@@ -1,6 +1,7 @@
 package com.example.booklibrary.ui.userProfile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,15 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,15 +40,18 @@ import com.example.booklibrary.R
 import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
-fun ProfileScreen() {
-    Column {
+fun ProfileScreen(
+    onChangePassword: () -> Unit
+) {
+    Scaffold(topBar = {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Spacer(Modifier.weight(1f))
             Text(
                 text = stringResource(id = R.string.profile),
                 style = TextStyle(
@@ -53,137 +59,150 @@ fun ProfileScreen() {
                     fontWeight = FontWeight.SemiBold,
                 )
             )
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
             Spacer(Modifier.weight(1f))
-            Box(
-                modifier = Modifier.size(200.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.profile_pic),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(200.dp)
+            IconButton(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .size(24.dp),
+                onClick = {
 
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
                 )
-                IconButton(
+            }
+        }
+    }) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Spacer(Modifier.weight(1f))
+                Box(
+                    modifier = Modifier.size(200.dp)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.profile_pic),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(200.dp)
+
+                    )
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(60.dp)
+                            .padding(end = 16.dp, top = 16.dp),
+                        onClick = {
+                            TODO()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.camera),
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                        )
+                    }
+                }
+                Spacer(Modifier.weight(1f))
+            }
+            Text(
+                text = stringResource(id = R.string.florinda_hasani),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally),
+                style = TextStyle(
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(
+                    start = 32.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Text(
+                    stringResource(id = R.string.email),
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(60.dp)
-                        .padding(end = 16.dp, top = 16.dp),
+                        .padding(start = 24.dp)
+                        .align(Alignment.CenterVertically),
+                    style = TextStyle(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(
+                    start = 32.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Text(
+                    stringResource(id = R.string.change_password),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable {
+                            onChangePassword()
+                        },
+                    style = TextStyle(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    modifier = Modifier.size(32.dp),
                     onClick = {
-                        TODO()
+                        onChangePassword()
                     }
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.camera),
-                        contentDescription = null,
-                        modifier = Modifier.size(60.dp)
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = null
                     )
                 }
             }
             Spacer(Modifier.weight(1f))
-        }
-        Text(
-            text = stringResource(id = R.string.florinda_hasani),
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally),
-            style = TextStyle(
-                fontSize = 30.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(
-                start = 32.dp,
-                top = 16.dp,
-                end = 16.dp,
-                bottom = 16.dp
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Email,
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                stringResource(id = R.string.email),
-                modifier = Modifier
-                    .padding(start = 24.dp)
-                    .align(Alignment.CenterVertically),
-                style = TextStyle(
-                    fontWeight = FontWeight.SemiBold
-                )
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(
-                start = 32.dp,
-                top = 16.dp,
-                end = 16.dp,
-                bottom = 16.dp
-            )
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.shelves),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                stringResource(id = R.string.shelve),
-                modifier = Modifier
-                    .padding(start = 24.dp)
-                    .align(Alignment.CenterVertically),
-                style = TextStyle(
-                    fontWeight = FontWeight.SemiBold
-                )
-            )
-            Spacer(Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier.size(32.dp),
+            Button(
                 onClick = {
                     TODO()
-                }
+                },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(24.dp)
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = null
+                Text(
+                    text = stringResource(id = R.string.log_out),
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                    )
                 )
             }
         }
-        Spacer(Modifier.weight(1f))
-        Button(
-            onClick = {
-                TODO()
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(16.dp)
-                .width(300.dp)
-                .height(60.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.log_out),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                )
-            )
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewProfileScreen() {
-    BookLibraryTheme {
-        ProfileScreen()
     }
 }

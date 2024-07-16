@@ -54,6 +54,7 @@
     <string name="date_returned_number">14 Jun. 2024</string>
     <string name="user_reviews">User Reviews</string>
     <string name="my_review">My Review</string>
+    <string name="change_password">Change password</string>
     <string name="books_by">Books by </string>
     <string name="hello_there">Hello there, </string>
     <string name="most_popular">Most Popular Books</string>
@@ -61,6 +62,8 @@
     <string name="see_all">See All</string>
     <string name="rating">3.8</string>
     <string name="status">Status: </string>
+    <string name="enter_old_password">Enter your old password</string>
+    <string name="change_password_info">Please enter the required information to change your password.</string>
     <string name="available_books">Available Books</string>
     <string name="quote">“The person, be it gentleman or lady, who has not pleasure in a good novel, must be intolerably stupid.”</string>
     <string name="quote_author">Jane Austen, Northanger Abbey</string>

@@ -162,7 +162,7 @@ fun LoginScreen(
                 .padding(16.dp)
                 .width(300.dp)
                 .height(60.dp),
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(12.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.login),

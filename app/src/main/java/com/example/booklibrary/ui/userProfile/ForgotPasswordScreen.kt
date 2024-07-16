@@ -90,7 +90,7 @@ fun ForgotPasswordScreen(
                 .padding(top = 8.dp, bottom = 16.dp)
                 .fillMaxWidth()
                 .height(60.dp),
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(12.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.send_email),

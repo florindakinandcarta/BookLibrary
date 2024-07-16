@@ -63,9 +63,6 @@ fun NavigationHost(
                 onAddNewBook = {
                     navController.navigate(Navigation.SearchWithGoogle.route)
                 },
-                onSearchClick = {
-                    navController.navigate(Navigation.SearchScreen.route)
-                },
                 onClickedBook = { book ->
                     sharedViewModel.selectedBook = book
                     navController.navigate(Navigation.RequestedBookDetails.route)
@@ -80,8 +77,8 @@ fun NavigationHost(
                     onBackClicked = {
                         navController.popBackStack()
                     },
-                    onUserReviewsClicked = {
-                        navController.navigate(Navigation.Reviews.route)
+                    onAddReviewClicked = {
+                        navController.navigate(Navigation.ReviewDialog.route)
                     }
                 )
             }
@@ -101,6 +98,9 @@ fun NavigationHost(
                 },
                 onReturnClick = {
                     navController.navigate(Navigation.ReturnDialog.route)
+                },
+                onSearchClick = {
+                    navController.navigate(Navigation.SearchScreen.route)
                 }
             )
         }

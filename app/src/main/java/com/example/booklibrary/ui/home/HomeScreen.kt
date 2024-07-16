@@ -42,11 +42,11 @@ fun HomeScreen(
     onNotificationClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
-    var selectedFilter by remember { mutableStateOf(SampleData.genres.first()) }
+    var selectedFilter by remember { mutableStateOf("") }
     var expanded by remember {
         mutableStateOf(false)
     }
-    var selectedText by remember {
+    var selectedLanguage by remember {
         mutableStateOf("Languages")
     }
 
@@ -83,7 +83,7 @@ fun HomeScreen(
                                     onClick = {},
                                     label = {
                                         Text(
-                                            text = selectedText,
+                                            text = selectedLanguage,
                                             style = TextStyle(
                                                 color = Color.Black
                                             )
@@ -111,7 +111,7 @@ fun HomeScreen(
                                                 )
                                             },
                                             onClick = {
-                                                selectedText = option
+                                                selectedLanguage = option
                                                 expanded = false
                                             },
                                         )
@@ -124,7 +124,6 @@ fun HomeScreen(
                                 selected = option == selectedFilter,
                                 onClick = {
                                     selectedFilter = option
-                                    selectedText = "Languages"
                                 },
                                 label = {
                                     Text(text = option)
@@ -136,10 +135,11 @@ fun HomeScreen(
             }
 
             items(SampleData.books.filter { book ->
-                if (selectedText != "Languages") {
-                    book.language == selectedText
+                if (selectedLanguage == "Languages") {
+                    true
                 } else {
-                    book.genre == selectedFilter
+                    (selectedLanguage.isEmpty() || book.language == selectedLanguage) &&
+                            (selectedFilter.isEmpty() || book.genre == selectedFilter)
                 }
             }) { book ->
                 ItemBook(

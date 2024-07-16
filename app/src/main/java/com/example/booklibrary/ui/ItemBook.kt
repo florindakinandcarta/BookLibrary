@@ -61,16 +61,6 @@ fun ItemBook(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = book.author.toString(),
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .align(Alignment.Start),
-                    style = TextStyle(
-                        fontSize = 8.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    ),
-                )
-                Text(
                     text = book.title.toString(),
                     modifier = Modifier
                         .padding(8.dp)

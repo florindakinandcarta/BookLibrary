@@ -34,7 +34,6 @@ import com.example.booklibrary.data.SampleData
 @Composable
 fun RequestedScreen(
     onAddNewBook: () -> Unit,
-    onSearchClick: () -> Unit,
     onClickedBook: (Book) -> Unit
 //    orderBooksBasedOnLikes: () -> Unit
 ) {
@@ -62,20 +61,6 @@ fun RequestedScreen(
                         .padding(6.dp)
                         .size(24.dp),
                     onClick = {
-                        onSearchClick()
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-                IconButton(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .size(24.dp),
-                    onClick = {
                         onAddNewBook()
                     },
                 ) {
@@ -90,7 +75,6 @@ fun RequestedScreen(
                         .padding(6.dp)
                         .size(24.dp),
                     onClick = {
-//                        orderBooksBasedOnLikes()
                         setIsFiltered(!isFiltered)
                     },
                 ) {

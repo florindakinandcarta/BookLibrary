@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -45,7 +47,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun BorrowedBooksScreen(onBorrowedBookClick: (Book) -> Unit, onReturnClick: () -> Unit) {
+fun BorrowedBooksScreen(
+    onBorrowedBookClick: (Book) -> Unit,
+    onReturnClick: () -> Unit,
+    onSearchClick: () -> Unit
+) {
     val context = LocalContext.current
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     val scope = rememberCoroutineScope()
@@ -90,6 +96,20 @@ fun BorrowedBooksScreen(onBorrowedBookClick: (Book) -> Unit, onReturnClick: () -
                     ),
                 )
                 Spacer(Modifier.weight(1f))
+                IconButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(24.dp),
+                    onClick = {
+                        onSearchClick()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
                 IconButton(
                     modifier = Modifier
                         .padding(6.dp)

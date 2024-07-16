@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,20 +21,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
 import com.example.booklibrary.data.Book
 import com.example.booklibrary.ui.review.ItemUserReview
+import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun BookDetails(
     book: Book,
     onBackClicked: () -> Unit,
-    onUserReviewsClicked: () -> Unit
+    onAddReviewClicked: () -> Unit
 ) {
     Scaffold(topBar = {
         IconButton(
@@ -67,7 +71,7 @@ fun BookDetails(
                             modifier = Modifier
                                 .padding(20.dp)
                                 .clickable {
-                                    onUserReviewsClicked()
+                                    onAddReviewClicked()
                                 },
                             style = TextStyle(
                                 fontSize = 24.sp,
@@ -80,13 +84,12 @@ fun BookDetails(
                                 .padding(16.dp)
                                 .size(32.dp),
                             onClick = {
-                                onUserReviewsClicked()
+                                onAddReviewClicked()
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.add_review),
                                 contentDescription = null,
-                                modifier = Modifier.size(32.dp)
                             )
                         }
                     }
@@ -101,26 +104,36 @@ fun BookDetails(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Button(
-                            onClick = {
-                                TODO()
-                            },
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxWidth()
-                                .height(60.dp),
-                            shape = RoundedCornerShape(10.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.borrow),
-                                style = TextStyle(
-                                    fontWeight = FontWeight.Bold,
-                                )
+                    Button(
+                        onClick = {
+                            TODO()
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .width(300.dp)
+                            .height(60.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.borrow),
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
                             )
-                        }
+                        )
                     }
                 }
             }
+            }
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun BookDetailsPreview() {
+    BookLibraryTheme {
+        BookDetails(book = Book(), onBackClicked = { /*TODO*/ }) {
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.booklibrary.ui.userProfile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +25,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -35,12 +40,43 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.util.Resource
+import com.example.booklibrary.viewModels.AuthViewModel
 
 @Composable
 fun ProfileScreen(
-    onChangePassword: () -> Unit
+    onChangePassword: () -> Unit,
+    onLogOutClick: () -> Unit,
 ) {
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val messageResponse by authViewModel.message.collectAsState()
+    val context = LocalContext.current
+    val user by authViewModel.user.collectAsState()
+    LaunchedEffect(messageResponse) {
+        when (messageResponse) {
+            is Resource.Success -> {
+                Toast.makeText(
+                    context,
+                    (messageResponse as Resource.Success<String>).data.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+                onLogOutClick()
+            }
+
+            is Resource.Error -> {
+                Toast.makeText(
+                    context, (messageResponse as Resource.Error<String>).data.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            else -> {
+
+            }
+        }
+    }
     Scaffold(topBar = {
         Row(
             modifier = Modifier
@@ -111,7 +147,7 @@ fun ProfileScreen(
                 Spacer(Modifier.weight(1f))
             }
             Text(
-                text = stringResource(id = R.string.florinda_hasani),
+                text = user?.displayName.toString(),
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally),
@@ -135,7 +171,7 @@ fun ProfileScreen(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Text(
-                    stringResource(id = R.string.email),
+                    text = user?.email.toString(),
                     modifier = Modifier
                         .padding(start = 24.dp)
                         .align(Alignment.CenterVertically),
@@ -186,7 +222,7 @@ fun ProfileScreen(
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
-                    TODO()
+                    authViewModel.signOut()
                 },
                 modifier = Modifier
                     .padding(16.dp)

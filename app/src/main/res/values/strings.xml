@@ -11,7 +11,7 @@
     <string name="surname">Surname</string>
     <string name="confirm_password">Confirm password</string>
     <string name="create_account">Create Account</string>
-    <string name="enter_info">Fill your information below or register with your Gmail account.</string>
+    <string name="enter_info">Fill your information below </string>
     <string name="already_have_acc">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="enter_email_forgot">Enter your email and we\'ll send an email to reset your password</string>

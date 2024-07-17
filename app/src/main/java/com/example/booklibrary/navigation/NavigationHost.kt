@@ -22,6 +22,7 @@ import com.example.booklibrary.ui.review.UserReviewDialog
 import com.example.booklibrary.ui.review.UserReviewSection
 import com.example.booklibrary.ui.searchNewBook.GoogleBookDetails
 import com.example.booklibrary.ui.searchNewBook.SearchWithGoogleBookScreen
+import com.example.booklibrary.ui.userProfile.ChangePasswordScreen
 import com.example.booklibrary.ui.userProfile.ForgotPasswordScreen
 import com.example.booklibrary.ui.userProfile.LoginScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
@@ -72,9 +73,6 @@ fun NavigationHost(
             RequestedScreen(
                 onAddNewBook = {
                     navController.navigate(Navigation.SearchWithGoogle.route)
-                },
-                onSearchClick = {
-                    navController.navigate(Navigation.SearchScreen.route)
                 },
                 onClickedBook = { book ->
                     sharedViewModel.selectedBook = book

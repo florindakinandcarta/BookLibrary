@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.toast
+import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.viewModels.AuthViewModel
 
@@ -68,12 +68,23 @@ fun LoginScreen(
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                context.toast((messageResponse as Resource.Success<String>).data.toString())
+                context.showToast((messageResponse as Resource.Success<String>).data.toString())
                 onLoginClick()
             }
 
             is Resource.Error -> {
-                context.toast((messageResponse as Resource.Error<String>).data.toString())
+                when ((messageResponse as Resource.Error<String>).message.toString()) {
+                    context.resources.getString(R.string.error_code_message_incorrect) ->
+                        context.showToast(context.getString(R.string.wrong_password_email))
+
+                    context.resources.getString(R.string.error_code_message_connection) ->
+                        context.showToast(context.getString(R.string.error_connection))
+
+                    else -> {
+                        context.showToast(context.getString(R.string.default_error))
+
+                    }
+                }
             }
 
             else -> {

@@ -64,8 +64,8 @@ fun BorrowedBooksScreen(
         } else {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = "The camera is needed for this step.",
-                    actionLabel = "Go to settings",
+                    message = context.resources.getString(R.string.camera_is_needed),
+                    actionLabel = context.resources.getString(R.string.go_to_settings),
                 )
                 if (result == SnackbarResult.ActionPerformed) {
                     val intent = Intent(
@@ -123,8 +123,8 @@ fun BorrowedBooksScreen(
                             cameraPermissionState.status.shouldShowRationale -> {
                                 scope.launch {
                                     val result = snackbarHostState.showSnackbar(
-                                        message = "The camera is needed for this step.",
-                                        actionLabel = "Go to settings",
+                                        message = context.resources.getString(R.string.camera_is_needed),
+                                        actionLabel = context.resources.getString(R.string.go_to_settings),
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
                                         val intent = Intent(

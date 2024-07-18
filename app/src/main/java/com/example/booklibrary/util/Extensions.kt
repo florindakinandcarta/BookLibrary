@@ -11,6 +11,6 @@ fun String.toHttpsUrl(): String {
     }
 }
 
-fun Context.toast(message: String, duration: Int = Toast.LENGTH_SHORT){
+fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT){
     Toast.makeText(this, message, duration).show()
 }

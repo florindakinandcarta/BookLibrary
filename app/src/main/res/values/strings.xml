@@ -80,4 +80,12 @@
     <string name="no_books_found">No books found</string>
     <string name="no_results">No results found</string>
     <string name="search_book_with">Search for books with </string>
+    <string name="default_error">Something went wrong?!</string>
+    <string name="error_code_message_incorrect">The supplied auth credential is incorrect, malformed or has expired.</string>
+    <string name="wrong_password_email">Wrong password or email!!!</string>
+    <string name="error_code_message_connection">A network error (such as timeout, interrupted connection or unreachable host) has occurred.</string>
+    <string name="error_connection">You\'re not connected to the internet!</string>
+    <string name="photo_capture_failed">Photo capture failed</string>
+    <string name="camera_is_needed">The camera is needed for this step.</string>
+    <string name="go_to_settings">Go to settings</string>
 </resources>

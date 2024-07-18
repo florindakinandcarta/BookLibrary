@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.toast
+import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.viewModels.AuthViewModel
 
@@ -47,12 +47,12 @@ fun ForgotPasswordScreen(
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                context.toast((messageResponse as Resource.Success<String>).data.toString())
+                context.showToast((messageResponse as Resource.Success<String>).data.toString())
                 onSendEmailClick()
             }
 
             is Resource.Error -> {
-                context.toast((messageResponse as Resource.Error<String>).data.toString())
+                context.showToast((messageResponse as Resource.Error<String>).data.toString())
             }
 
             else -> {

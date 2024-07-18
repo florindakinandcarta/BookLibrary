@@ -71,11 +71,3 @@ fun ItemUserReview() {
         )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewItemUserReview() {
-    BookLibraryTheme {
-        ItemUserReview()
-    }
-}

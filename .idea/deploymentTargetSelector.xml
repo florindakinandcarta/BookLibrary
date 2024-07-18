@@ -16,9 +16,6 @@
       <SelectionState runConfigName="PreviewHomeScreen">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="PreviewComposeSwipeablePages">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="PreviewWishListScreen">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

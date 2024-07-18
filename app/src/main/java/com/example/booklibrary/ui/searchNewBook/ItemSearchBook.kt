@@ -71,12 +71,3 @@ fun ItemSearchBook() {
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewItemSearchBook() {
-    BookLibraryTheme {
-        ItemSearchBook()
-    }
-}

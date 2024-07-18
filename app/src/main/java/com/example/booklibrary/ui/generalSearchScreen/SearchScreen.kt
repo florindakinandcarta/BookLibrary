@@ -53,7 +53,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(onScanClick: () -> Unit, onBackClicked: () -> Unit, onClickedBook: (Book) -> Unit,) {
+fun SearchScreen(
+    onScanClick: () -> Unit,
+    onBackClicked: () -> Unit,
+    onClickedBook: (Book) -> Unit,
+) {
     val searchViewModel: SearchViewModel = viewModel()
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
@@ -71,8 +75,8 @@ fun SearchScreen(onScanClick: () -> Unit, onBackClicked: () -> Unit, onClickedBo
         } else {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = "The camera is needed for this step.",
-                    actionLabel = "Go to settings",
+                    message = context.resources.getString(R.string.camera_is_needed),
+                    actionLabel = context.resources.getString(R.string.go_to_settings),
                 )
                 if (result == SnackbarResult.ActionPerformed) {
                     val intent = Intent(
@@ -149,8 +153,8 @@ fun SearchScreen(onScanClick: () -> Unit, onBackClicked: () -> Unit, onClickedBo
                                 cameraPermissionState.status.shouldShowRationale -> {
                                     scope.launch {
                                         val result = snackbarHostState.showSnackbar(
-                                            message = "The camera is needed for this step.",
-                                            actionLabel = "Go to settings",
+                                            message = context.resources.getString(R.string.camera_is_needed),
+                                            actionLabel = context.resources.getString(R.string.go_to_settings),
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             val intent = Intent(

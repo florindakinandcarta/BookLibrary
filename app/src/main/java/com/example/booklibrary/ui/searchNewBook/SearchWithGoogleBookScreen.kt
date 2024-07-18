@@ -154,7 +154,7 @@ fun SearchWithGoogleBookScreen(
                         } ?: run {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Text(
-                                    text = "No books found",
+                                    text = stringResource(id = R.string.no_books_found),
                                     color = Color.Gray,
                                     modifier = Modifier.align(Alignment.Center)
                                 )
@@ -166,7 +166,7 @@ fun SearchWithGoogleBookScreen(
                         val errorMessage = (responseBooks as Resource.Error).message
                         Box(modifier = Modifier.fillMaxSize()) {
                             Text(
-                                text = errorMessage ?: "An error occurred",
+                                text = errorMessage ?: stringResource(id = R.string.error_occurred),
                                 color = Color.Red,
                                 modifier = Modifier.align(Alignment.Center)
                             )
@@ -176,7 +176,7 @@ fun SearchWithGoogleBookScreen(
                     isResponseZero -> {
                         Box(modifier = Modifier.fillMaxSize()) {
                             Text(
-                                text = "No results found",
+                                text = stringResource(id = R.string.no_results),
                                 color = Color.Gray,
                                 modifier = Modifier.align(Alignment.Center)
                             )
@@ -197,7 +197,7 @@ fun SearchWithGoogleBookScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Search for books with ",
+                text = stringResource(id = R.string.search_book_with),
                 color = Color.Gray,
             )
             GlideImage(

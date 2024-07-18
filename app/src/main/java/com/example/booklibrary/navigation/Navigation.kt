@@ -50,4 +50,7 @@ sealed class Navigation(
     object RequestedBookDetails: Navigation(
         "requestedBookDetails"
     )
+    object ChangePassword: Navigation(
+        "changePassword"
+    )
 }

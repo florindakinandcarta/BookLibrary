@@ -91,11 +91,3 @@ fun RequestedBookDetails(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRequestedBookDetails() {
-    BookLibraryTheme {
-        RequestedBookDetails(book = Book(), onBackClicked = { /*TODO*/ })
-    }
-}

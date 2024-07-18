@@ -19,7 +19,6 @@ fun MainScreen(navController: NavHostController) {
         bottomBar = {
             if (shouldShowBottomNav(currentRoute)) {
                 BottomNavigation(navController = navController)
-                // each screen should have it's scaffold
             }
         }
     ) { innerPadding ->

@@ -1,7 +1,10 @@
 package com.example.booklibrary.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,18 +22,26 @@ import com.example.booklibrary.ui.review.UserReviewDialog
 import com.example.booklibrary.ui.review.UserReviewSection
 import com.example.booklibrary.ui.searchNewBook.GoogleBookDetails
 import com.example.booklibrary.ui.searchNewBook.SearchWithGoogleBookScreen
+import com.example.booklibrary.ui.userProfile.ChangePasswordScreen
 import com.example.booklibrary.ui.userProfile.ForgotPasswordScreen
 import com.example.booklibrary.ui.userProfile.LoginScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 import com.example.booklibrary.ui.userProfile.RegisterScreen
+import com.example.booklibrary.viewModels.AuthViewModel
 
 @Composable
 fun NavigationHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    sharedViewModel: SharedViewModel = viewModel()
+    sharedViewModel: SharedViewModel = viewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
-    NavHost(navController, startDestination = BottomNavItem.Dashboard.route, modifier = modifier) {
+    val user by authViewModel.user.collectAsState()
+    NavHost(
+        navController,
+        startDestination = if (user != null) BottomNavItem.Dashboard.route else Navigation.Login.route,
+        modifier = modifier
+    ) {
         composable(Navigation.Login.route) {
             LoginScreen(
                 onLoginClick = {
@@ -126,12 +137,21 @@ fun NavigationHost(
             )
         }
         composable(BottomNavItem.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                onChangePassword = {
+                    navController.navigate(Navigation.ChangePassword.route)
+                },
+                onLogOutClick = {
+                    navController.navigate(Navigation.Login.route)
+                }
+            )
         }
 
         composable(Navigation.ForgotPassword.route) {
             ForgotPasswordScreen(
-                onSendEmailClick = {}
+                onSendEmailClick = {
+                    navController.popBackStack()
+                }
             )
         }
 
@@ -139,8 +159,7 @@ fun NavigationHost(
             RegisterScreen(
                 onLoginClick = {
                     navController.navigate(Navigation.Login.route)
-                },
-                onSignUpClick = {}
+                }
             )
         }
 
@@ -199,6 +218,13 @@ fun NavigationHost(
                     }
                 )
             }
+        }
+        composable(Navigation.ChangePassword.route) {
+            ChangePasswordScreen(
+                onBackClicked = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

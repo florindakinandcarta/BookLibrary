@@ -69,7 +69,7 @@ fun ReturnDialog(onNext: (String) -> Unit) {
                 Text(
                     text = stringResource(id = R.string.next),
                     style = TextStyle(
-                        color = if (selectedOption != "Return type") MaterialTheme.colorScheme.primary else Color.Gray,
+                        color = if (selectedOption != stringResource(id = R.string.return_type)) MaterialTheme.colorScheme.primary else Color.Gray,
                         fontWeight = FontWeight.SemiBold
                     ),
                     modifier = Modifier
@@ -78,7 +78,7 @@ fun ReturnDialog(onNext: (String) -> Unit) {
                         )
                         .align(Alignment.End)
                         .then(
-                            if (selectedOption != "Return type") {
+                            if (selectedOption != stringResource(id = R.string.return_type)) {
                                 Modifier.clickable { onNext(selectedOption) }
                             } else {
                                 Modifier
@@ -88,10 +88,4 @@ fun ReturnDialog(onNext: (String) -> Unit) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewReturnDialog() {
-    ReturnDialog(onNext = {})
 }

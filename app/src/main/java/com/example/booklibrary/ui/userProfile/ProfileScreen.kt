@@ -1,6 +1,5 @@
 package com.example.booklibrary.ui.userProfile
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.toast
 import com.example.booklibrary.viewModels.AuthViewModel
 
 @Composable
@@ -57,19 +57,14 @@ fun ProfileScreen(
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                Toast.makeText(
-                    context,
-                    (messageResponse as Resource.Success<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(
+                    (messageResponse as Resource.Success<String>).data.toString()
+                )
                 onLogOutClick()
             }
 
             is Resource.Error -> {
-                Toast.makeText(
-                    context, (messageResponse as Resource.Error<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast((messageResponse as Resource.Error<String>).data.toString())
             }
 
             else -> {

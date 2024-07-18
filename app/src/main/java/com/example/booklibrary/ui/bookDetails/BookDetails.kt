@@ -127,13 +127,3 @@ fun BookDetails(
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun BookDetailsPreview() {
-    BookLibraryTheme {
-        BookDetails(book = Book(), onBackClicked = { /*TODO*/ }) {
-        }
-    }
-}

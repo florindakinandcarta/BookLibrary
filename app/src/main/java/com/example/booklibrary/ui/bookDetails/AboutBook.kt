@@ -29,10 +29,12 @@ import com.example.booklibrary.data.googleBooks.Items
 
 @Composable
 fun AboutBook(book: Items? = null) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()
-        .padding(8.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(8.dp)
+    ) {
         val minimumLineLength = 3
         var expandedState by remember {
             mutableStateOf(false)
@@ -73,7 +75,9 @@ fun AboutBook(book: Items? = null) {
         )
         if (showReadMoreButtonState) {
             Text(
-                text = if (expandedState) "Read Less" else "Read More",
+                text = if (expandedState) stringResource(id = R.string.read_less) else stringResource(
+                    id = R.string.read_more
+                ),
                 color = MaterialTheme.colorScheme.secondary,
 
                 modifier = Modifier

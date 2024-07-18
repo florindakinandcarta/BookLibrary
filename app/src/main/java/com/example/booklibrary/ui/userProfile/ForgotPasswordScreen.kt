@@ -1,6 +1,5 @@
 package com.example.booklibrary.ui.userProfile
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.toast
 import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.viewModels.AuthViewModel
 
@@ -47,19 +47,12 @@ fun ForgotPasswordScreen(
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                Toast.makeText(
-                    context,
-                    (messageResponse as Resource.Success<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast((messageResponse as Resource.Success<String>).data.toString())
                 onSendEmailClick()
             }
 
             is Resource.Error -> {
-                Toast.makeText(
-                    context, (messageResponse as Resource.Error<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast((messageResponse as Resource.Error<String>).data.toString())
             }
 
             else -> {
@@ -115,7 +108,7 @@ fun ForgotPasswordScreen(
                     Text(
                         text =
                         if (isEmailValid) {
-                            "Use your work email!"
+                            stringResource(id = R.string.use_work_email)
                         } else {
                             stringResource(id = R.string.enter_email)
                         },

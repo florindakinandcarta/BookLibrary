@@ -1,6 +1,5 @@
 package com.example.booklibrary.ui.userProfile
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.toast
 import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.viewModels.AuthViewModel
 
@@ -65,19 +65,12 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                Toast.makeText(
-                    context,
-                    (messageResponse as Resource.Success<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast((messageResponse as Resource.Success<String>).data.toString())
                 onLoginClick()
             }
 
             is Resource.Error -> {
-                Toast.makeText(
-                    context, (messageResponse as Resource.Error<String>).data.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast((messageResponse as Resource.Error<String>).data.toString())
             }
 
             else -> {
@@ -194,7 +187,7 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                 label = {
                     Text(
                         text = if (password.length < 6) {
-                            "Your password must be at least 6 characters"
+                            stringResource(id = R.string.password_min_char)
                         } else {
                             stringResource(id = R.string.enter_password)
                         },
@@ -224,7 +217,7 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                         } else {
                             Icons.Filled.VisibilityOff
                         },
-                        contentDescription = "Toggle password visibility",
+                        contentDescription = stringResource(id = R.string.password_visibility_des),
                         modifier = Modifier.clickable { showPassword = !showPassword }
                     )
                 },
@@ -265,7 +258,7 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                         } else {
                             Icons.Filled.VisibilityOff
                         },
-                        contentDescription = "Toggle password visibility",
+                        contentDescription = stringResource(id = R.string.password_visibility_des),
                         modifier = Modifier.clickable { showPassword = !showPassword }
                     )
                 },

@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import com.example.booklibrary.util.toast
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -49,7 +50,7 @@ fun Camera() {
                     bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
                 }
             } else {
-                Toast.makeText(context, "Photo capture failed", Toast.LENGTH_SHORT).show()
+                context.toast("Photo capture failed")
             }
         }
     val photoFile =

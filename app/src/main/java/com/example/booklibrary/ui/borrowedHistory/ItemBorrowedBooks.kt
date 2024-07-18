@@ -127,12 +127,3 @@ fun ItemBorrowedBooks(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewItemBorrowedBooks() {
-    BookLibraryTheme {
-        ItemBorrowedBooks(book = Book()) {
-        }
-    }
-}

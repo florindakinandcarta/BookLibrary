@@ -81,13 +81,13 @@ fun RequestedScreen(
                     if (isFiltered) {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.filter),
-                            contentDescription = "Filter Applied",
+                            contentDescription = stringResource(id = R.string.filter_applied),
                             modifier = Modifier.size(32.dp)
                         )
                     } else {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.filter_two),
-                            contentDescription = "Filter",
+                            contentDescription = stringResource(id = R.string.filter),
                             modifier = Modifier.size(32.dp)
                         )
                     }

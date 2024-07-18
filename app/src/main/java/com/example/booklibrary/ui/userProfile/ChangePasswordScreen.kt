@@ -30,11 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
-import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun ChangePasswordScreen(
@@ -77,11 +75,13 @@ fun ChangePasswordScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxHeight().padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = paddingValues.calculateTopPadding()
-            )
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = paddingValues.calculateTopPadding()
+                )
         ) {
             var text by remember {
                 mutableStateOf("")
@@ -172,16 +172,6 @@ fun ChangePasswordScreen(
                     )
                 )
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewChangePassword() {
-    BookLibraryTheme {
-        ChangePasswordScreen {
-
         }
     }
 }

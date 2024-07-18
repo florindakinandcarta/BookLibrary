@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,7 +60,7 @@ fun ComposeSwipeablePages() {
                     .width(150.dp)
             )
             Text(
-                text = "Return date: 08/07/2024",
+                text = stringResource(id = R.string.return_date),
                 modifier = Modifier.padding(16.dp),
                 style = TextStyle(
                     fontSize = 14.sp,
@@ -89,14 +90,5 @@ fun ComposeSwipeablePages() {
                 Spacer(Modifier.width(4.dp))
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewComposeSwipeablePages() {
-    BookLibraryTheme {
-        ComposeSwipeablePages()
     }
 }

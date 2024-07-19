@@ -53,4 +53,7 @@ sealed class Navigation(
     object ChangePassword: Navigation(
         "changePassword"
     )
+    object ConfirmDialog: Navigation(
+        "confirmDialog"
+    )
 }

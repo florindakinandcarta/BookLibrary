@@ -7,18 +7,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Recommend
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
@@ -26,7 +24,6 @@ import com.example.booklibrary.data.Book
 import com.example.booklibrary.ui.bookDetails.AboutBook
 import com.example.booklibrary.ui.bookDetails.BookDetailsSection
 import com.example.booklibrary.ui.review.ItemUserReview
-import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun RequestedBookDetails(
@@ -59,7 +56,7 @@ fun RequestedBookDetails(
                 }
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.recommend),
+                    imageVector = Icons.Filled.Recommend,
                     contentDescription = null,
                     modifier = Modifier.size(32.dp)
                 )

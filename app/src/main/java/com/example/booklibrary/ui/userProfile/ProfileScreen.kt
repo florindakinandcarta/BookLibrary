@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -133,7 +134,7 @@ fun ProfileScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.camera),
+                            imageVector = Icons.Filled.CameraAlt,
                             contentDescription = null,
                             modifier = Modifier.size(60.dp)
                         )

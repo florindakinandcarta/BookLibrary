@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.booklibrary.Camera
+import com.example.booklibrary.ui.ConfirmDialog
 import com.example.booklibrary.ui.bookDetails.BookDetails
 import com.example.booklibrary.ui.borrowedHistory.BorrowedBookDetail
 import com.example.booklibrary.ui.borrowedHistory.BorrowedBooksScreen
@@ -123,6 +124,9 @@ fun NavigationHost(
                     },
                     onEditReviewClicked = {
                         navController.navigate(Navigation.ReviewDialog.route)
+                    },
+                    onReportAsLostClicked = {
+                        navController.navigate(Navigation.ConfirmDialog.route)
                     }
                 )
             }
@@ -222,6 +226,13 @@ fun NavigationHost(
         composable(Navigation.ChangePassword.route) {
             ChangePasswordScreen(
                 onBackClicked = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(Navigation.ConfirmDialog.route) {
+            ConfirmDialog(
+                onDismissRequest = {
                     navController.popBackStack()
                 }
             )

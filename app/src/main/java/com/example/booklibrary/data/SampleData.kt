@@ -5,7 +5,8 @@ object SampleData {
     val authors =  listOf("Filani", "Fisteki", "Hasani", "Florinda")
     val languages = listOf("English", "Albanian", "Macedonian")
     val numberOfLikes = listOf(23,24,3,45,21,10,9,18,12)
-    val returnStatus = listOf("Return", "Report Damage", "Report as Lost")
+    val returnStatus = listOf("Return", "Report Damage")
+    val countries = listOf("Pristina", "Skopje", "Sofia")
 
     val books = (0..25).map {
         Book(

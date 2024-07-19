@@ -23,10 +23,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,11 +60,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.viewModels.AuthViewModel
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(onLoginClick: () -> Unit) {
     val authViewModel: AuthViewModel = hiltViewModel()
@@ -96,6 +108,12 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
         val passwordVisualTransformation = remember { PasswordVisualTransformation() }
         var isError by remember { mutableStateOf(false) }
         var isEmailValid by remember { mutableStateOf(false) }
+        var expanded by remember {
+            mutableStateOf(false)
+        }
+        var text by remember {
+            mutableStateOf(SampleData.countries[0])
+        }
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -148,6 +166,53 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                 textStyle = TextStyle(color = Color.Black),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = it },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp)
+            ) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    value = text,
+                    onValueChange = {},
+                    readOnly = true,
+                    singleLine = true,
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.chose_office)
+                        )
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                    colors = TextFieldDefaults.colors(focusedTextColor = Color.Black)
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.exposedDropdownSize()
+                ) {
+                    SampleData.countries.forEach { country ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = country,
+                                )
+                            },
+                            onClick = {
+                                text = country
+                                expanded = false
+                            },
+                            contentPadding = ItemContentPadding,
+                            colors = MenuDefaults.itemColors(textColor = Color.Black)
+                        )
+                    }
+                }
+            }
             OutlinedTextField(
                 value = email,
                 shape = RoundedCornerShape(12.dp),
@@ -161,7 +226,7 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                     Text(
                         text =
                         if (isEmailValid) {
-                            "Use your work email!"
+                            stringResource(id = R.string.use_work_email)
                         } else {
                             stringResource(id = R.string.enter_email)
                         },

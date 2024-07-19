@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,23 +36,41 @@ import com.example.booklibrary.ui.review.ItemUserReview
 fun BorrowedBookDetail(
     book: Book,
     onBackClicked: () -> Unit,
-    onEditReviewClicked: () -> Unit
+    onEditReviewClicked: () -> Unit,
+    onReportAsLostClicked: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            IconButton(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(32.dp),
-                onClick = {
-                    onBackClicked()
+            Row() {
+                IconButton(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(32.dp),
+                    onClick = {
+                        onBackClicked()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(32.dp),
+                    onClick = {
+                        onReportAsLostClicked()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Report,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
         }
     ) { paddingValues ->

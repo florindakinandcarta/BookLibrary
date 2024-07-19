@@ -201,7 +201,7 @@ fun SearchWithGoogleBookScreen(
                 color = Color.Gray,
             )
             GlideImage(
-                model = R.drawable.google_pooks_logo_2015,
+                model = R.drawable.google_books_logo_2015,
                 contentDescription = null,
                 modifier = Modifier.padding(16.dp)
             )

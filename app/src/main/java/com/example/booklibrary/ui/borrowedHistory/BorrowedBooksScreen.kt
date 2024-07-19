@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AssignmentReturned
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -143,7 +144,7 @@ fun BorrowedBooksScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.return_book),
+                        imageVector = Icons.Filled.AssignmentReturned,
                         contentDescription = null,
                         modifier = Modifier.size(32.dp)
                     )

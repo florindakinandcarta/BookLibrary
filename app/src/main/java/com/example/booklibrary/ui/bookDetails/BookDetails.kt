@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.RateReview
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -88,7 +89,7 @@ fun BookDetails(
                             },
                         ) {
                             Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.add_review),
+                                imageVector = Icons.Filled.RateReview,
                                 contentDescription = null,
                             )
                         }

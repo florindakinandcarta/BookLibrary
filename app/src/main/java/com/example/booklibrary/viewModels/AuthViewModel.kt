@@ -17,17 +17,24 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(): ViewModel() {
+class AuthViewModel @Inject constructor() : ViewModel() {
     private var auth: FirebaseAuth = Firebase.auth
     private val _message = MutableStateFlow<Resource<String>?>(null)
     val message: StateFlow<Resource<String>?> = _message
     private val _user = MutableStateFlow(auth.currentUser)
     val user: StateFlow<FirebaseUser?> = _user
+    private val _userAdmin = MutableStateFlow(false)
+    val userAdmin: StateFlow<Boolean> = _userAdmin
 
     init {
         auth.addAuthStateListener {
             _user.value = it.currentUser
+            isUserAdmin(it.currentUser?.email)
         }
+    }
+
+    private fun isUserAdmin(email: String?) {
+        _userAdmin.value = email == "florinda.hasani@kinandcarta.com"
     }
 
     fun createUserWithEmailAndPassword(email: String, password: String) {

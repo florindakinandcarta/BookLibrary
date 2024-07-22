@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -31,11 +32,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,11 +49,13 @@ import com.example.booklibrary.viewModels.AuthViewModel
 fun ProfileScreen(
     onChangePassword: () -> Unit,
     onLogOutClick: () -> Unit,
+    onAllUsersClicked: () -> Unit
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
     val user by authViewModel.user.collectAsState()
+    val isUserAdmin by authViewModel.userAdmin.collectAsState()
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
@@ -213,6 +214,47 @@ fun ProfileScreen(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = null
                     )
+                }
+            }
+            if (isUserAdmin) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(
+                        start = 32.dp,
+                        top = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Groups,
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                    Text(
+                        stringResource(id = R.string.all_users),
+                        modifier = Modifier
+                            .padding(start = 24.dp)
+                            .align(Alignment.CenterVertically)
+                            .clickable {
+                                onAllUsersClicked()
+                            },
+                        style = TextStyle(
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
+                        modifier = Modifier.size(32.dp),
+                        onClick = {
+                            onAllUsersClicked()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
             Spacer(Modifier.weight(1f))

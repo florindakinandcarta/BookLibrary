@@ -28,6 +28,7 @@ import com.example.booklibrary.ui.userProfile.ForgotPasswordScreen
 import com.example.booklibrary.ui.userProfile.LoginScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 import com.example.booklibrary.ui.userProfile.RegisterScreen
+import com.example.booklibrary.ui.users.UsersScreen
 import com.example.booklibrary.viewModels.AuthViewModel
 
 @Composable
@@ -147,6 +148,18 @@ fun NavigationHost(
                 },
                 onLogOutClick = {
                     navController.navigate(Navigation.Login.route)
+                },
+                onAllUsersClicked = {
+                    navController.navigate(Navigation.AllUsers.route)
+                }
+            )
+        }
+        composable(Navigation.AllUsers.route) {
+            UsersScreen(
+                onDeleteUser = {},
+                onChangeRole = {},
+                onBackClicked = {
+                    navController.popBackStack()
                 }
             )
         }

@@ -56,4 +56,7 @@ sealed class Navigation(
     object ConfirmDialog: Navigation(
         "confirmDialog"
     )
+    object AllUsers: Navigation(
+        "allUsers"
+    )
 }

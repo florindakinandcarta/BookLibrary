@@ -56,6 +56,7 @@
     <string name="my_review">My Review</string>
     <string name="change_password">Change password</string>
     <string name="books_by">Books by </string>
+    <string name="all_users">All Users</string>
     <string name="hello_there">Hello there, </string>
     <string name="most_popular">Most Popular Books</string>
     <string name="top_authors">Top Authors</string>
@@ -89,5 +90,6 @@
     <string name="camera_is_needed">The camera is needed for this step.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="chose_office">Chose Office</string>
+    <string name="admin">Admin</string>
     <string name="confirm_report_as_lost">The book has been reported as lost!</string>
 </resources>

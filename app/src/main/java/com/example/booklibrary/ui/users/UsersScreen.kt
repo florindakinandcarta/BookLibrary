@@ -21,14 +21,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
-import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.SampleData.users
 import com.example.booklibrary.data.User
 
 @Composable
 fun UsersScreen(
     onDeleteUser: (User) -> Unit,
     onChangeRole: (User) -> Unit,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -63,7 +63,7 @@ fun UsersScreen(
         }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            items(SampleData.users) { user ->
+            items(users) { user ->
                 ItemUser(
                     user = user,
                     onDeleteUser = onDeleteUser,

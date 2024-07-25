@@ -89,7 +89,8 @@
     <string name="photo_capture_failed">Photo capture failed</string>
     <string name="camera_is_needed">The camera is needed for this step.</string>
     <string name="go_to_settings">Go to settings</string>
-    <string name="chose_office">Chose Office</string>
+    <string name="choose_office">Choose Office</string>
+    <string name="choose_role">Choose Role</string>
     <string name="admin">Admin</string>
     <string name="confirm_report_as_lost">The book has been reported as lost!</string>
 </resources>

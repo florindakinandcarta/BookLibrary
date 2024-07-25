@@ -183,7 +183,7 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                     singleLine = true,
                     label = {
                         Text(
-                            text = stringResource(id = R.string.chose_office)
+                            text = stringResource(id = R.string.choose_office)
                         )
                     },
                     trailingIcon = {

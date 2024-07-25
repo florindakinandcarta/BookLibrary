@@ -59,4 +59,7 @@ sealed class Navigation(
     object AllUsers: Navigation(
         "allUsers"
     )
+    object UserRoleDialog: Navigation(
+        "userRoleDialog"
+    )
 }

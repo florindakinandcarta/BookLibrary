@@ -28,6 +28,7 @@ import com.example.booklibrary.ui.userProfile.ForgotPasswordScreen
 import com.example.booklibrary.ui.userProfile.LoginScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 import com.example.booklibrary.ui.userProfile.RegisterScreen
+import com.example.booklibrary.ui.users.UserRoleDialog
 import com.example.booklibrary.ui.users.UsersScreen
 import com.example.booklibrary.viewModels.AuthViewModel
 
@@ -157,11 +158,24 @@ fun NavigationHost(
         composable(Navigation.AllUsers.route) {
             UsersScreen(
                 onDeleteUser = {},
-                onChangeRole = {},
+                onChangeRole = { user ->
+                    sharedViewModel.user = user
+                    navController.navigate(Navigation.UserRoleDialog.route)
+                },
                 onBackClicked = {
                     navController.popBackStack()
                 }
             )
+        }
+        composable(Navigation.UserRoleDialog.route) {
+            val users = sharedViewModel.user
+                UserRoleDialog(
+                    user = users,
+                    onSubmit = {userRole ->
+                        users.role = userRole
+                        navController.popBackStack()
+                    }
+                )
         }
 
         composable(Navigation.ForgotPassword.route) {

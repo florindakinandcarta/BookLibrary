@@ -122,7 +122,6 @@ fun UserRoleDialog(user: User, onSubmit: (String) -> Unit) {
                         userRole?.let { onSubmit(it) }
                     }
             )
-
         }
     }
 }

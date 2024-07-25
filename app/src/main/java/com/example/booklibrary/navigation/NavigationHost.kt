@@ -176,7 +176,6 @@ fun NavigationHost(
                         navController.popBackStack()
                     }
                 )
-
         }
 
         composable(Navigation.ForgotPassword.route) {

@@ -249,7 +249,7 @@ fun LoginScreen(
                     .padding(16.dp)
                     .width(300.dp)
                     .height(60.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(32.dp),
                 enabled = isError && isPasswordValid,
             ) {
                 Text(

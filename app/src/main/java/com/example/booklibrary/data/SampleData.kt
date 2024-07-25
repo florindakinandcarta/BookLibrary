@@ -8,6 +8,7 @@ object SampleData {
     val returnStatus = listOf("Return", "Report Damage")
     val countries = listOf("Pristina", "Skopje", "Sofia")
     val role = listOf("Admin", "User")
+    val bookStatus = listOf("Requested", "Pending Purchase", "Rejected", "Currently Unavailable")
 
     val books = (0..25).map {
         Book(
@@ -16,7 +17,8 @@ object SampleData {
             genre = genres.random(),
             author = authors.random(),
             language = languages.random(),
-            numberOfLikes = numberOfLikes.random()
+            numberOfLikes = numberOfLikes.random(),
+            status = bookStatus.random()
         )
     }
 

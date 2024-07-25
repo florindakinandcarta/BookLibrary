@@ -55,12 +55,14 @@
     <string name="user_reviews">User Reviews</string>
     <string name="my_review">My Review</string>
     <string name="change_password">Change password</string>
+    <string name="change_status">Change status</string>
     <string name="books_by">Books by </string>
     <string name="all_users">All Users</string>
     <string name="hello_there">Hello there, </string>
     <string name="most_popular">Most Popular Books</string>
     <string name="top_authors">Top Authors</string>
     <string name="see_all">See All</string>
+    <string name="number_of_likes">Number of likes:</string>
     <string name="rating">3.8</string>
     <string name="status">Status: </string>
     <string name="enter_old_password">Enter your old password</string>

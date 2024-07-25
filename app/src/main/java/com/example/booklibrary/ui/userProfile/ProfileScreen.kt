@@ -266,7 +266,7 @@ fun ProfileScreen(
                     .padding(16.dp)
                     .fillMaxWidth()
                     .height(60.dp),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(32.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.log_out),

@@ -11,5 +11,6 @@ data class Book(
     val image: String? = null,
     val author: String? = null,
     val genre: String? = null,
-    val numberOfLikes: Int? = null
+    val numberOfLikes: Int? = null,
+    val status: String? = null
 ) : Parcelable

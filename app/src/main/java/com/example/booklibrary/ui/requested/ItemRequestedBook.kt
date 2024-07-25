@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,7 +37,7 @@ fun ItemRequestedBook(
 ) {
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .fillMaxWidth()
             .height(100.dp)
             .clickable {
@@ -57,11 +58,13 @@ fun ItemRequestedBook(
                 loading = placeholder(R.drawable.reading_time)
             )
             Column(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp),
+                modifier = Modifier
+                    .padding(start = 8.dp, top = 8.dp)
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = book.author.toString(),
+                    text = book.status.toString(),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .align(Alignment.Start),
@@ -86,7 +89,7 @@ fun ItemRequestedBook(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Number of likes: ",
+                        text = stringResource(id = R.string.number_of_likes),
                         modifier = Modifier
                             .padding(start = 8.dp),
                         style = TextStyle(
@@ -115,6 +118,5 @@ fun ItemRequestedBook(
                 )
             }
         }
-
     }
 }

@@ -132,10 +132,10 @@ fun ForgotPasswordScreen(
                     authViewModel.sendPasswordResetEmail(emailInput)
                 },
                 modifier = Modifier
-                    .padding(top = 8.dp, bottom = 16.dp)
+                    .padding(16.dp)
                     .fillMaxWidth()
                     .height(60.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(32.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.send_email),

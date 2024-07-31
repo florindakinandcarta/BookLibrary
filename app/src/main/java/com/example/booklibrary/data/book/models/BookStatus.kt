@@ -1,4 +1,4 @@
-package com.example.booklibrary.data
+package com.example.booklibrary.data.book.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 enum class BookStatus(
     val REQUESTED: String? = null,
     val PENDING_PURCHASE: String? = null,
-    val DECLINED: String? = null,
-    val PRESENT: String? = null,
+    val REJECTED: String? = null,
+    val IN_STOCK: String? = null,
     val CURRENTLY_UNAVAILABLE: String? = null
 ) : Parcelable

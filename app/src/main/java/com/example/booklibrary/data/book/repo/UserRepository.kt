@@ -67,7 +67,7 @@ class UserRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun changePassword(user: UserChangePasswordRequest): Resource<String> {
+    suspend fun changeUserPassword(user: UserChangePasswordRequest): Resource<String> {
         val response = try {
             userService.changeUserPassword(user)
         } catch (httpException: HttpException) {

@@ -34,7 +34,7 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun changePassword(user: UserChangePasswordRequest): Resource<String> {
-        return userRepository.changePassword(user)
+        return userRepository.changeUserPassword(user)
     }
 
     suspend fun deleteAccount(userId: UUID): Resource<String> {

@@ -43,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
-import com.example.booklibrary.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @Composable
 fun ProfileScreen(

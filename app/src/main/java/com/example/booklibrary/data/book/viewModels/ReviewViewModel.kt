@@ -13,20 +13,32 @@ import javax.inject.Inject
 class ReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
-    suspend fun getAllReviewsByBookISBN(isbn: String): Resource<List<ReviewResponse>> {
-        return reviewRepository.getAllReviewsByBookISBN(isbn)
+    suspend fun getAllReviewsByBookISBN(
+        bookISBN: String,
+        officeName: String
+    ): Resource<List<ReviewResponse>> {
+        return reviewRepository.getAllReviewsByBookISBN(bookISBN, officeName)
     }
 
-    suspend fun getTopReviewsForDisplayInBookView(isbn: String): Resource<List<ReviewResponse>> {
-        return reviewRepository.getTopReviewsForDisplayInBookView(isbn)
+    suspend fun getTopReviewsForDisplayInBookView(
+        bookISBN: String,
+        officeName: String
+    ): Resource<List<ReviewResponse>> {
+        return reviewRepository.getTopReviewsForDisplayInBookView(bookISBN, officeName)
     }
 
-    suspend fun insertReview(reviewInsert: ReviewRequest): Resource<ReviewResponse> {
-        return reviewRepository.insertReview(reviewInsert)
+    suspend fun insertReview(
+        bookISBN: String,
+        reviewInsert: ReviewRequest
+    ): Resource<ReviewResponse> {
+        return reviewRepository.insertReview(bookISBN, reviewInsert)
     }
 
-    suspend fun updateReview(reviewUpdate: ReviewRequest): Resource<ReviewResponse> {
-        return reviewRepository.updateReview(reviewUpdate)
+    suspend fun updateReview(
+        reviewId: UUID,
+        reviewUpdate: ReviewRequest
+    ): Resource<ReviewResponse> {
+        return reviewRepository.updateReview(reviewId, reviewUpdate)
     }
 
     suspend fun deleteReviewById(id: UUID): Resource<UUID> {

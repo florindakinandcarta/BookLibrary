@@ -1,18 +1,20 @@
 package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
+import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
+import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface BookCheckoutManagementService {
-    @POST("bookCheckout/borrow/{bookCheckout}")
+    @POST("bookCheckoutManagement/borrow")
     suspend fun borrowBookItem(
-        @Path("bookCheckout") bookCheckoutRequest: BookCheckoutRequest
-    ): String
+        @Body bookCheckoutRequest: BookCheckoutRequest
+    ): BookCheckoutResponse
 
-    @POST("bookCheckout/return/{bookCheckout}")
+    @POST("bookCheckoutManagement/return")
     suspend fun returnBookItem(
-        @Path("bookCheckout") bookCheckoutRequest: BookCheckoutRequest
-    ): String
+       @Body bookCheckoutRequest: BookCheckoutRequest
+    ): BookCheckoutResponse
 
 }

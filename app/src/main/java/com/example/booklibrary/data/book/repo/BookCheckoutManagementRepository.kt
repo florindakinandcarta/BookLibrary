@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.repo
 
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
+import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
 import com.example.booklibrary.data.book.services.BookCheckoutManagementService
 import com.example.booklibrary.util.Resource
 import com.google.gson.Gson
@@ -11,7 +12,7 @@ import javax.inject.Inject
 class BookCheckoutManagementRepository @Inject constructor(
     private val bookCheckoutManagementService: BookCheckoutManagementService
 ) {
-    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<String> {
+    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
         val response = try {
             bookCheckoutManagementService.borrowBookItem(bookCheckoutRequest)
         } catch (httpException: HttpException) {
@@ -28,7 +29,7 @@ class BookCheckoutManagementRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<String> {
+    suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
         val response = try {
             bookCheckoutManagementService.returnBookItem(bookCheckoutRequest)
         } catch (httpException: HttpException) {

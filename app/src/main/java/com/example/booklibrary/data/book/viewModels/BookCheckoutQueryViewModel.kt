@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
+import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.data.book.repo.BookCheckoutQueryRepository
 import com.example.booklibrary.util.Resource
@@ -49,5 +50,19 @@ class BookCheckoutQueryViewModel @Inject constructor(
 
     suspend fun getAllBookCheckoutsForBookTitle(userId: UUID): Resource<List<BookCheckoutResponse>> {
         return bookCheckoutQueryRepository.getAllBookCheckoutsFromUserWithId(userId)
+    }
+
+    suspend fun getAllNearReturnDate(officeName: String): Resource<List<BookCheckoutReturnReminderResponse>> {
+        return bookCheckoutQueryRepository.getAllNearReturnDate(officeName)
+    }
+
+    suspend fun getAllBooksForUserByTitleContaining(
+        userId: UUID,
+        titleSearchTerm: String
+    ): Resource<List<BookCheckoutResponse>> {
+        return bookCheckoutQueryRepository.getAllBooksForUserByTitleContaining(
+            userId,
+            titleSearchTerm
+        )
     }
 }

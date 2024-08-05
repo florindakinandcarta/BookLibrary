@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.repo
 
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
+import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.data.book.services.BookCheckoutQueryService
 import com.example.booklibrary.util.Resource
@@ -111,7 +112,44 @@ class BookCheckoutQueryRepository @Inject constructor(
 
     suspend fun getAllBookCheckoutsFromUserWithId(userId: UUID): Resource<List<BookCheckoutResponse>> {
         val response = try {
-            bookCheckoutQueryService.getAllBookCheckoutsFromUserWithId(userId)
+            bookCheckoutQueryService.getAllBookCheckoutsForUserWithId(userId)
+        } catch (httpException: HttpException) {
+            val errorResponse = Gson().fromJson(
+                httpException.response()?.errorBody()?.string(),
+                ExceptionResponse::class.java
+            )
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
+        } catch (e: Exception) {
+            return Resource.Error(e.message.toString())
+        }
+        return Resource.Success(response)
+    }
+
+    suspend fun getAllNearReturnDate(officeName: String): Resource<List<BookCheckoutReturnReminderResponse>> {
+        val response = try {
+            bookCheckoutQueryService.getAllNearReturnDate(officeName)
+        } catch (httpException: HttpException) {
+            val errorResponse = Gson().fromJson(
+                httpException.response()?.errorBody()?.string(),
+                ExceptionResponse::class.java
+            )
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
+        } catch (e: Exception) {
+            return Resource.Error(e.message.toString())
+        }
+        return Resource.Success(response)
+    }
+
+    suspend fun getAllBooksForUserByTitleContaining(
+        userId: UUID,
+        titleSearchTerm: String
+    ): Resource<List<BookCheckoutResponse>> {
+        val response = try {
+            bookCheckoutQueryService.getAllBooksForUserByTitleContaining(userId, titleSearchTerm)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

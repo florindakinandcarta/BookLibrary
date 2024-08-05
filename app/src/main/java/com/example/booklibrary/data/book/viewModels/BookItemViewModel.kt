@@ -12,16 +12,16 @@ import javax.inject.Inject
 class BookItemViewModel @Inject constructor(
     private val bookItemRepository: BookItemRepository
 ) : ViewModel() {
-    suspend fun getBookItemsByBookIsbn(isbn: String): Resource<List<BookItem>> {
-        return bookItemRepository.getBookItemsByBookIsbn(isbn)
+    suspend fun getBookItemsByBookIsbn(isbn: String, officeName: String): Resource<List<BookItem>> {
+        return bookItemRepository.getBookItemsByBookIsbn(isbn, officeName)
     }
 
-    suspend fun insertBookItem(isbn: String): Resource<BookItem> {
-        return bookItemRepository.insertBookItem(isbn)
+    suspend fun saveBookItem(bookItem: BookItem): Resource<BookItem> {
+        return bookItemRepository.saveBookItem(bookItem)
     }
 
-    suspend fun deleteById(id: UUID): Resource<UUID> {
-        return bookItemRepository.deleteById(id)
+    suspend fun deleteBookItem(bookItem: BookItem): Resource<BookItem> {
+        return bookItemRepository.deleteBookItem(bookItem)
     }
 
     suspend fun reportBookItemAsDamaged(bookItemId: UUID): Resource<String> {

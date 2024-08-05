@@ -12,31 +12,34 @@ import javax.inject.Inject
 class BookViewModel @Inject constructor(
     private val bookRepository: BookRepository
 ) : ViewModel() {
-    suspend fun getAllBooks(): Resource<List<Book>> {
-        return bookRepository.getAllBooks()
+    suspend fun getAllBooks(officeName: String): Resource<List<BookDisplay>> {
+        return bookRepository.getAllBooks(officeName)
     }
 
-    suspend fun getBookByISBN(isbn: String): Resource<Book> {
-        return bookRepository.getBookByISBN(isbn)
+    suspend fun getBookByISBN(isbn: String, officeName: String): Resource<Book> {
+        return bookRepository.getBookByISBN(isbn, officeName)
     }
 
-    suspend fun getBooksByTitle(title: String): Resource<List<Book>> {
-        return bookRepository.getBooksByTitle(title)
+    suspend fun getBooksByTitle(title: String, officeName: String): Resource<List<BookDisplay>> {
+        return bookRepository.getBooksByTitle(title, officeName)
     }
 
-    suspend fun getAvailableBooks(): Resource<List<BookDisplay>> {
-        return bookRepository.getAvailableBooks()
+    suspend fun getAvailableBooks(officeName: String): Resource<List<BookDisplay>> {
+        return bookRepository.getAvailableBooks(officeName)
     }
 
-    suspend fun getRequestedBooks(): Resource<List<BookDisplay>> {
-        return bookRepository.getRequestedBooks()
+    suspend fun getRequestedBooks(officeName: String): Resource<List<BookDisplay>> {
+        return bookRepository.getRequestedBooks(officeName)
     }
 
-    suspend fun getBooksByLanguage(language: String): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByLanguage(language)
+    suspend fun getBooksByLanguage(
+        language: String,
+        officeName: String
+    ): Resource<List<BookDisplay>> {
+        return bookRepository.getBooksByLanguage(language, officeName)
     }
 
-    suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByGenre(genre)
+    suspend fun getBooksByGenre(genre: String, officeName: String): Resource<List<BookDisplay>> {
+        return bookRepository.getBooksByGenre(genre, officeName)
     }
 }

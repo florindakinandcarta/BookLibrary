@@ -8,37 +8,42 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.UUID
 
 interface ReviewService {
 
-    @GET("review/{id}")
+    @GET("review-query/{reviewId}/display")
     suspend fun getReviewByUserId(
-        @Path("id") id: UUID
+        @Path("reviewId") reviewId: UUID
     ): ReviewResponse
 
-    @GET("review/{isbn}")
+    @GET("review-query/{bookISBN}/reviews")
     suspend fun getAllReviewsByBookISBN(
-        @Path("isbn") isbn: String
+        @Path("bookISBN") bookISBN: String,
+        @Query("officeName") officeName: String
     ): List<ReviewResponse>
 
-    @GET("review/topReviews/{isbn}")
+    @GET("/review-query/{bookISBN}/top-reviews")
     suspend fun getTopReviewsForDisplayInBookView(
-        @Path("isbn") isbn: String
+        @Path("bookISBN") bookISBN: String,
+        @Query("officeName") officeName: String
     ): List<ReviewResponse>
 
-    @POST("review/new")
+    @POST("review-management/{bookISBN}/new-review")
     suspend fun insertReview(
+        @Path("bookISBN") bookISBN: String,
         @Body reviewInsert: ReviewRequest
     ): ReviewResponse
 
-    @PUT("review/{reviewId}/update")
+    @PUT("review-management/{reviewId}/update")
     suspend fun updateReview(
+        @Path("reviewId") reviewId: UUID,
         @Body reviewRequest: ReviewRequest
     ): ReviewResponse
 
-    @DELETE("review/{id}/delete")
+    @DELETE("/review-management/{reviewId}/delete ")
     suspend fun deleteReviewById(
-        @Path("id") id: UUID
+        @Path("reviewId") reviewId: UUID
     ): UUID
 }

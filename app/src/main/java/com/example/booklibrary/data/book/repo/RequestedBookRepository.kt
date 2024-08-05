@@ -13,9 +13,9 @@ import javax.inject.Inject
 class RequestedBookRepository @Inject constructor(
     private val requestedBookService: RequestedBookService
 ) {
-    suspend fun getAllRequestedBooks(): Resource<List<RequestedBook>> {
+    suspend fun getAllRequestedBooks(officeName: String): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getAllRequestedBooks()
+            requestedBookService.getAllRequestedBooks(officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -64,9 +64,9 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun saveRequestedBook(bookIsbn: String): Resource<RequestedBook> {
+    suspend fun insertNewRequestedBook(bookIsbn: String): Resource<RequestedBook> {
         val response = try {
-            requestedBookService.saveRequestedBook(bookIsbn)
+            requestedBookService.insertNewRequestedBook(bookIsbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -81,9 +81,9 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun deleteRequestedBook(bookIsbn: String): Resource<String> {
+    suspend fun deleteRequestedBook(bookIsbn: String, officeName: String): Resource<String> {
         val response = try {
-            requestedBookService.deleteRequestedBook(bookIsbn)
+            requestedBookService.deleteRequestedBook(bookIsbn, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -118,9 +118,12 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun handleRequestedBookLike(requestedBookId: UUID): Resource<RequestedBook> {
+    suspend fun handleRequestedBookLike(
+        requestedBookId: UUID,
+        status: BookStatus
+    ): Resource<RequestedBook> {
         val response = try {
-            requestedBookService.handleRequestedBookLike(requestedBookId)
+            requestedBookService.handleRequestedBookLike(requestedBookId, status)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -135,9 +138,12 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getRequestedBooksByBookStatus(status: BookStatus): Resource<List<RequestedBook>> {
+    suspend fun getRequestedBooksByBookStatus(
+        status: BookStatus,
+        officeName: String
+    ): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getRequestedBooksByBookStatus(status)
+            requestedBookService.getRequestedBooksByBookStatus(status, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

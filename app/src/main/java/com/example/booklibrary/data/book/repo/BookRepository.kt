@@ -12,9 +12,9 @@ import javax.inject.Inject
 class BookRepository @Inject constructor(
     private val bookService: BookService
 ) {
-    suspend fun getAllBooks(): Resource<List<Book>> {
+    suspend fun getAllBooks(officeName: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getAllBooks()
+            bookService.getAllBooks(officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -29,9 +29,9 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getBookByISBN(isbn: String): Resource<Book> {
+    suspend fun getBookByISBN(isbn: String, officeName: String): Resource<Book> {
         val response = try {
-            bookService.getBookByISBN(isbn)
+            bookService.getBookByISBN(isbn, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -46,9 +46,9 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getBooksByTitle(title: String): Resource<List<Book>> {
+    suspend fun getBooksByTitle(title: String, officeName: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByTitle(title)
+            bookService.getBooksByTitle(title, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -63,9 +63,9 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getAvailableBooks(): Resource<List<BookDisplay>> {
+    suspend fun getAvailableBooks(officeName: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getAvailableBooks()
+            bookService.getAvailableBooks(officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -80,9 +80,9 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getRequestedBooks(): Resource<List<BookDisplay>> {
+    suspend fun getRequestedBooks(officeName: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getRequestedBooks()
+            bookService.getRequestedBooks(officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -97,9 +97,12 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getBooksByLanguage(language: String): Resource<List<BookDisplay>> {
+    suspend fun getBooksByLanguage(
+        language: String,
+        officeName: String
+    ): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByLanguage(language)
+            bookService.getBooksByLanguage(language, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -114,9 +117,9 @@ class BookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
+    suspend fun getBooksByGenre(genre: String, officeName: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByGenre(genre)
+            bookService.getBooksByGenre(genre, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

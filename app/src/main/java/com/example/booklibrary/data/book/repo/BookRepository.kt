@@ -1,25 +1,20 @@
 package com.example.booklibrary.data.book.repo
 
+import com.example.booklibrary.data.book.models.Book
+import com.example.booklibrary.data.book.models.BookDisplay
 import com.example.booklibrary.data.book.models.ExceptionResponse
-import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
-import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
-import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
-import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
-import com.example.booklibrary.data.book.models.response.UserResponse
-import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
-import com.example.booklibrary.data.book.services.UserService
+import com.example.booklibrary.data.book.services.BookService
 import com.example.booklibrary.util.Resource
 import com.google.gson.Gson
 import retrofit2.HttpException
-import java.util.UUID
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(
-    private val userService: UserService
+class BookRepository @Inject constructor(
+    private val bookService: BookService
 ) {
-    suspend fun getUserProfile(userId: UUID): Resource<UserResponse> {
+    suspend fun getAllBooks(): Resource<List<Book>> {
         val response = try {
-            userService.getUserProfile(userId)
+            bookService.getAllBooks()
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -34,112 +29,105 @@ class UserRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getAllUsersWithFullName(
-        officeName: String,
-        fullName: String
-    ): Resource<List<UserWithRoleResponse>> {
+    suspend fun getBookByISBN(isbn: String): Resource<Book> {
         val response = try {
-            userService.getAllUsersWithFullName(officeName, fullName)
+            bookService.getBookByISBN(isbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun getAllUsers(officeName: String): Resource<List<UserWithRoleResponse>> {
+    suspend fun getBooksByTitle(title: String): Resource<List<Book>> {
         val response = try {
-            userService.getAllUsers(officeName)
+            bookService.getBooksByTitle(title)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun changeUserPassword(user: UserChangePasswordRequest): Resource<String> {
+    suspend fun getAvailableBooks(): Resource<List<BookDisplay>> {
         val response = try {
-            userService.changeUserPassword(user)
+            bookService.getAvailableBooks()
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun deleteAccount(userId: UUID): Resource<String> {
+    suspend fun getRequestedBooks(): Resource<List<BookDisplay>> {
         val response = try {
-            userService.deleteAccount(userId)
+            bookService.getRequestedBooks()
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun updateUserRole(user: UserUpdateRoleRequest): Resource<String> {
+    suspend fun getBooksByLanguage(language: String): Resource<List<BookDisplay>> {
         val response = try {
-            userService.updateUserRole(user)
+            bookService.getBooksByLanguage(language)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
+            )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun registerUser(user: UserRegistrationRequest): Resource<String> {
+    suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
         val response = try {
-            userService.registerUser(user)
+            bookService.getBooksByGenre(genre)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
-        } catch (e: Exception) {
-            return Resource.Error(e.message.toString())
-        }
-        return Resource.Success(response)
-    }
-
-    suspend fun updateUserData(user: UserUpdateDataRequest): Resource<String> {
-        val response = try {
-            userService.updateUserData(user)
-        } catch (httpException: HttpException) {
-            val errorResponse = Gson().fromJson(
-                httpException.response()?.errorBody()?.string(),
-                ExceptionResponse::class.java
+            return Resource.Error(
+                errorResponse?.message ?: "Unknown Error"
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
-
 }

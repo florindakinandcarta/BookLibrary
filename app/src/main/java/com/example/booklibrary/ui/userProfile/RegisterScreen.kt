@@ -64,7 +64,7 @@ import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
-import com.example.booklibrary.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

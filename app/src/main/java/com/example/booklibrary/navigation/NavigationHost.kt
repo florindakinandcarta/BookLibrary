@@ -30,7 +30,7 @@ import com.example.booklibrary.ui.userProfile.ProfileScreen
 import com.example.booklibrary.ui.userProfile.RegisterScreen
 import com.example.booklibrary.ui.users.UserRoleDialog
 import com.example.booklibrary.ui.users.UsersScreen
-import com.example.booklibrary.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @Composable
 fun NavigationHost(

@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.Book
 import com.example.booklibrary.data.SampleData
-import com.example.booklibrary.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @Composable
 fun RequestedScreen(

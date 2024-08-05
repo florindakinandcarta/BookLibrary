@@ -45,7 +45,7 @@ import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.ui.bookDetails.AboutBook
 import com.example.booklibrary.ui.bookDetails.BookDetailsSection
 import com.example.booklibrary.ui.review.ItemUserReview
-import com.example.booklibrary.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

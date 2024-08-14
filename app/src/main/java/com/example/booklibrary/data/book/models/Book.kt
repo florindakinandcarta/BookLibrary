@@ -8,7 +8,7 @@ data class Book(
     val isbn: String? = null,
     val title: String,
     val description: String,
-    val language: String? = null,
+    val languages: Languages? = null,
     val genre: String? = null,
     val totalPages: Int? = null,
     val bookStatus: BookStatus? = null,

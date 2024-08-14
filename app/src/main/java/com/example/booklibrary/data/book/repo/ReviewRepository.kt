@@ -13,9 +13,12 @@ import javax.inject.Inject
 class ReviewRepository @Inject constructor(
     private val reviewService: ReviewService
 ) {
-    suspend fun getAllReviewsByBookISBN(isbn: String): Resource<List<ReviewResponse>> {
+    suspend fun getAllReviewsByBookISBN(
+        bookISBN: String,
+        officeName: String
+    ): Resource<List<ReviewResponse>> {
         val response = try {
-            reviewService.getAllReviewsByBookISBN(isbn)
+            reviewService.getAllReviewsByBookISBN(bookISBN, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -30,9 +33,12 @@ class ReviewRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getTopReviewsForDisplayInBookView(isbn: String): Resource<List<ReviewResponse>> {
+    suspend fun getTopReviewsForDisplayInBookView(
+        bookISBN: String,
+        officeName: String
+    ): Resource<List<ReviewResponse>> {
         val response = try {
-            reviewService.getTopReviewsForDisplayInBookView(isbn)
+            reviewService.getTopReviewsForDisplayInBookView(bookISBN, officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -47,7 +53,9 @@ class ReviewRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun insertReview(reviewInsert: ReviewRequest): Resource<ReviewResponse> {
+    suspend fun insertReview(
+        reviewInsert: ReviewRequest
+    ): Resource<ReviewResponse> {
         val response = try {
             reviewService.insertReview(reviewInsert)
         } catch (httpException: HttpException) {
@@ -64,7 +72,9 @@ class ReviewRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun updateReview(reviewUpdate: ReviewRequest): Resource<ReviewResponse> {
+    suspend fun updateReview(
+        reviewUpdate: ReviewRequest
+    ): Resource<ReviewResponse> {
         val response = try {
             reviewService.updateReview(reviewUpdate)
         } catch (httpException: HttpException) {

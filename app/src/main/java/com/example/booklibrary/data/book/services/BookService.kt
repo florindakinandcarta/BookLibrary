@@ -2,36 +2,73 @@ package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.book.models.BookDisplay
+import com.example.booklibrary.data.book.models.BookID
+import com.example.booklibrary.data.book.models.BookState
+import com.example.booklibrary.data.book.models.BookStatus
+import com.example.booklibrary.data.book.models.request.BookInsertRequest
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface BookService {
-    @GET
-    suspend fun getAllBooks(): List<Book>
+    @GET("books")
+    suspend fun getAllBooks(
+        @Query("officeName") officeName: String
+    ): List<BookDisplay>
 
-    @GET("book/{isbn}")
+    @GET("books/book")
     suspend fun getBookByISBN(
-        @Path("isbn") isbn: String
+        @Query("officeName") officeName: String,
+        @Query("isbn") isbn: String
     ): Book
 
-    @GET("books/{title}")
+    @GET("books/available-books")
+    suspend fun getAvailableBooks(
+        @Query("officeName") officeName: String
+    ): List<BookDisplay>
+
+    @GET("books/paginated-books")
+    suspend fun getAllAvailableBooksPaginated(
+        @Query("officeName") officeName: String,
+        @Query("bookStatus") bookStatus: BookStatus,
+        @Query("bookItemState") bookItemState: BookState,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): List<BookDisplay>
+
+    @GET("books")
     suspend fun getBooksByTitle(
-        @Path("title") title: String
-    ): List<Book>
+        @Query("officeName") officeName: String,
+        @Query("title") title: String
+    ): List<BookDisplay>
 
-    @GET("availableBooks")
-    suspend fun getAvailableBooks(): List<BookDisplay>
+    @GET("book/requested-books")
+    suspend fun getRequestedBooks(
+        @Query("officeName") officeName: String
+    ): List<BookDisplay>
 
-    @GET("requestedBooks")
-    suspend fun getRequestedBooks(): List<BookDisplay>
-
-    @GET("books/{language}")
+    @GET("books")
     suspend fun getBooksByLanguage(
-        @Path("language") languages: String
+        @Query("officeName") officeName: String,
+        @Query("language") languages: String
     ): List<BookDisplay>
 
-    @GET("books/{genre}")
+    @GET("books")
     suspend fun getBooksByGenre(
-        @Path("genre") genre: String
+        @Query("officeName") officeName: String,
+        @Query("genres") genres: String
     ): List<BookDisplay>
+
+    @POST("books/insert")
+    suspend fun insertNewAvailableBook(
+        @Body bookInsertRequest: BookInsertRequest
+    ): BookDisplay
+
+    @DELETE("books")
+    suspend fun deleteBook(
+        @Query("officeName") officeName: String,
+        @Query("isbn") isbn: String
+    ): BookID
 }

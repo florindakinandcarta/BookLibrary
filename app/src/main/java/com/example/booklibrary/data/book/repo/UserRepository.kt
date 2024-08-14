@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.repo
 
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
+import com.example.booklibrary.data.book.models.request.UserLoginRequest
 import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
@@ -130,6 +131,21 @@ class UserRepository @Inject constructor(
     suspend fun updateUserData(user: UserUpdateDataRequest): Resource<String> {
         val response = try {
             userService.updateUserData(user)
+        } catch (httpException: HttpException) {
+            val errorResponse = Gson().fromJson(
+                httpException.response()?.errorBody()?.string(),
+                ExceptionResponse::class.java
+            )
+            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+        } catch (e: Exception) {
+            return Resource.Error(e.message.toString())
+        }
+        return Resource.Success(response)
+    }
+
+    suspend fun loginUser(userLoginRequest: UserLoginRequest): Resource<String> {
+        val response = try {
+            userService.loginUser(userLoginRequest)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

@@ -1,57 +1,66 @@
 package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
+import com.example.booklibrary.data.book.models.request.UserLoginRequest
 import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
 import com.example.booklibrary.data.book.models.response.UserResponse
 import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.UUID
 
 interface UserService {
-    @PUT("updateUserData/{user}")
+    @PATCH("user/updateData")
     suspend fun updateUserData(
-        @Path("user") user: UserUpdateDataRequest
+        @Body user: UserUpdateDataRequest
     ): String
 
-    @POST("registerUser/{user}")
+    @POST("user/registerUser")
     suspend fun registerUser(
-        @Path("user") user: UserRegistrationRequest
+        @Body user: UserRegistrationRequest
     ): String
 
-    @PUT("updateUserRole/{user}")
+    @POST("user/updateRole")
     suspend fun updateUserRole(
-        @Path("user") user: UserUpdateRoleRequest
+        @Body user: UserUpdateRoleRequest
     ): String
 
-    @DELETE("deleteAccount/{userId}")
+    @DELETE("user/deleteAccount/USER_ID")
     suspend fun deleteAccount(
-        @Path("user") userId: UUID
+        @Path("USER_ID") USER_ID: UUID
     ): String
 
-    @PUT("changeUserPassword/{user}")
+    @PUT("user/changePassword")
     suspend fun changeUserPassword(
-        @Path("user") user: UserChangePasswordRequest
+        @Body user: UserChangePasswordRequest
     ): String
 
-    @GET("users/all/{officeName}")
+    @GET("user/getAll")
     suspend fun getAllUsers(
-        @Path("officeName") officeName: String
+        @Query("officeName") officeName: String
     ): List<UserWithRoleResponse>
 
-    @GET("users/all/{officeName}/{fullName}")
+    @GET("user/getAllByFullNameContaining")
     suspend fun getAllUsersWithFullName(
-        @Path("officeName") officeName: String,
-        @Path("fullName") fullName: String,
+        @Query("officeName") officeName: String,
+        @Query("fullName") fullName: String,
     ): List<UserWithRoleResponse>
 
-    @GET("users/{userId}")
+    @GET("user/profile")
     suspend fun getUserProfile(
-        @Path("userId") userId: UUID
+        @Query("userId") userId: UUID
     ): UserResponse
+
+    @POST("user/loginUser")
+    suspend fun loginUser(
+        @Body userLoginRequest: UserLoginRequest
+    ): String
 }

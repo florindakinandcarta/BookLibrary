@@ -2,19 +2,26 @@ package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.RequestedBook
+import com.example.booklibrary.data.book.models.request.BookChangeStatus
+import com.example.booklibrary.data.book.models.request.BookRequest
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.UUID
 
 interface RequestedBookService {
-    @GET("requestedBook/all")
-    suspend fun getAllRequestedBooks(): List<RequestedBook>
+    @GET("requested-book/all")
+    suspend fun getAllRequestedBooks(
+        @Query("officeName") officeName: String
+    ): List<RequestedBook>
 
-    @GET("requestedBook/{status}")
+    @GET("requested-book/{status}/all")
     suspend fun getRequestedBooksByBookStatus(
+        @Query("officeName") officeName: String,
         @Path("status") status: BookStatus
     ): List<RequestedBook>
 
@@ -28,24 +35,24 @@ interface RequestedBookService {
         @Path("isbn") isbn: String
     ): RequestedBook
 
-    @POST("requestedBook/{bookISBN}")
-    suspend fun saveRequestedBook(
-        @Path("bookISBN") bookISBN: String
+    @POST("requested-book/insert")
+    suspend fun insertNewRequestedBook(
+        @Body book: BookRequest
     ): RequestedBook
 
-    @DELETE("requestedBook/delete/{bookISBN}")
+    @DELETE("requested-book/delete")
     suspend fun deleteRequestedBook(
+        @Query("officeName") officeName: String,
         @Path("bookISBN") bookISBN: String
     ): String
 
-    @PATCH("requestedBook/{bookISBN}/{bookStatus}")
+    @PATCH("requested-book/change-status")
     suspend fun changeBookStatus(
-        @Path("requestedBookId") requestedBookId: UUID,
-        @Path("bookStatus") bookStatus: BookStatus
+        @Body book: BookChangeStatus
     ): RequestedBook
 
-    @PATCH("requestedBook/{bookISBN}/like")
+    @POST("requested-book/handle-like")
     suspend fun handleRequestedBookLike(
-        @Path("requestedBookId") requestedBookId: UUID,
+        @Body book: BookRequest
     ): RequestedBook
 }

@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
+import com.example.booklibrary.data.book.models.request.UserLoginRequest
 import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
@@ -51,5 +52,9 @@ class UserViewModel @Inject constructor(
 
     suspend fun updateUserData(user: UserUpdateDataRequest): Resource<String> {
         return userRepository.updateUserData(user)
+    }
+
+    suspend fun loginUser(userLoginRequest: UserLoginRequest): Resource<String> {
+        return userRepository.loginUser(userLoginRequest)
     }
 }

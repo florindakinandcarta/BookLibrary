@@ -54,11 +54,10 @@ class ReviewRepository @Inject constructor(
     }
 
     suspend fun insertReview(
-        bookISBN: String,
         reviewInsert: ReviewRequest
     ): Resource<ReviewResponse> {
         val response = try {
-            reviewService.insertReview(bookISBN, reviewInsert)
+            reviewService.insertReview(reviewInsert)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -74,11 +73,10 @@ class ReviewRepository @Inject constructor(
     }
 
     suspend fun updateReview(
-        reviewId: UUID,
         reviewUpdate: ReviewRequest
     ): Resource<ReviewResponse> {
         val response = try {
-            reviewService.updateReview(reviewId, reviewUpdate)
+            reviewService.updateReview(reviewUpdate)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

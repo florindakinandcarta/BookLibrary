@@ -28,17 +28,16 @@ class ReviewViewModel @Inject constructor(
     }
 
     suspend fun insertReview(
-        bookISBN: String,
         reviewInsert: ReviewRequest
     ): Resource<ReviewResponse> {
-        return reviewRepository.insertReview(bookISBN, reviewInsert)
+        return reviewRepository.insertReview(reviewInsert)
     }
 
+
     suspend fun updateReview(
-        reviewId: UUID,
         reviewUpdate: ReviewRequest
     ): Resource<ReviewResponse> {
-        return reviewRepository.updateReview(reviewId, reviewUpdate)
+        return reviewRepository.updateReview(reviewUpdate)
     }
 
     suspend fun deleteReviewById(id: UUID): Resource<UUID> {

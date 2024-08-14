@@ -2,6 +2,8 @@ package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.RequestedBook
+import com.example.booklibrary.data.book.models.request.BookChangeStatus
+import com.example.booklibrary.data.book.models.request.BookRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -19,8 +21,8 @@ interface RequestedBookService {
 
     @GET("requested-book/{status}/all")
     suspend fun getRequestedBooksByBookStatus(
-        @Path("status") status: BookStatus,
-        @Query("officeName") officeName: String
+        @Query("officeName") officeName: String,
+        @Path("status") status: BookStatus
     ): List<RequestedBook>
 
     @GET("requestedBook/{id}")
@@ -33,26 +35,24 @@ interface RequestedBookService {
         @Path("isbn") isbn: String
     ): RequestedBook
 
-    @POST("requested-book/new")
+    @POST("requested-book/insert")
     suspend fun insertNewRequestedBook(
-        @Body bookISBN: String
+        @Body book: BookRequest
     ): RequestedBook
 
-    @DELETE("requested-book/{bookISBN}/delete")
+    @DELETE("requested-book/delete")
     suspend fun deleteRequestedBook(
-        @Path("bookISBN") bookISBN: String,
-        @Query("officeName") officeName: String
+        @Query("officeName") officeName: String,
+        @Path("bookISBN") bookISBN: String
     ): String
 
-    @PATCH("requested-book/{requestedBookId}/change-status")
+    @PATCH("requested-book/change-status")
     suspend fun changeBookStatus(
-        @Path("requestedBookId") requestedBookId: UUID,
-        @Path("bookStatus") bookStatus: BookStatus
+        @Body book: BookChangeStatus
     ): RequestedBook
 
-    @POST("requested-book/{requestedBookId}/handle-like")
+    @POST("requested-book/handle-like")
     suspend fun handleRequestedBookLike(
-        @Path("requestedBookId") requestedBookId: UUID,
-        @Query("status") status: BookStatus
+        @Body book: BookRequest
     ): RequestedBook
 }

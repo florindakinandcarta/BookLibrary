@@ -2,6 +2,8 @@ package com.example.booklibrary.data.book.viewModels
 
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.RequestedBook
+import com.example.booklibrary.data.book.models.request.BookChangeStatus
+import com.example.booklibrary.data.book.models.request.BookRequest
 import com.example.booklibrary.data.book.repo.RequestedBookRepository
 import com.example.booklibrary.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +26,8 @@ class RequestedBookViewModel @Inject constructor(
         return requestedBookRepository.getRequestedBookByISBN(isbn)
     }
 
-    suspend fun insertNewRequestedBook(bookIsbn: String): Resource<RequestedBook> {
-        return requestedBookRepository.insertNewRequestedBook(bookIsbn)
+    suspend fun insertNewRequestedBook(book: BookRequest): Resource<RequestedBook> {
+        return requestedBookRepository.insertNewRequestedBook(book)
     }
 
     suspend fun deleteRequestedBook(bookIsbn: String, officeName: String): Resource<String> {
@@ -34,17 +36,15 @@ class RequestedBookViewModel @Inject constructor(
 
 
     suspend fun changeBookStatus(
-        requestedBookId: UUID,
-        bookStatus: BookStatus
+        bookStatus: BookChangeStatus
     ): Resource<RequestedBook> {
-        return requestedBookRepository.changeBookStatus(requestedBookId, bookStatus)
+        return requestedBookRepository.changeBookStatus(bookStatus)
     }
 
     suspend fun handleRequestedBookLike(
-        requestedBookId: UUID,
-        status: BookStatus
+        status: BookRequest
     ): Resource<RequestedBook> {
-        return requestedBookRepository.handleRequestedBookLike(requestedBookId, status)
+        return requestedBookRepository.handleRequestedBookLike(status)
     }
 
 
@@ -52,6 +52,6 @@ class RequestedBookViewModel @Inject constructor(
         status: BookStatus,
         officeName: String
     ): Resource<List<RequestedBook>> {
-        return requestedBookRepository.getRequestedBooksByBookStatus(status,officeName)
+        return requestedBookRepository.getRequestedBooksByBookStatus(status, officeName)
     }
 }

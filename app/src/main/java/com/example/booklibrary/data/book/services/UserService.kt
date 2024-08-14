@@ -10,6 +10,7 @@ import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -17,7 +18,7 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface UserService {
-    @POST("user/updateData")
+    @PATCH("user/updateData")
     suspend fun updateUserData(
         @Body user: UserUpdateDataRequest
     ): String
@@ -27,7 +28,7 @@ interface UserService {
         @Body user: UserRegistrationRequest
     ): String
 
-    @POST("/user/updateRole")
+    @POST("user/updateRole")
     suspend fun updateUserRole(
         @Body user: UserUpdateRoleRequest
     ): String
@@ -42,8 +43,10 @@ interface UserService {
         @Body user: UserChangePasswordRequest
     ): String
 
-    @GET("users/all")
-    suspend fun getAllUsers(): List<UserWithRoleResponse>
+    @GET("user/getAll")
+    suspend fun getAllUsers(
+        @Query("officeName") officeName: String
+    ): List<UserWithRoleResponse>
 
     @GET("user/getAllByFullNameContaining")
     suspend fun getAllUsersWithFullName(
@@ -51,9 +54,9 @@ interface UserService {
         @Query("fullName") fullName: String,
     ): List<UserWithRoleResponse>
 
-    @GET("user/profile/USER_ID")
+    @GET("user/profile")
     suspend fun getUserProfile(
-        @Path("USER_ID") USER_ID: UUID
+        @Query("userId") userId: UUID
     ): UserResponse
 
     @POST("user/loginUser")

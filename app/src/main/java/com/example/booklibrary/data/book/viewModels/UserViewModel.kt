@@ -30,8 +30,8 @@ class UserViewModel @Inject constructor(
         return userRepository.getAllUsersWithFullName(officeName, fullName)
     }
 
-    suspend fun getAllUsers(): Resource<List<UserWithRoleResponse>> {
-        return userRepository.getAllUsers()
+    suspend fun getAllUsers(officeName: String): Resource<List<UserWithRoleResponse>> {
+        return userRepository.getAllUsers(officeName)
     }
 
     suspend fun changePassword(user: UserChangePasswordRequest): Resource<String> {

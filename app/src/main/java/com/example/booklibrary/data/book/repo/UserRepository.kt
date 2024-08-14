@@ -53,9 +53,9 @@ class UserRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getAllUsers(): Resource<List<UserWithRoleResponse>> {
+    suspend fun getAllUsers(officeName: String): Resource<List<UserWithRoleResponse>> {
         val response = try {
-            userService.getAllUsers()
+            userService.getAllUsers(officeName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

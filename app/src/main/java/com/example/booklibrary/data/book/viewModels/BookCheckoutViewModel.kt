@@ -1,21 +1,22 @@
 package com.example.booklibrary.data.book.viewModels
 
 import androidx.lifecycle.ViewModel
+import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
-import com.example.booklibrary.data.book.repo.BookCheckoutQueryRepository
+import com.example.booklibrary.data.book.repo.BookCheckoutRepository
 import com.example.booklibrary.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class BookCheckoutQueryViewModel @Inject constructor(
-    private val bookCheckoutQueryRepository: BookCheckoutQueryRepository
+class BookCheckoutViewModel @Inject constructor(
+    private val bookCheckoutRepository: BookCheckoutRepository
 ) : ViewModel() {
     suspend fun getAllBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutQueryRepository.getAllBookCheckouts(officeName)
+        return bookCheckoutRepository.getAllBookCheckouts(officeName)
     }
 
     suspend fun getAllBookCheckoutsPaginated(
@@ -23,7 +24,7 @@ class BookCheckoutQueryViewModel @Inject constructor(
         numberOfPages: Int,
         pageSize: Int
     ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutQueryRepository.getAllBookCheckoutsPaginated(
+        return bookCheckoutRepository.getAllBookCheckoutsPaginated(
             officeName,
             numberOfPages,
             pageSize
@@ -31,38 +32,46 @@ class BookCheckoutQueryViewModel @Inject constructor(
     }
 
     suspend fun getAllActiveBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutQueryRepository.getAllActiveBookCheckouts(officeName)
+        return bookCheckoutRepository.getAllActiveBookCheckouts(officeName)
     }
 
     suspend fun getAllPastBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutQueryRepository.getAllPastBookCheckouts(officeName)
+        return bookCheckoutRepository.getAllPastBookCheckouts(officeName)
     }
 
     suspend fun getAllBookCheckoutsForBookTitle(
         officeName: String,
         titleSearchTerm: String
     ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutQueryRepository.getAllBookCheckoutsForBookTitle(
+        return bookCheckoutRepository.getAllBookCheckoutsForBookTitle(
             officeName,
             titleSearchTerm
         )
     }
 
     suspend fun getAllBookCheckoutsForBookTitle(userId: UUID): Resource<List<BookCheckoutResponse>> {
-        return bookCheckoutQueryRepository.getAllBookCheckoutsFromUserWithId(userId)
+        return bookCheckoutRepository.getAllBookCheckoutsFromUserWithId(userId)
     }
 
     suspend fun getAllNearReturnDate(officeName: String): Resource<List<BookCheckoutReturnReminderResponse>> {
-        return bookCheckoutQueryRepository.getAllNearReturnDate(officeName)
+        return bookCheckoutRepository.getAllNearReturnDate(officeName)
     }
 
     suspend fun getAllBooksForUserByTitleContaining(
         userId: UUID,
         titleSearchTerm: String
     ): Resource<List<BookCheckoutResponse>> {
-        return bookCheckoutQueryRepository.getAllBooksForUserByTitleContaining(
+        return bookCheckoutRepository.getAllBooksForUserByTitleContaining(
             userId,
             titleSearchTerm
         )
+    }
+
+    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
+        return bookCheckoutRepository.borrowBookItem(bookCheckoutRequest)
+    }
+
+    suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
+        return bookCheckoutRepository.returnBookItem(bookCheckoutRequest)
     }
 }

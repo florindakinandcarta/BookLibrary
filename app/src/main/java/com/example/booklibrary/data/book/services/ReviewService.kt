@@ -13,36 +13,34 @@ import java.util.UUID
 
 interface ReviewService {
 
-    @GET("review-query/{reviewId}/display")
+    @GET("reviews/{reviewId}")
     suspend fun getReviewByUserId(
         @Path("reviewId") reviewId: UUID
     ): ReviewResponse
 
-    @GET("review-query/{bookISBN}/reviews")
+    @GET("reviews")
     suspend fun getAllReviewsByBookISBN(
-        @Path("bookISBN") bookISBN: String,
-        @Query("officeName") officeName: String
+        @Query("officeName") officeName: String,
+        @Query("bookISBN") bookISBN: String
     ): List<ReviewResponse>
 
-    @GET("/review-query/{bookISBN}/top-reviews")
+    @GET("reviews/top-reviews")
     suspend fun getTopReviewsForDisplayInBookView(
-        @Path("bookISBN") bookISBN: String,
-        @Query("officeName") officeName: String
+        @Query("officeName") officeName: String,
+        @Query("bookISBN") bookISBN: String
     ): List<ReviewResponse>
 
-    @POST("review-management/{bookISBN}/new-review")
+    @POST("reviews/insert")
     suspend fun insertReview(
-        @Path("bookISBN") bookISBN: String,
         @Body reviewInsert: ReviewRequest
     ): ReviewResponse
 
-    @PUT("review-management/{reviewId}/update")
+    @PUT("reviews/update")
     suspend fun updateReview(
-        @Path("reviewId") reviewId: UUID,
         @Body reviewRequest: ReviewRequest
     ): ReviewResponse
 
-    @DELETE("/review-management/{reviewId}/delete ")
+    @DELETE("reviews/delete/{reviewId} ")
     suspend fun deleteReviewById(
         @Path("reviewId") reviewId: UUID
     ): UUID

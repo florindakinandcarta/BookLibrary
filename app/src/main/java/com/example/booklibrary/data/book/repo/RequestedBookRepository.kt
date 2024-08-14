@@ -3,6 +3,8 @@ package com.example.booklibrary.data.book.repo
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.RequestedBook
+import com.example.booklibrary.data.book.models.request.BookChangeStatus
+import com.example.booklibrary.data.book.models.request.BookRequest
 import com.example.booklibrary.data.book.services.RequestedBookService
 import com.example.booklibrary.util.Resource
 import com.google.gson.Gson
@@ -64,9 +66,9 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun insertNewRequestedBook(bookIsbn: String): Resource<RequestedBook> {
+    suspend fun insertNewRequestedBook(book: BookRequest): Resource<RequestedBook> {
         val response = try {
-            requestedBookService.insertNewRequestedBook(bookIsbn)
+            requestedBookService.insertNewRequestedBook(book)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -99,11 +101,10 @@ class RequestedBookRepository @Inject constructor(
     }
 
     suspend fun changeBookStatus(
-        requestedBookId: UUID,
-        bookStatus: BookStatus
+        bookStatus: BookChangeStatus
     ): Resource<RequestedBook> {
         val response = try {
-            requestedBookService.changeBookStatus(requestedBookId, bookStatus)
+            requestedBookService.changeBookStatus(bookStatus)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -119,11 +120,10 @@ class RequestedBookRepository @Inject constructor(
     }
 
     suspend fun handleRequestedBookLike(
-        requestedBookId: UUID,
-        status: BookStatus
+        status: BookRequest
     ): Resource<RequestedBook> {
         val response = try {
-            requestedBookService.handleRequestedBookLike(requestedBookId, status)
+            requestedBookService.handleRequestedBookLike( status)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -143,7 +143,7 @@ class RequestedBookRepository @Inject constructor(
         officeName: String
     ): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getRequestedBooksByBookStatus(status, officeName)
+            requestedBookService.getRequestedBooksByBookStatus(officeName,status)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

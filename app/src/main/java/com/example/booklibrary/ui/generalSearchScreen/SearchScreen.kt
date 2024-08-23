@@ -27,6 +27,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,11 +40,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.ui.home.SearchViewModel
+import com.example.booklibrary.util.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -53,14 +56,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
+    officeName: String,
     onScanClick: () -> Unit,
     onBackClicked: () -> Unit,
-    onClickedBook: (Book) -> Unit,
+    onClickedBook: (String) -> Unit,
+    viewModel: BookViewModel = hiltViewModel(),
 ) {
     val searchViewModel: SearchViewModel = viewModel()
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
-    val booksList by searchViewModel.booksList.collectAsState()
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
@@ -87,6 +91,8 @@ fun SearchScreen(
             }
         }
     }
+
+    val listOfBooks = viewModel.books.collectAsState().value
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -106,6 +112,9 @@ fun SearchScreen(
             onSearch = {
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
+                scope.launch {
+                    viewModel.getBooksByTitle(searchText, officeName)
+                }
             },
             leadingIcon = {
                 IconButton(
@@ -199,9 +208,13 @@ fun SearchScreen(
                 )
             ),
         ) {
-            LazyColumn {
-                items(booksList) { book ->
-                    ItemBook(book = book, onClickedBook = onClickedBook)
+            if (listOfBooks is Resource.Success) {
+                LazyColumn {
+                    listOfBooks.data?.let { books ->
+                        items(books) { book ->
+                            ItemBook(book = book, onClickedBook = onClickedBook)
+                        }
+                    }
                 }
             }
         }

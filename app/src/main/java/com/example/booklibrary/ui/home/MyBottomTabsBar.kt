@@ -7,47 +7,40 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.booklibrary.navigation.BottomNavItem
+import com.example.booklibrary.navigation.BottomTab
 
 @Composable
-fun BottomNavigation(navController: NavHostController) {
-    val items = listOf(
-        BottomNavItem.Dashboard,
-        BottomNavItem.Requested,
-        BottomNavItem.Borrowed,
-        BottomNavItem.Profile
-    )
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+fun MyBottomTabsBar(
+    bottomTabs: List<BottomTab>,
+    currentBottomTab: BottomTab?,
+    onTabClicked: (BottomTab) -> Unit,
+) {
     NavigationBar {
-        items.forEach { item ->
-            AddItem(
-                screen = item,
-                isSelected = currentRoute == item.route,
-                onClick = {
-                    if (currentRoute != item.route) {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                }
-            )
+        bottomTabs.forEachIndexed { _, bottomTab ->
+            NavigationBarItem(
+                alwaysShowLabel = true,
+                selected = currentBottomTab == bottomTab,
+                label = {
+                    Text(
+                        text = bottomTab.title,
+                    )
+                },
+                onClick = { onTabClicked(bottomTab) },
+                icon = {
+                    Icon(
+                        painterResource(id = bottomTab.icon),
+                        contentDescription = bottomTab.title
+                    )
+                })
         }
     }
 }
 
 @Composable
 fun RowScope.AddItem(
-    screen: BottomNavItem,
+    screen: BottomTab,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {

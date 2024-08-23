@@ -1,37 +1,44 @@
 package com.example.booklibrary.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.booklibrary.navigation.Navigation
-import com.example.booklibrary.navigation.NavigationHost
-import com.example.booklibrary.ui.home.BottomNavigation
+import com.example.booklibrary.navigation.MainScreenContent
+import com.example.booklibrary.navigation.Route
+import com.example.booklibrary.ui.home.MyBottomTabsBar
 
 @Composable
-fun MainScreen(navController: NavHostController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+fun MainScreen() {
+    val screensNavigator = remember() {
+        ScreensNavigator()
+    }
+
+    val currentBottomTab = screensNavigator.currentBottomTab.collectAsState()
+
+    val currentRoute = screensNavigator.currentRoute.collectAsState()
+
+    val isRootRoute = screensNavigator.isRootRoute.collectAsState()
+
     Scaffold(
         bottomBar = {
-            if (shouldShowBottomNav(currentRoute)) {
-                BottomNavigation(navController = navController)
+            BottomAppBar {
+                MyBottomTabsBar(
+                    bottomTabs = ScreensNavigator.BOTTOM_TABS,
+                    currentBottomTab = currentBottomTab.value,
+                    onTabClicked = { bottomTab ->
+                        screensNavigator.toTab(bottomTab)
+                    }
+                )
             }
         }
     ) { innerPadding ->
-        NavigationHost(navController, modifier = Modifier.padding(innerPadding))
-    }
-}
-
-private fun shouldShowBottomNav(currentRoute: String?): Boolean {
-    return when (currentRoute) {
-        Navigation.Login.route,
-        Navigation.Register.route,
-        Navigation.ForgotPassword.route,
-        Navigation.SearchWithGoogle.route -> false
-        else -> true
+        MainScreenContent(
+            modifier = Modifier.padding(innerPadding),
+            screensNavigator = screensNavigator
+        )
     }
 }

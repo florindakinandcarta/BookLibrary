@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.userProfile
+package com.example.booklibrary.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

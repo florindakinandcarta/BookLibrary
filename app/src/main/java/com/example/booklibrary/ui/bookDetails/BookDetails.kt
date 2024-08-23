@@ -32,7 +32,7 @@ import com.example.booklibrary.ui.review.ItemUserReview
 
 @Composable
 fun BookDetails(
-    book: Book,
+    bookISBN: String,
     onBackClicked: () -> Unit,
     onAddReviewClicked: () -> Unit
 ) {

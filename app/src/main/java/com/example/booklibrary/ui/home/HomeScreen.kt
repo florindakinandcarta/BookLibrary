@@ -19,6 +19,8 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,9 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.example.booklibrary.data.Book
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.models.Languages
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.ItemBook
+import com.example.booklibrary.util.Resource
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -38,9 +43,11 @@ import com.example.booklibrary.ui.ItemBook
 )
 @Composable
 fun HomeScreen(
-    onClickedBook: (Book) -> Unit,
+    officeName: String,
     onNotificationClick: () -> Unit,
-    onSearchClick: () -> Unit
+    viewModel: BookViewModel = hiltViewModel(),
+    onSearchClick: () -> Unit,
+    onClickedBook: (String) -> Unit
 ) {
     var selectedFilter by remember { mutableStateOf("") }
     var expanded by remember {
@@ -49,7 +56,10 @@ fun HomeScreen(
     var selectedLanguage by remember {
         mutableStateOf("Languages")
     }
-
+    val listOfBooks = viewModel.books.collectAsState().value
+    LaunchedEffect(officeName) {
+        viewModel.getAvailableBooks(officeName)
+    }
     Scaffold(
         topBar = { TopBarHome(onNotificationClick, onSearchClick) },
     ) { paddingValues ->
@@ -102,16 +112,16 @@ fun HomeScreen(
                                         .width(140.dp)
                                         .background(Color.White)
                                 ) {
-                                    SampleData.languages.forEach { option ->
+                                    Languages.entries.forEach { option ->
                                         DropdownMenuItem(
                                             text = {
                                                 Text(
-                                                    option,
+                                                    option.name,
                                                     style = TextStyle(color = Color.Black)
                                                 )
                                             },
                                             onClick = {
-                                                selectedLanguage = option
+                                                selectedLanguage = option.name
                                                 expanded = false
                                             },
                                         )
@@ -133,21 +143,16 @@ fun HomeScreen(
                     }
                 }
             }
-
-            items(SampleData.books.filter { book ->
-                if (selectedLanguage == "Languages") {
-                    true
-                } else {
-                    (selectedLanguage.isEmpty() || book.language == selectedLanguage) &&
-                            (selectedFilter.isEmpty() || book.genre == selectedFilter)
+            if (listOfBooks is Resource.Success) {
+                listOfBooks.data?.let { books ->
+                    items(books) { book ->
+                        ItemBook(
+                            book = book,
+                            onClickedBook = onClickedBook
+                        )
+                    }
                 }
-            }) { book ->
-                ItemBook(
-                    book = book,
-                    onClickedBook
-                )
             }
-
         }
     }
 }

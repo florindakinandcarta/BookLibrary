@@ -20,7 +20,7 @@ sealed class BottomTab(
     )
 
     data object Borrowed : BottomTab(
-        "history",
+        "borrowed",
         "History",
         R.drawable.history_icon
     )

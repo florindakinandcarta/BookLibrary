@@ -12,31 +12,23 @@ import java.util.UUID
 
 interface BookCheckoutService {
     @GET("book-checkouts/getAll")
-    suspend fun getAllBookCheckouts(
-        @Query("officeName") officeName: String
-    ): List<BookCheckoutWithUserAndBookItemResponse>
+    suspend fun getAllBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllPaginated")
     suspend fun getAllBookCheckoutsPaginated(
-        @Query("officeName") officeName: String,
         @Query("numberOfPages") numberOfPages: Int = 0,
         @Query("pageSize") pageSize: Int = 5
     ): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllActive")
-    suspend fun getAllActiveBookCheckouts(
-        @Query("officeName") officeName: String
-    ): List<BookCheckoutWithUserAndBookItemResponse>
+    suspend fun getAllActiveBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllPast")
-    suspend fun getAllPastBookCheckouts(
-        @Query("officeName") officeName: String
-    ): List<BookCheckoutWithUserAndBookItemResponse>
+    suspend fun getAllPastBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllByTitleContaining")
     suspend fun getAllBookCheckoutsForBookTitle(
-        @Query("titleSearchTerm") titleSearchTerm: String,
-        @Query("officeName") officeName: String
+        @Query("titleSearchTerm") titleSearchTerm: String
     ): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllBooksForUser")
@@ -45,9 +37,7 @@ interface BookCheckoutService {
     ): List<BookCheckoutResponse>
 
     @GET("book-checkouts/getAllNearReturnDate")
-    suspend fun getAllNearReturnDate(
-        @Query("officeName") officeName: String
-    ): List<BookCheckoutReturnReminderResponse>
+    suspend fun getAllNearReturnDate(): List<BookCheckoutReturnReminderResponse>
 
     @GET("bookCheckoutQuery/getAllBooksForUserByTitleContaining")
     suspend fun getAllBooksForUserByTitleContaining(

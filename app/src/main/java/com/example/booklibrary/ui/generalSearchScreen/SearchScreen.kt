@@ -56,7 +56,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    officeName: String,
     onScanClick: () -> Unit,
     onBackClicked: () -> Unit,
     onClickedBook: (String) -> Unit,
@@ -92,7 +91,7 @@ fun SearchScreen(
         }
     }
 
-    val listOfBooks = viewModel.books.collectAsState().value
+//    val listOfBooks = viewModel.books.collectAsState().value
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -113,7 +112,7 @@ fun SearchScreen(
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
                 scope.launch {
-                    viewModel.getBooksByTitle(searchText, officeName)
+//                    viewModel.getBooksByTitle(searchText)
                 }
             },
             leadingIcon = {
@@ -208,15 +207,15 @@ fun SearchScreen(
                 )
             ),
         ) {
-            if (listOfBooks is Resource.Success) {
-                LazyColumn {
-                    listOfBooks.data?.let { books ->
-                        items(books) { book ->
-                            ItemBook(book = book, onClickedBook = onClickedBook)
-                        }
-                    }
-                }
-            }
+//            if (listOfBooks is Resource.Success) {
+//                LazyColumn {
+//                    listOfBooks.data?.let { books ->
+//                        items(books) { book ->
+//                            ItemBook(book = book, onClickedBook = onClickedBook)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

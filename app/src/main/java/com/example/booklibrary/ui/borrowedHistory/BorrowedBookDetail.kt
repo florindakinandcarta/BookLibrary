@@ -79,7 +79,7 @@ fun BorrowedBookDetail(
                 BookDetailsSection(book)
             }
             item {
-                AboutBook()
+//                AboutBook()
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

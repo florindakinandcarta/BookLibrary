@@ -7,9 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.booklibrary.ui.ScreensNavigator
+import androidx.navigation.compose.rememberNavController
 import com.example.booklibrary.ui.theme.BookLibraryTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,8 +19,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             BookLibraryTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    val screensNavigator = ScreensNavigator()
-                    LoginScreenContent(screensNavigator = screensNavigator)
+                    val navController = rememberNavController()
+                    LoginScreenContent(navController)
                 }
             }
         }

@@ -14,7 +14,6 @@ import java.util.UUID
 interface BookItemService {
     @GET("bookItems")
     suspend fun getBookItemsByBookIsbn(
-        @Query("officeName") officeName: String,
         @Query("isbn") isbn: String
     ): List<BookItem>
 

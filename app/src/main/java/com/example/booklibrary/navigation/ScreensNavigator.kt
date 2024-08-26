@@ -1,8 +1,6 @@
-package com.example.booklibrary.ui
+package com.example.booklibrary.navigation
 
 import androidx.navigation.NavHostController
-import com.example.booklibrary.navigation.BottomTab
-import com.example.booklibrary.navigation.Route
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,7 +33,7 @@ class ScreensNavigator {
                     Route.Borrowed.routeName -> BottomTab.Borrowed
                     Route.Profile.routeName -> BottomTab.Profile
                     null -> null
-                    else -> throw RuntimeException("unsupported bottom tab: $routeName")
+                    else -> throw RuntimeException("Unsupported bottom tab: $routeName")
                 }
                 currentBottomTab.value = bottomTab
             }.collect()
@@ -51,8 +49,13 @@ class ScreensNavigator {
                     //setup all the routes for the screens here
                     //also see for the nav args we need to pass for example book isbn
                     // and other args we might need
+                    Route.Dashboard.routeName -> Route.Dashboard
+                    Route.Requested.routeName -> Route.Requested
+                    Route.Borrowed.routeName -> Route.Borrowed
+                    Route.Profile.routeName -> Route.Profile
+                    Route.SearchWithGoogle.routeName -> Route.SearchWithGoogle
                     null -> null
-                    else -> throw RuntimeException("unsupported route: $routeName")
+                    else -> throw RuntimeException("Unsupported route: $routeName")
                 }
                 currentRoute.value = route
                 isRootRoute.value = route == Route.Dashboard

@@ -25,10 +25,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
+import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.googleBooks.Items
 
 @Composable
-fun AboutBook(book: Items? = null) {
+fun AboutBook(book: Book) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +55,7 @@ fun AboutBook(book: Items? = null) {
             )
         )
         Text(
-            text = AnnotatedString(book?.volumeInfo?.description.toString()),
+            text = book.description,
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                 .fillMaxSize()

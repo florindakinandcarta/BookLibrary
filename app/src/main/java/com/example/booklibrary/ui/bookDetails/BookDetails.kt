@@ -52,13 +52,13 @@ fun BookDetails(
             )
         }
     }) { paddingValues ->
-        book.let { book ->
+//        book.let { book ->
             LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 item {
-                    BookDetailsSection(book)
+//                    BookDetailsSection()
                 }
                 item {
-                    AboutBook()
+//                    AboutBook()
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -122,4 +122,3 @@ fun BookDetails(
             }
         }
     }
-}

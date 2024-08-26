@@ -14,17 +14,15 @@ class ReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
     suspend fun getAllReviewsByBookISBN(
-        bookISBN: String,
-        officeName: String
+        bookISBN: String
     ): Resource<List<ReviewResponse>> {
-        return reviewRepository.getAllReviewsByBookISBN(bookISBN, officeName)
+        return reviewRepository.getAllReviewsByBookISBN(bookISBN)
     }
 
     suspend fun getTopReviewsForDisplayInBookView(
-        bookISBN: String,
-        officeName: String
+        bookISBN: String
     ): Resource<List<ReviewResponse>> {
-        return reviewRepository.getTopReviewsForDisplayInBookView(bookISBN, officeName)
+        return reviewRepository.getTopReviewsForDisplayInBookView(bookISBN)
     }
 
     suspend fun insertReview(

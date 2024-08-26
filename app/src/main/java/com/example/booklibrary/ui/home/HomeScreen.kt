@@ -43,7 +43,6 @@ import com.example.booklibrary.util.Resource
 )
 @Composable
 fun HomeScreen(
-    officeName: String,
     onNotificationClick: () -> Unit,
     viewModel: BookViewModel = hiltViewModel(),
     onSearchClick: () -> Unit,
@@ -56,10 +55,10 @@ fun HomeScreen(
     var selectedLanguage by remember {
         mutableStateOf("Languages")
     }
-    val listOfBooks = viewModel.books.collectAsState().value
-    LaunchedEffect(officeName) {
-        viewModel.getAvailableBooks(officeName)
-    }
+//    val listOfBooks = viewModel.books.collectAsState().value
+//    LaunchedEffect() {
+//        viewModel.getAvailableBooks()
+//    }
     Scaffold(
         topBar = { TopBarHome(onNotificationClick, onSearchClick) },
     ) { paddingValues ->
@@ -143,16 +142,16 @@ fun HomeScreen(
                     }
                 }
             }
-            if (listOfBooks is Resource.Success) {
-                listOfBooks.data?.let { books ->
-                    items(books) { book ->
-                        ItemBook(
-                            book = book,
-                            onClickedBook = onClickedBook
-                        )
-                    }
-                }
-            }
+//            if (listOfBooks is Resource.Success) {
+//                listOfBooks.data?.let { books ->
+//                    items(books) { book ->
+//                        ItemBook(
+//                            book = book,
+//                            onClickedBook = onClickedBook
+//                        )
+//                    }
+//                }
+//            }
         }
     }
 }

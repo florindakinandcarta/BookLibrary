@@ -17,7 +17,7 @@ class OfficeViewModel @Inject constructor(
 ) : ViewModel() {
     init {
         viewModelScope.launch {
-            getAllOffices()
+//            getAllOffices()
         }
     }
 

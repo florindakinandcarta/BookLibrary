@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui
+package com.example.booklibrary.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
@@ -7,8 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.example.booklibrary.navigation.MainScreenContent
-import com.example.booklibrary.navigation.Route
 import com.example.booklibrary.ui.home.MyBottomTabsBar
 
 @Composable

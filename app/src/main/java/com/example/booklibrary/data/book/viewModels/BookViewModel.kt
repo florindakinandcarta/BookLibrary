@@ -24,46 +24,45 @@ class BookViewModel @Inject constructor(
     private val _bookDetails = MutableStateFlow<Resource<Book>?>(Resource.Loading())
     val bookDetails: StateFlow<Resource<Book>?> = _bookDetails
 
-    suspend fun getAllBooks(officeName: String): Resource<List<BookDisplay>> {
-        return bookRepository.getAllBooks(officeName)
+    suspend fun getAllBooks(): Resource<List<BookDisplay>> {
+        return bookRepository.getAllBooks()
     }
 
-    suspend fun getBookByISBN(isbn: String, officeName: String) {
+    suspend fun getBookByISBN(isbn: String) {
         viewModelScope.launch {
             _bookDetails.value = Resource.Loading()
-            val result = bookRepository.getBookByISBN(isbn, officeName)
+            val result = bookRepository.getBookByISBN(isbn)
             _bookDetails.value = result
         }
     }
 
-    suspend fun getBooksByTitle(title: String, officeName: String){
+    suspend fun getBooksByTitle(title: String){
       viewModelScope.launch {
           _books.value = Resource.Loading()
-          val result = bookRepository.getBooksByTitle(title,officeName)
+          val result = bookRepository.getBooksByTitle(title)
           _books.value = result
       }
     }
 
-    suspend fun getAvailableBooks(officeName: String){
+    suspend fun getAvailableBooks(){
        viewModelScope.launch {
            _books.value = Resource.Loading()
-           val result = bookRepository.getAvailableBooks(officeName)
+           val result = bookRepository.getAvailableBooks()
            _books.value = result
        }
     }
 
-    suspend fun getRequestedBooks(officeName: String): Resource<List<BookDisplay>> {
-        return bookRepository.getRequestedBooks(officeName)
+    suspend fun getRequestedBooks(): Resource<List<BookDisplay>> {
+        return bookRepository.getRequestedBooks()
     }
 
     suspend fun getBooksByLanguage(
         language: String,
-        officeName: String
     ): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByLanguage(language, officeName)
+        return bookRepository.getBooksByLanguage(language)
     }
 
-    suspend fun getBooksByGenre(genre: String, officeName: String): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByGenre(genre, officeName)
+    suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
+        return bookRepository.getBooksByGenre(genre)
     }
 }

@@ -100,7 +100,7 @@ fun RequestedBookDetails(
                     BookDetailsSection(bookItem)
                 }
                 item {
-                    AboutBook()
+//                    AboutBook()
                     if (!isUserAdmin) {
                         Text(
                             text = stringResource(id = R.string.user_reviews),

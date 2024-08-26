@@ -15,36 +15,32 @@ import javax.inject.Inject
 class BookCheckoutViewModel @Inject constructor(
     private val bookCheckoutRepository: BookCheckoutRepository
 ) : ViewModel() {
-    suspend fun getAllBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutRepository.getAllBookCheckouts(officeName)
+    suspend fun getAllBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllBookCheckouts()
     }
 
     suspend fun getAllBookCheckoutsPaginated(
-        officeName: String,
         numberOfPages: Int,
         pageSize: Int
     ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         return bookCheckoutRepository.getAllBookCheckoutsPaginated(
-            officeName,
             numberOfPages,
             pageSize
         )
     }
 
-    suspend fun getAllActiveBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutRepository.getAllActiveBookCheckouts(officeName)
+    suspend fun getAllActiveBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllActiveBookCheckouts()
     }
 
-    suspend fun getAllPastBookCheckouts(officeName: String): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
-        return bookCheckoutRepository.getAllPastBookCheckouts(officeName)
+    suspend fun getAllPastBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllPastBookCheckouts()
     }
 
     suspend fun getAllBookCheckoutsForBookTitle(
-        officeName: String,
         titleSearchTerm: String
     ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         return bookCheckoutRepository.getAllBookCheckoutsForBookTitle(
-            officeName,
             titleSearchTerm
         )
     }
@@ -53,8 +49,8 @@ class BookCheckoutViewModel @Inject constructor(
         return bookCheckoutRepository.getAllBookCheckoutsFromUserWithId(userId)
     }
 
-    suspend fun getAllNearReturnDate(officeName: String): Resource<List<BookCheckoutReturnReminderResponse>> {
-        return bookCheckoutRepository.getAllNearReturnDate(officeName)
+    suspend fun getAllNearReturnDate(): Resource<List<BookCheckoutReturnReminderResponse>> {
+        return bookCheckoutRepository.getAllNearReturnDate()
     }
 
     suspend fun getAllBooksForUserByTitleContaining(

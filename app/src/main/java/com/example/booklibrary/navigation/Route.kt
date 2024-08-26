@@ -33,7 +33,13 @@ sealed class Route(
 
     data object SearchWithGoogle : Route("searchWithGoogle")
 
-    data object GoogleBookDetails : Route("googleBookDetails")
+    data class GoogleBookDetails(
+        val bookISBN: String = ""
+    ) : Route("googleBookDetails/{bookISBN}") {
+        override val navCommand: String
+            get() = routeName
+                .replace("{bookISBN}", bookISBN)
+    }
 
     data object Camera : Route("camera")
 

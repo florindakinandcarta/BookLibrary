@@ -36,11 +36,10 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun getAllUsersWithFullName(
-        officeName: String,
         fullName: String
     ): Resource<List<UserWithRoleResponse>> {
         val response = try {
-            userService.getAllUsersWithFullName(officeName, fullName)
+            userService.getAllUsersWithFullName(fullName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -53,9 +52,9 @@ class UserRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getAllUsers(officeName: String): Resource<List<UserWithRoleResponse>> {
+    suspend fun getAllUsers(): Resource<List<UserWithRoleResponse>> {
         val response = try {
-            userService.getAllUsers(officeName)
+            userService.getAllUsers()
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

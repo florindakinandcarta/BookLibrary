@@ -44,13 +44,10 @@ interface UserService {
     ): String
 
     @GET("user/getAll")
-    suspend fun getAllUsers(
-        @Query("officeName") officeName: String
-    ): List<UserWithRoleResponse>
+    suspend fun getAllUsers(): List<UserWithRoleResponse>
 
     @GET("user/getAllByFullNameContaining")
     suspend fun getAllUsersWithFullName(
-        @Query("officeName") officeName: String,
         @Query("fullName") fullName: String,
     ): List<UserWithRoleResponse>
 

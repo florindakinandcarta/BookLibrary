@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.bookDetails
+package com.example.booklibrary.ui.generalScreens.bookDetails
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,11 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
 import com.example.booklibrary.data.Book
+import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.ui.review.ItemUserReview
+import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun BookDetails(
@@ -52,13 +55,13 @@ fun BookDetails(
             )
         }
     }) { paddingValues ->
-//        book.let { book ->
+        SampleData.books.let { book ->
             LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 item {
-//                    BookDetailsSection()
+                    BookDetailsSection(book[1])
                 }
                 item {
-//                    AboutBook()
+                    AboutBook(book[1])
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -122,3 +125,14 @@ fun BookDetails(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable 
+fun PreviewBookDetails(){
+    BookLibraryTheme {
+        BookDetails(bookISBN = "", onBackClicked = { /*TODO*/ }) {
+            
+        }
+    }
+}

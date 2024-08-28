@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.bookDetails
+package com.example.booklibrary.ui.generalScreens.bookDetails
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,7 @@ import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.googleBooks.Items
 
 @Composable
-fun AboutBook(book: Book) {
+fun AboutBook(book: com.example.booklibrary.data.Book) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +55,7 @@ fun AboutBook(book: Book) {
             )
         )
         Text(
-            text = book.description,
+            text = book.title.toString(),
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                 .fillMaxSize()

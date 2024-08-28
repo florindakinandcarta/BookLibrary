@@ -15,13 +15,7 @@ sealed class Route(
 
     data object Register : Route("register")
 
-    data class BookDetails(
-        val bookISBN: String = ""
-    ) : Route("bookDetails/{bookISBN}") {
-        override val navCommand: String
-            get() = routeName
-                .replace("{bookISBN}", bookISBN)
-    }
+    data object BookDetails : Route("bookDetails")
 
     data object BorrowedBookDetails : Route("borrowedBookDetails")
 

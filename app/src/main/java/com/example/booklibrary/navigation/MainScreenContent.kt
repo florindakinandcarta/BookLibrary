@@ -8,12 +8,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.booklibrary.ui.bookDetails.BookDetails
+import com.example.booklibrary.ui.generalScreens.bookDetails.BookDetails
 import com.example.booklibrary.ui.borrowedHistory.BorrowedBooksScreen
-import com.example.booklibrary.ui.generalSearchScreen.SearchScreen
+import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.home.HomeScreen
 import com.example.booklibrary.ui.requested.RequestedScreen
-import com.example.booklibrary.ui.searchNewBook.SearchWithGoogleBookScreen
+import com.example.booklibrary.ui.search.SearchWithGoogleBookScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 
 @Composable
@@ -40,7 +40,7 @@ fun MainScreenContent(
                     composable(route = Route.Dashboard.routeName) {
                         HomeScreen(
                             onClickedBook = { bookISBN ->
-                                screensNavigator.toRoute(Route.BookDetails(bookISBN))
+                                screensNavigator.toRoute(Route.BookDetails)
                             },
                             onNotificationClick = {
 
@@ -50,12 +50,12 @@ fun MainScreenContent(
                             }
                         )
                     }
-                    composable(route = Route.BookDetails().routeName) {
-                        val bookISBN = remember {
-                            (screensNavigator.currentRoute.value as Route.BookDetails).bookISBN
-                        }
+                    composable(route = Route.BookDetails.routeName) {
+//                        val bookISBN = remember {
+//                            (screensNavigator.currentRoute.value as Route.BookDetails).bookISBN
+//                        }
                         BookDetails(
-                            bookISBN = bookISBN,
+                            bookISBN = "qwerty",
                             onBackClicked = {
                                 screensNavigator.navigateBack()
                             },
@@ -72,7 +72,7 @@ fun MainScreenContent(
                                 screensNavigator.navigateBack()
                             },
                             onClickedBook = { bookISBN ->
-                                screensNavigator.toRoute(Route.BookDetails(bookISBN))
+//                                screensNavigator.toRoute(Route.BookDetails(bookISBN))
                             })
                     }
                 }
@@ -93,7 +93,7 @@ fun MainScreenContent(
                                 screensNavigator.toRoute(Route.SearchWithGoogle)
                             },
                             onClickedBook = { isbn ->
-                                screensNavigator.toRoute(Route.BookDetails(isbn))
+                                screensNavigator.toRoute(Route.BookDetails)
                             })
                     }
                     composable(Route.SearchWithGoogle.routeName) {
@@ -103,6 +103,20 @@ fun MainScreenContent(
                             onBookClicked = { isbn ->
                                 screensNavigator.toRoute(Route.GoogleBookDetails(isbn))
                             })
+                    }
+                    composable(route = Route.BookDetails.routeName) {
+//                        val bookISBN = remember {
+//                            (screensNavigator.currentRoute.value as Route.BookDetails).bookISBN
+//                        }
+                        BookDetails(
+                            bookISBN = "qwerty",
+                            onBackClicked = {
+                                screensNavigator.navigateBack()
+                            },
+                            onAddReviewClicked = {
+                                screensNavigator.toRoute(Route.ReviewDialog)
+                            }
+                        )
                     }
                 }
             }
@@ -115,7 +129,9 @@ fun MainScreenContent(
                 ) {
                     composable(Route.Borrowed.routeName) {
                         BorrowedBooksScreen(
-                            onBorrowedBookClick = {},
+                            onBorrowedBookClick = {
+                                screensNavigator.toRoute(Route.BookDetails)
+                            },
                             onReturnClick = { /*TODO*/ },
                             onSearchClick = {
                                 screensNavigator.toRoute(Route.SearchWithGoogle)
@@ -124,6 +140,20 @@ fun MainScreenContent(
                     }
                     composable(Route.SearchWithGoogle.routeName) {
                         SearchWithGoogleBookScreen(onBackClicked = { /*TODO*/ }, onBookClicked = {})
+                    }
+                    composable(route = Route.BookDetails.routeName) {
+//                        val bookISBN = remember {
+//                            (screensNavigator.currentRoute.value as Route.BookDetails).bookISBN
+//                        }
+                        BookDetails(
+                            bookISBN = "qwerty",
+                            onBackClicked = {
+                                screensNavigator.navigateBack()
+                            },
+                            onAddReviewClicked = {
+                                screensNavigator.toRoute(Route.ReviewDialog)
+                            }
+                        )
                     }
                 }
             }

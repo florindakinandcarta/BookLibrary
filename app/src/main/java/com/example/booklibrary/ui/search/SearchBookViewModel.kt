@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.searchNewBook
+package com.example.booklibrary.ui.search
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

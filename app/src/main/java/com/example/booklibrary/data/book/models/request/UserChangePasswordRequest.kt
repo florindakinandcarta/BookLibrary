@@ -7,6 +7,6 @@ import java.util.UUID
 @Parcelize
 data class UserChangePasswordRequest(
     val userId: UUID,
-    val oldPassword: String,
-    val newPassword: String
+    val oldPassword: String? = null,
+    val newPassword: String? = null
 ) : Parcelable

@@ -13,6 +13,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,16 +23,26 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.SampleData.users
 import com.example.booklibrary.data.User
+import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
+import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
+import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.util.Resource
+import java.util.UUID
 
 @Composable
 fun UsersScreen(
     onDeleteUser: (User) -> Unit,
-    onChangeRole: (User) -> Unit,
+    onChangeRole: (UserUpdateRoleRequest) -> Unit,
     onBackClicked: () -> Unit,
 ) {
+    val userViewModel: UserViewModel = hiltViewModel()
+    val users by userViewModel.users.collectAsState()
+    LaunchedEffect(Unit) {
+        userViewModel.getAllUsers()
+    }
     Scaffold(
         topBar = {
             Row(
@@ -63,12 +76,16 @@ fun UsersScreen(
         }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            items(users) { user ->
-                ItemUser(
-                    user = user,
-                    onDeleteUser = onDeleteUser,
-                    onChangeRole = onChangeRole
-                )
+            if (users is Resource.Success) {
+                users.data?.let { users ->
+                    items(users) { user ->
+                        ItemUser(
+                            user = user,
+                            onChangeRole = onChangeRole
+                        )
+                    }
+
+                }
             }
         }
     }

@@ -55,6 +55,10 @@ class ScreensNavigator {
                     Route.Profile.routeName -> Route.Profile
                     Route.SearchWithGoogle.routeName -> Route.SearchWithGoogle
                     Route.BookDetails.routeName -> Route.BookDetails
+                    Route.ReturnDialog.routeName -> Route.ReturnDialog
+                    Route.AllUsers.routeName -> Route.AllUsers
+                    Route.ChangePassword.routeName -> Route.ChangePassword
+                    Route.UserRoleDialog.routeName -> Route.UserRoleDialog
                     null -> null
                     else -> throw RuntimeException("Unsupported route: $routeName")
                 }

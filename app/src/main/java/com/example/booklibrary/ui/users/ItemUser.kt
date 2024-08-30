@@ -17,27 +17,37 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
 import com.example.booklibrary.data.User
+import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
+import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
+import com.example.booklibrary.data.book.viewModels.UserViewModel
+import kotlinx.coroutines.launch
+import java.util.UUID
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemUser(
-    user: User,
-    onDeleteUser: (User) -> Unit,
-    onChangeRole: (User) -> Unit,
+    user: UserWithRoleResponse,
+    userRoleChange: UserUpdateRoleRequest,
+    onChangeRole: (UserUpdateRoleRequest) -> Unit,
 ) {
+    val userViewModel: UserViewModel = hiltViewModel()
+    val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -64,7 +74,7 @@ fun ItemUser(
                 .weight(1f),
         ) {
             Text(
-                text = user.name.toString(),
+                text = user.fullName.toString(),
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .align(Alignment.Start),
@@ -109,7 +119,9 @@ fun ItemUser(
                     .padding(8.dp)
                     .size(32.dp),
                 onClick = {
-                    onDeleteUser(user)
+                    scope.launch {
+                        userViewModel.deleteAccount(user.userId)
+                    }
                 }
             ) {
                 Icon(
@@ -122,7 +134,7 @@ fun ItemUser(
                     .padding(8.dp)
                     .size(32.dp),
                 onClick = {
-                    onChangeRole(user)
+                    onChangeRole(userRoleChange)
                 }
             ) {
                 Icon(

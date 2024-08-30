@@ -72,13 +72,19 @@
     <string name="quote_author">Jane Austen, Northanger Abbey</string>
     <string name="use_work_email">Use your work email!</string>
     <string name="password_visibility_des">Toggle password visibility</string>
+    <string name="passwords_dont_match">Password`s don\'t match</string>
     <string name="password_min_char">Your password must be at least 6 characters</string>
     <string name="read_less">Read Less</string>
     <string name="read_more">Read More</string>
+    <string name="all_fields_required">All fields are required!</string>
     <string name="return_date">Return date: 08/07/2024</string>
     <string name="filter_applied">Filter Applied</string>
     <string name="filter">Filter</string>
+    <string name="something_went_wrong">Something went wrong!!!</string>
+    <string name="password_changed_successfully">The password has been successfully updated.</string>
     <string name="return_type">Return type</string>
+    <string name="unknown_error">An error occurred!</string>
+    <string name="user_data_updated">Users data successfully updated.</string>
     <string name="error_occurred">An error occurred</string>
     <string name="no_books_found">No books found</string>
     <string name="no_results">No results found</string>
@@ -90,6 +96,7 @@
     <string name="error_connection">You\'re not connected to the internet!</string>
     <string name="photo_capture_failed">Photo capture failed</string>
     <string name="camera_is_needed">The camera is needed for this step.</string>
+    <string name="enter_new_password">Enter new password </string>
     <string name="go_to_settings">Go to settings</string>
     <string name="choose_office">Choose Office</string>
     <string name="choose_role">Choose Role</string>

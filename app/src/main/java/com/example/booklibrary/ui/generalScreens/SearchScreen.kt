@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.generalSearchScreen
+package com.example.booklibrary.ui.generalScreens
 
 import android.content.Intent
 import android.net.Uri
@@ -10,8 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.QrCode
@@ -39,10 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
-import com.example.booklibrary.ui.ItemBook
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.home.SearchViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -55,12 +53,12 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     onScanClick: () -> Unit,
     onBackClicked: () -> Unit,
-    onClickedBook: (Book) -> Unit,
+    onClickedBook: (String) -> Unit,
+    viewModel: BookViewModel = hiltViewModel(),
 ) {
     val searchViewModel: SearchViewModel = viewModel()
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
-    val booksList by searchViewModel.booksList.collectAsState()
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
@@ -87,6 +85,8 @@ fun SearchScreen(
             }
         }
     }
+
+//    val listOfBooks = viewModel.books.collectAsState().value
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -106,6 +106,9 @@ fun SearchScreen(
             onSearch = {
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
+                scope.launch {
+//                    viewModel.getBooksByTitle(searchText)
+                }
             },
             leadingIcon = {
                 IconButton(
@@ -199,11 +202,15 @@ fun SearchScreen(
                 )
             ),
         ) {
-            LazyColumn {
-                items(booksList) { book ->
-                    ItemBook(book = book, onClickedBook = onClickedBook)
-                }
-            }
+//            if (listOfBooks is Resource.Success) {
+//                LazyColumn {
+//                    listOfBooks.data?.let { books ->
+//                        items(books) { book ->
+//                            ItemBook(book = book, onClickedBook = onClickedBook)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

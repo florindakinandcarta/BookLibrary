@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Groups
@@ -23,15 +24,21 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,28 +48,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     onChangePassword: () -> Unit,
-    onLogOutClick: () -> Unit,
-    onAllUsersClicked: () -> Unit
+    onAllUsersClicked: () -> Unit,
+    onChangeProfilePhotoClicked: () -> Unit
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
     val user by authViewModel.user.collectAsState()
+    val userUpdate by userViewModel.user.collectAsState()
     val isUserAdmin by authViewModel.userAdmin.collectAsState()
+    val response by userViewModel.response.collectAsState()
+    val scope = rememberCoroutineScope()
+    var isEditMode by remember {
+        mutableStateOf(false)
+    }
+    var displayName by remember {
+        mutableStateOf(user?.displayName ?: "")
+    }
+    LaunchedEffect(response) {
+        when(response){
+            is Resource.Success -> {
+                context.showToast((response as Resource.Success<String>).data.toString())
+            }
+            is Resource.Error -> {
+                context.showToast(context.getString(R.string.something_went_wrong))
+            }
+            else -> {
+                context.showToast(context.getString(R.string.unknown_error))
+            }
+        }
+    }
+
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
                 context.showToast(
                     (messageResponse as Resource.Success<String>).data.toString()
                 )
-                onLogOutClick()
             }
 
             is Resource.Error -> {
@@ -70,7 +103,7 @@ fun ProfileScreen(
             }
 
             else -> {
-
+                context.showToast(context.getString(R.string.unknown_error))
             }
         }
     }
@@ -96,7 +129,7 @@ fun ProfileScreen(
                     .padding(6.dp)
                     .size(24.dp),
                 onClick = {
-
+                    isEditMode = !isEditMode
                 },
             ) {
                 Icon(
@@ -131,7 +164,7 @@ fun ProfileScreen(
                             .size(60.dp)
                             .padding(end = 16.dp, top = 16.dp),
                         onClick = {
-                            TODO()
+                            onChangeProfilePhotoClicked()
                         }
                     ) {
                         Icon(
@@ -143,16 +176,57 @@ fun ProfileScreen(
                 }
                 Spacer(Modifier.weight(1f))
             }
-            Text(
-                text = user?.displayName.toString(),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally),
-                style = TextStyle(
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.SemiBold,
+            if (isEditMode) {
+                OutlinedTextField(
+                    value = displayName,
+                    shape = RoundedCornerShape(12.dp),
+                    onValueChange = {
+                        displayName = it
+                    },
+                    label = {
+                        Text(
+                            stringResource(id = R.string.enter_old_password),
+                            style = TextStyle(
+                                color = Color.Gray
+                            )
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    singleLine = true,
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                            val updatedName = UserUpdateDataRequest(
+                                userUpdate.data?.userId!!,
+                                displayName
+                            )
+                            scope.launch {
+                                userViewModel.updateUserData(updatedName)
+                                isEditMode = !isEditMode
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = "Save",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                    }
                 )
-            )
+            }else {
+                Text(
+                    text = user?.displayName.toString(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally),
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                )
+            }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.padding(

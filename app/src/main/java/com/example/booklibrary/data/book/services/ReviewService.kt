@@ -20,13 +20,11 @@ interface ReviewService {
 
     @GET("reviews")
     suspend fun getAllReviewsByBookISBN(
-        @Query("officeName") officeName: String,
         @Query("bookISBN") bookISBN: String
     ): List<ReviewResponse>
 
     @GET("reviews/top-reviews")
     suspend fun getTopReviewsForDisplayInBookView(
-        @Query("officeName") officeName: String,
         @Query("bookISBN") bookISBN: String
     ): List<ReviewResponse>
 

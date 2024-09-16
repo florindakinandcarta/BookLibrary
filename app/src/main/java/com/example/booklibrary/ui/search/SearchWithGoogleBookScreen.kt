@@ -1,20 +1,16 @@
-package com.example.booklibrary.ui.searchNewBook
+package com.example.booklibrary.ui.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,16 +38,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.booklibrary.R
-import com.example.booklibrary.data.googleBooks.Items
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.requested.GoogleBooksViewModel
-import com.example.booklibrary.util.Resource
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun SearchWithGoogleBookScreen(
     onBackClicked: () -> Unit,
-    onBookClicked: (Items) -> Unit
+    onBookClicked: (String) -> Unit,
+    viewModel: BookViewModel = hiltViewModel()
 ) {
     val searchBookViewModel: GoogleBooksViewModel = hiltViewModel()
     val responseBooks by searchBookViewModel.responseBooks.collectAsState()
@@ -60,6 +57,12 @@ fun SearchWithGoogleBookScreen(
     val (isSearching, setIsSearching) = remember { mutableStateOf(false) }
     val (searchText, setSearchText) = remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = rememberCoroutineScope()
+
+//    val listOfBooks = viewModel.books.collectAsState().value
+//    LaunchedEffect(searchText) {
+//        viewModel.getBooksByTitle(searchText)
+//    }
 
     if (isSearching) {
         BackHandler {
@@ -80,7 +83,6 @@ fun SearchWithGoogleBookScreen(
                 onSearch = {
                     setSearchText(it)
                     keyboardController?.hide()
-                    searchBookViewModel.fetchBooks(queryBookName = it, loadMore = 0)
                 },
                 leadingIcon = {
                     IconButton(
@@ -136,56 +138,55 @@ fun SearchWithGoogleBookScreen(
                     )
                 ),
             ) {
-                when {
-                    loadingBooks -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-
-                    responseBooks is Resource.Success -> {
-                        val books = responseBooks?.data
-                        books?.let {
-                            LazyColumn {
-                                items(it.items) { book ->
-                                    ItemSearchGoogleBook(book = book, onBookClicked = onBookClicked)
-                                }
-                            }
-                        } ?: run {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    text = stringResource(id = R.string.no_books_found),
-                                    color = Color.Gray,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
-                        }
-                    }
-
-                    responseBooks is Resource.Error -> {
-                        val errorMessage = (responseBooks as Resource.Error).message
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Text(
-                                text = errorMessage ?: stringResource(id = R.string.error_occurred),
-                                color = Color.Red,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
-                    }
-
-                    isResponseZero -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Text(
-                                text = stringResource(id = R.string.no_results),
-                                color = Color.Gray,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
-                    }
-
-                    else -> {
-                    }
-                }
+//                when {
+//                    listOfBooks is Resource.Loading -> {
+//                        Box(modifier = Modifier.fillMaxSize()) {
+//                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+//                        }
+//                    }
+//
+//                    listOfBooks is Resource.Success -> {
+//                        listOfBooks.data?.let {
+//                            LazyColumn {
+//                                items(it) { book ->
+//                                    ItemSearchGoogleBook(book = book, onBookClicked = onBookClicked)
+//                                }
+//                            }
+//                        } ?: run {
+//                            Box(modifier = Modifier.fillMaxSize()) {
+//                                Text(
+//                                    text = stringResource(id = R.string.no_books_found),
+//                                    color = Color.Gray,
+//                                    modifier = Modifier.align(Alignment.Center)
+//                                )
+//                            }
+//                        }
+//                    }
+//
+//                    listOfBooks is Resource.Error -> {
+//                        val errorMessage = (responseBooks as Resource.Error).message
+//                        Box(modifier = Modifier.fillMaxSize()) {
+//                            Text(
+//                                text = errorMessage ?: stringResource(id = R.string.error_occurred),
+//                                color = Color.Red,
+//                                modifier = Modifier.align(Alignment.Center)
+//                            )
+//                        }
+//                    }
+//
+//                    isResponseZero -> {
+//                        Box(modifier = Modifier.fillMaxSize()) {
+//                            Text(
+//                                text = stringResource(id = R.string.no_results),
+//                                color = Color.Gray,
+//                                modifier = Modifier.align(Alignment.Center)
+//                            )
+//                        }
+//                    }
+//
+//                    else -> {
+//                    }
+//                }
             }
         }
     ) {

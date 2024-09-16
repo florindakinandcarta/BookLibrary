@@ -43,7 +43,7 @@ import com.example.booklibrary.data.book.viewModels.AuthViewModel
 @Composable
 fun RequestedScreen(
     onAddNewBook: () -> Unit,
-    onClickedBook: (Book) -> Unit
+    onClickedBook: (String) -> Unit,
 //    orderBooksBasedOnLikes: () -> Unit
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()

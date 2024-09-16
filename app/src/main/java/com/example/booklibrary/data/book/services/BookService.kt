@@ -15,23 +15,19 @@ import retrofit2.http.Query
 interface BookService {
     @GET("books")
     suspend fun getAllBooks(
-        @Query("officeName") officeName: String
     ): List<BookDisplay>
 
     @GET("books/book")
     suspend fun getBookByISBN(
-        @Query("officeName") officeName: String,
         @Query("isbn") isbn: String
     ): Book
 
     @GET("books/available-books")
     suspend fun getAvailableBooks(
-        @Query("officeName") officeName: String
     ): List<BookDisplay>
 
     @GET("books/paginated-books")
     suspend fun getAllAvailableBooksPaginated(
-        @Query("officeName") officeName: String,
         @Query("bookStatus") bookStatus: BookStatus,
         @Query("bookItemState") bookItemState: BookState,
         @Query("page") page: Int,
@@ -40,24 +36,19 @@ interface BookService {
 
     @GET("books")
     suspend fun getBooksByTitle(
-        @Query("officeName") officeName: String,
         @Query("title") title: String
     ): List<BookDisplay>
 
     @GET("book/requested-books")
-    suspend fun getRequestedBooks(
-        @Query("officeName") officeName: String
-    ): List<BookDisplay>
+    suspend fun getRequestedBooks(): List<BookDisplay>
 
     @GET("books")
     suspend fun getBooksByLanguage(
-        @Query("officeName") officeName: String,
         @Query("language") languages: String
     ): List<BookDisplay>
 
     @GET("books")
     suspend fun getBooksByGenre(
-        @Query("officeName") officeName: String,
         @Query("genres") genres: String
     ): List<BookDisplay>
 
@@ -68,7 +59,6 @@ interface BookService {
 
     @DELETE("books")
     suspend fun deleteBook(
-        @Query("officeName") officeName: String,
         @Query("isbn") isbn: String
     ): BookID
 }

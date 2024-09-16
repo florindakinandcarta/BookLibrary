@@ -2,30 +2,30 @@ package com.example.booklibrary.navigation
 
 import com.example.booklibrary.R
 
-sealed class BottomNavItem(
+sealed class BottomTab(
     val route: String,
     var title: String,
     var icon: Int
 ) {
-    object Dashboard : BottomNavItem(
+    data object Dashboard : BottomTab(
         "dashboard",
         "Dashboard",
         R.drawable.home
     )
 
-    object Requested : BottomNavItem(
+    data object Requested : BottomTab(
         "requested",
         "Requested",
         R.drawable.recommended
     )
 
-    object Borrowed : BottomNavItem(
-        "history",
+    data object Borrowed : BottomTab(
+        "borrowed",
         "History",
         R.drawable.history_icon
     )
 
-    object Profile : BottomNavItem(
+    data object Profile : BottomTab(
         "profile",
         "Profile",
         R.drawable.profile

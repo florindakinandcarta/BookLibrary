@@ -15,13 +15,10 @@ import java.util.UUID
 
 interface RequestedBookService {
     @GET("requested-book/all")
-    suspend fun getAllRequestedBooks(
-        @Query("officeName") officeName: String
-    ): List<RequestedBook>
+    suspend fun getAllRequestedBooks(): List<RequestedBook>
 
     @GET("requested-book/{status}/all")
     suspend fun getRequestedBooksByBookStatus(
-        @Query("officeName") officeName: String,
         @Path("status") status: BookStatus
     ): List<RequestedBook>
 
@@ -42,7 +39,6 @@ interface RequestedBookService {
 
     @DELETE("requested-book/delete")
     suspend fun deleteRequestedBook(
-        @Query("officeName") officeName: String,
         @Path("bookISBN") bookISBN: String
     ): String
 

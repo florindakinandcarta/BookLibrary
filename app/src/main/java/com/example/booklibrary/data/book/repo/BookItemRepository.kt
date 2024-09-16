@@ -13,9 +13,9 @@ import javax.inject.Inject
 class BookItemRepository @Inject constructor(
     private val bookItemService: BookItemService
 ) {
-    suspend fun getBookItemsByBookIsbn(isbn: String, officeName:String): Resource<List<BookItem>> {
+    suspend fun getBookItemsByBookIsbn(isbn: String): Resource<List<BookItem>> {
         val response = try {
-            bookItemService.getBookItemsByBookIsbn(isbn,officeName)
+            bookItemService.getBookItemsByBookIsbn(isbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

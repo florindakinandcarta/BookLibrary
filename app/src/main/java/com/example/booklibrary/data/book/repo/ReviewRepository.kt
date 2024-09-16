@@ -14,11 +14,10 @@ class ReviewRepository @Inject constructor(
     private val reviewService: ReviewService
 ) {
     suspend fun getAllReviewsByBookISBN(
-        bookISBN: String,
-        officeName: String
+        bookISBN: String
     ): Resource<List<ReviewResponse>> {
         val response = try {
-            reviewService.getAllReviewsByBookISBN(bookISBN, officeName)
+            reviewService.getAllReviewsByBookISBN(bookISBN)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -34,11 +33,10 @@ class ReviewRepository @Inject constructor(
     }
 
     suspend fun getTopReviewsForDisplayInBookView(
-        bookISBN: String,
-        officeName: String
+        bookISBN: String
     ): Resource<List<ReviewResponse>> {
         val response = try {
-            reviewService.getTopReviewsForDisplayInBookView(bookISBN, officeName)
+            reviewService.getTopReviewsForDisplayInBookView(bookISBN)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

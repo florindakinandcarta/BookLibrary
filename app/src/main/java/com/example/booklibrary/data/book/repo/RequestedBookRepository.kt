@@ -15,9 +15,9 @@ import javax.inject.Inject
 class RequestedBookRepository @Inject constructor(
     private val requestedBookService: RequestedBookService
 ) {
-    suspend fun getAllRequestedBooks(officeName: String): Resource<List<RequestedBook>> {
+    suspend fun getAllRequestedBooks(): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getAllRequestedBooks(officeName)
+            requestedBookService.getAllRequestedBooks()
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -83,9 +83,9 @@ class RequestedBookRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun deleteRequestedBook(bookIsbn: String, officeName: String): Resource<String> {
+    suspend fun deleteRequestedBook(bookIsbn: String): Resource<String> {
         val response = try {
-            requestedBookService.deleteRequestedBook(bookIsbn, officeName)
+            requestedBookService.deleteRequestedBook(bookIsbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -139,11 +139,10 @@ class RequestedBookRepository @Inject constructor(
     }
 
     suspend fun getRequestedBooksByBookStatus(
-        status: BookStatus,
-        officeName: String
+        status: BookStatus
     ): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getRequestedBooksByBookStatus(officeName,status)
+            requestedBookService.getRequestedBooksByBookStatus(status)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

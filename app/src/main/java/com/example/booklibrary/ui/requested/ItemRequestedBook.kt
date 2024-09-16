@@ -33,7 +33,7 @@ import com.example.booklibrary.data.Book
 @Composable
 fun ItemRequestedBook(
     book: Book,
-    onClickedBook: (Book) -> Unit,
+    onClickedBook: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -41,7 +41,9 @@ fun ItemRequestedBook(
             .fillMaxWidth()
             .height(100.dp)
             .clickable {
-                onClickedBook(book)
+                book.isbn?.let { isbn ->
+                    onClickedBook(isbn)
+                }
             },
         verticalAlignment = Alignment.CenterVertically
     ) {

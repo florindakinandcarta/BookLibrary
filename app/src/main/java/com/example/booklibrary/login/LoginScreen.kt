@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.userProfile
+package com.example.booklibrary.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

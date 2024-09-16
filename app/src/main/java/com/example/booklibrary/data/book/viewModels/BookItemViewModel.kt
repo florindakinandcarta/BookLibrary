@@ -13,8 +13,8 @@ import javax.inject.Inject
 class BookItemViewModel @Inject constructor(
     private val bookItemRepository: BookItemRepository
 ) : ViewModel() {
-    suspend fun getBookItemsByBookIsbn(isbn: String, officeName: String): Resource<List<BookItem>> {
-        return bookItemRepository.getBookItemsByBookIsbn(isbn, officeName)
+    suspend fun getBookItemsByBookIsbn(isbn: String): Resource<List<BookItem>> {
+        return bookItemRepository.getBookItemsByBookIsbn(isbn)
     }
 
     suspend fun saveBookItem(bookID: BookID): Resource<BookItem> {

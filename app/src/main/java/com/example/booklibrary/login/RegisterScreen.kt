@@ -1,4 +1,4 @@
-package com.example.booklibrary.ui.userProfile
+package com.example.booklibrary.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -61,18 +61,24 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.OfficeViewModel
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(onLoginClick: () -> Unit) {
+fun RegisterScreen(
+    onLoginClick: () -> Unit,
+    viewModel: OfficeViewModel = hiltViewModel()
+) {
     val authViewModel: AuthViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
+    val offices = viewModel.offices.collectAsState().value
+
 
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
@@ -196,20 +202,26 @@ fun RegisterScreen(onLoginClick: () -> Unit) {
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.exposedDropdownSize()
                 ) {
-                    SampleData.countries.forEach { country ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = country,
-                                )
-                            },
-                            onClick = {
-                                text = country
-                                expanded = false
-                            },
-                            contentPadding = ItemContentPadding,
-                            colors = MenuDefaults.itemColors(textColor = Color.Black)
-                        )
+                    if (offices is Resource.Success) {
+                        offices.data?.let { offices ->
+                            offices.forEach { office ->
+                                office.name?.let { officeName ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = officeName,
+                                            )
+                                        },
+                                        onClick = {
+                                            text = officeName
+                                            expanded = false
+                                        },
+                                        contentPadding = ItemContentPadding,
+                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

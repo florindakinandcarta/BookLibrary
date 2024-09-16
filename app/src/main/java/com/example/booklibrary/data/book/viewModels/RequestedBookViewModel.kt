@@ -1,5 +1,6 @@
 package com.example.booklibrary.data.book.viewModels
 
+import androidx.lifecycle.ViewModel
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.RequestedBook
 import com.example.booklibrary.data.book.models.request.BookChangeStatus
@@ -13,9 +14,9 @@ import javax.inject.Inject
 @HiltViewModel
 class RequestedBookViewModel @Inject constructor(
     private val requestedBookRepository: RequestedBookRepository
-) {
-    suspend fun getAllRequestedBooks(officeName: String): Resource<List<RequestedBook>> {
-        return requestedBookRepository.getAllRequestedBooks(officeName)
+): ViewModel() {
+    suspend fun getAllRequestedBooks(): Resource<List<RequestedBook>> {
+        return requestedBookRepository.getAllRequestedBooks()
     }
 
     suspend fun getRequestedBookById(id: UUID): Resource<RequestedBook> {
@@ -30,8 +31,8 @@ class RequestedBookViewModel @Inject constructor(
         return requestedBookRepository.insertNewRequestedBook(book)
     }
 
-    suspend fun deleteRequestedBook(bookIsbn: String, officeName: String): Resource<String> {
-        return requestedBookRepository.deleteRequestedBook(bookIsbn, officeName)
+    suspend fun deleteRequestedBook(bookIsbn: String): Resource<String> {
+        return requestedBookRepository.deleteRequestedBook(bookIsbn)
     }
 
 
@@ -49,9 +50,8 @@ class RequestedBookViewModel @Inject constructor(
 
 
     suspend fun getRequestedBooksByBookStatus(
-        status: BookStatus,
-        officeName: String
+        status: BookStatus
     ): Resource<List<RequestedBook>> {
-        return requestedBookRepository.getRequestedBooksByBookStatus(status, officeName)
+        return requestedBookRepository.getRequestedBooksByBookStatus(status)
     }
 }

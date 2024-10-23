@@ -23,10 +23,10 @@ interface UserService {
         @Body user: UserUpdateDataRequest
     ): String
 
-    @POST("user/registerUser")
+    @POST("users/register")
     suspend fun registerUser(
         @Body user: UserRegistrationRequest
-    ): String
+    ): UserWithRoleResponse
 
     @POST("user/updateRole")
     suspend fun updateUserRole(
@@ -56,7 +56,7 @@ interface UserService {
         @Query("userId") userId: UUID
     ): UserResponse
 
-    @POST("user/loginUser")
+    @POST("users/login")
     suspend fun loginUser(
         @Body userLoginRequest: UserLoginRequest
     ): String

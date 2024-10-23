@@ -101,5 +101,6 @@
     <string name="choose_office">Choose Office</string>
     <string name="choose_role">Choose Role</string>
     <string name="admin">Admin</string>
+    <string name="login_successful">Login successful.</string>
     <string name="confirm_report_as_lost">The book has been reported as lost!</string>
 </resources>

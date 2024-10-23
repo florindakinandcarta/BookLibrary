@@ -20,10 +20,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,15 +38,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
-import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
+import com.example.booklibrary.util.Resource
+import kotlinx.coroutines.launch
 
 @Composable
 fun RequestedScreen(
     onAddNewBook: () -> Unit,
     onClickedBook: (String) -> Unit,
-//    orderBooksBasedOnLikes: () -> Unit
+    viewModel: RequestedBookViewModel = hiltViewModel(),
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
     var isFiltered by remember { mutableStateOf(true) }
@@ -55,6 +59,14 @@ fun RequestedScreen(
         mutableStateOf("")
     }
     val isUserAdmin by authViewModel.userAdmin.collectAsState()
+    val scope = rememberCoroutineScope()
+    val listOfBooks = viewModel.books.collectAsState().value
+    var swipedDown by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(swipedDown) {
+        viewModel.getAllRequestedBooks()
+    }
     Scaffold(
         topBar = {
             Row(
@@ -129,13 +141,19 @@ fun RequestedScreen(
                             )
                         }
                         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                            SampleData.bookStatus.forEach { bookStatus ->
+                            BookStatus.entries.forEach { bookStatus ->
                                 DropdownMenuItem(
-                                    text = { Text(text = bookStatus) },
+                                    text = { Text(text = bookStatus.name) },
                                     onClick = {
                                         expanded = false
-                                        selectedStatusFilter = bookStatus
-                                    })
+                                        selectedStatusFilter = bookStatus.name
+                                        scope.launch {
+                                            viewModel.getRequestedBooksByBookStatus(
+                                                selectedStatusFilter
+                                            )
+                                        }
+                                    }
+                                )
                             }
                         }
                     }
@@ -143,23 +161,33 @@ fun RequestedScreen(
             }
         }
     ) { paddingValues ->
-        val filteredBooks = if (selectedStatusFilter.isNotEmpty()) {
-            SampleData.books.filter { it.status == selectedStatusFilter }
-        } else {
-            SampleData.books
-        }
-
-        val sortedBooks = if (isFiltered) {
-            filteredBooks.sortedByDescending { it.numberOfLikes }
-        } else {
-            filteredBooks.sortedBy { it.numberOfLikes }
-        }
         LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            items(sortedBooks) { book ->
-                ItemRequestedBook(
-                    book = book,
-                    onClickedBook = onClickedBook
-                )
+            when (listOfBooks) {
+                is Resource.Success -> {
+                    listOfBooks.data?.let { books ->
+                        val sortedBooks = if (isFiltered) {
+                            books.sortedByDescending { it.likeCounter }
+                        } else {
+                            books.sortedBy { it.likeCounter }
+                        }
+                        items(sortedBooks) { book ->
+                            ItemRequestedBook(
+                                book = book,
+                                onClickedBook = onClickedBook
+                            )
+                        }
+                    }
+                }
+
+                is Resource.Loading -> {
+                    //loader display
+                }
+
+                is Resource.Error -> {
+                    listOfBooks.data?.let { error ->
+                        //call the dialog pop up for error display it for 5s and dismiss it
+                    }
+                }
             }
         }
     }

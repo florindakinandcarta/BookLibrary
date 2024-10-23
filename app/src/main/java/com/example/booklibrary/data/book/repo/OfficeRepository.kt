@@ -20,7 +20,7 @@ class OfficeRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())

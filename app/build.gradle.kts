@@ -100,4 +100,6 @@ dependencies {
     implementation (libs.androidx.camera.view)
     implementation (libs.androidx.camera.extensions)
     implementation (libs.androidx.material.icons.extended)
+    implementation (libs.androidx.datastore.preferences.v100)
+
 }

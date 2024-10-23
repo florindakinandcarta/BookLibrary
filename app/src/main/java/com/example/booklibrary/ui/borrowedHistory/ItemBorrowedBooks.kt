@@ -28,13 +28,14 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
 import com.example.booklibrary.data.Book
+import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemBorrowedBooks(
-    book: Book,
-    onBorrowedBookClick: (Book) -> Unit
+    book: BookCheckoutWithUserAndBookItemResponse,
+    onBorrowedBookClick: (BookCheckoutWithUserAndBookItemResponse) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -62,7 +63,7 @@ fun ItemBorrowedBooks(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = book.author.toString(),
+                text = book.bookISBN.toString(),
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .align(Alignment.Start),
@@ -72,7 +73,7 @@ fun ItemBorrowedBooks(
                 ),
             )
             Text(
-                text = book.title.toString(),
+                text = book.bookTitle.toString(),
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.Start),

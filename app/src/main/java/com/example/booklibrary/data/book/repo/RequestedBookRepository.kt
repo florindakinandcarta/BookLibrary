@@ -24,7 +24,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -41,7 +41,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -58,7 +58,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -75,7 +75,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -92,7 +92,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -111,7 +111,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -130,7 +130,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -139,7 +139,7 @@ class RequestedBookRepository @Inject constructor(
     }
 
     suspend fun getRequestedBooksByBookStatus(
-        status: BookStatus
+        status: String
     ): Resource<List<RequestedBook>> {
         val response = try {
             requestedBookService.getRequestedBooksByBookStatus(status)
@@ -149,7 +149,7 @@ class RequestedBookRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())

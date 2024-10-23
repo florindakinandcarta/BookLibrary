@@ -19,7 +19,7 @@ interface RequestedBookService {
 
     @GET("requested-book/{status}/all")
     suspend fun getRequestedBooksByBookStatus(
-        @Path("status") status: BookStatus
+        @Path("status") status: String
     ): List<RequestedBook>
 
     @GET("requestedBook/{id}")

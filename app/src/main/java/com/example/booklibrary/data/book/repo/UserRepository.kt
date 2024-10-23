@@ -27,7 +27,7 @@ class UserRepository @Inject constructor(
                 ExceptionResponse::class.java
             )
             return Resource.Error(
-                errorResponse?.message ?: "Unknown Error"
+                errorResponse?.generalExceptionMessage ?: "Unknown Error"
             )
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
@@ -45,7 +45,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -60,7 +60,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -75,7 +75,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -90,7 +90,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -105,14 +105,14 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
         return Resource.Success(response)
     }
 
-    suspend fun registerUser(user: UserRegistrationRequest): Resource<String> {
+    suspend fun registerUser(user: UserRegistrationRequest): Resource<UserWithRoleResponse> {
         val response = try {
             userService.registerUser(user)
         } catch (httpException: HttpException) {
@@ -120,7 +120,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -135,7 +135,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }
@@ -150,7 +150,7 @@ class UserRepository @Inject constructor(
                 httpException.response()?.errorBody()?.string(),
                 ExceptionResponse::class.java
             )
-            return Resource.Error(errorResponse?.message ?: "Unknown Error")
+            return Resource.Error(errorResponse?.generalExceptionMessage ?: "Unknown Error")
         } catch (e: Exception) {
             return Resource.Error(e.message.toString())
         }

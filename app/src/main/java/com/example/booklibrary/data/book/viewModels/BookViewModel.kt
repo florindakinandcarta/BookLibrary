@@ -1,6 +1,5 @@
 package com.example.booklibrary.data.book.viewModels
 
-import androidx.compose.ui.util.packFloats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.booklibrary.data.book.models.Book
@@ -36,33 +35,45 @@ class BookViewModel @Inject constructor(
         }
     }
 
-    suspend fun getBooksByTitle(title: String){
-      viewModelScope.launch {
-          _books.value = Resource.Loading()
-          val result = bookRepository.getBooksByTitle(title)
-          _books.value = result
-      }
+    suspend fun getBooksByTitle(title: String) {
+        viewModelScope.launch {
+            _books.value = Resource.Loading()
+            val result = bookRepository.getBooksByTitle(title)
+            _books.value = result
+        }
     }
 
-    suspend fun getAvailableBooks(){
-       viewModelScope.launch {
-           _books.value = Resource.Loading()
-           val result = bookRepository.getAvailableBooks()
-           _books.value = result
-       }
+    suspend fun getAvailableBooks() {
+        viewModelScope.launch {
+            _books.value = Resource.Loading()
+            val result = bookRepository.getAvailableBooks()
+            _books.value = result
+        }
     }
 
-    suspend fun getRequestedBooks(): Resource<List<BookDisplay>> {
-        return bookRepository.getRequestedBooks()
+    suspend fun getRequestedBooks() {
+        viewModelScope.launch {
+            _books.value = Resource.Loading()
+            val result = bookRepository.getRequestedBooks()
+            _books.value = result
+        }
     }
 
     suspend fun getBooksByLanguage(
         language: String,
-    ): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByLanguage(language)
+    ) {
+        viewModelScope.launch {
+            _books.value = Resource.Loading()
+            val result = bookRepository.getBooksByLanguage(language)
+            _books.value = result
+        }
     }
 
-    suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
-        return bookRepository.getBooksByGenre(genre)
+    suspend fun getBooksByGenre(genre: String) {
+        viewModelScope.launch {
+            _books.value = Resource.Loading()
+            val result = bookRepository.getBooksByGenre(genre)
+            _books.value = result
+        }
     }
 }

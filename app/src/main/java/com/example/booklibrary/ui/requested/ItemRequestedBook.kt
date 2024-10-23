@@ -28,11 +28,12 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
 import com.example.booklibrary.data.Book
+import com.example.booklibrary.data.book.models.RequestedBook
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemRequestedBook(
-    book: Book,
+    book: RequestedBook,
     onClickedBook: (String) -> Unit,
 ) {
     Row(
@@ -41,7 +42,7 @@ fun ItemRequestedBook(
             .fillMaxWidth()
             .height(100.dp)
             .clickable {
-                book.isbn?.let { isbn ->
+                book.bookISBN?.let { isbn ->
                     onClickedBook(isbn)
                 }
             },
@@ -66,7 +67,7 @@ fun ItemRequestedBook(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = book.status.toString(),
+                    text = book.bookStatus.toString(),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .align(Alignment.Start),
@@ -99,7 +100,7 @@ fun ItemRequestedBook(
                         ),
                     )
                     Text(
-                        text = book.numberOfLikes.toString(),
+                        text = book.likeCounter.toString(),
                         modifier = Modifier
                             .padding(start = 8.dp),
                         style = TextStyle(
@@ -110,7 +111,7 @@ fun ItemRequestedBook(
                     Spacer(Modifier.weight(1f))
                 }
                 Text(
-                    text = book.language.toString(),
+                    text = book.requestedDate.toString(),
                     modifier = Modifier
                         .padding(8.dp),
                     style = TextStyle(

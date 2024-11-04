@@ -18,22 +18,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
-import com.example.booklibrary.data.book.models.BookDisplay
-import com.example.booklibrary.ui.theme.BookLibraryTheme
+import com.example.booklibrary.data.googleBooks.VolumeInfo
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemSearchGoogleBook(
-    book: BookDisplay,
+    book: VolumeInfo,
     onBookClicked: (String) -> Unit
 ) {
 
@@ -43,14 +40,14 @@ fun ItemSearchGoogleBook(
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable {
-                book.isbn?.let { isbn ->
+                book.industryIdentifiers[0].identifier?.let { isbn ->
                     onBookClicked(isbn)
                 }
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
         GlideImage(
-            model = book.image,
+            model = book.imageLinks?.smallThumbnail,
             contentDescription = null,
             modifier = Modifier
                 .padding(16.dp)
@@ -63,9 +60,9 @@ fun ItemSearchGoogleBook(
             modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            book.isbn?.let { isbn ->
+            book.industryIdentifiers.firstOrNull()?.identifier.let { isbn ->
                 Text(
-                    text = isbn,
+                    text = isbn ?: "",
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .align(Alignment.Start),
@@ -90,7 +87,7 @@ fun ItemSearchGoogleBook(
                 )
             }
             Text(
-                text = book.languages.toString(),
+                text = book.language.toString(),
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .align(Alignment.Start),
@@ -98,16 +95,6 @@ fun ItemSearchGoogleBook(
                     fontSize = 10.sp,
                 ),
             )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewItemSearchGoogleBook(){
-    BookLibraryTheme {
-        ItemSearchGoogleBook(book = BookDisplay()) {
-            
         }
     }
 }

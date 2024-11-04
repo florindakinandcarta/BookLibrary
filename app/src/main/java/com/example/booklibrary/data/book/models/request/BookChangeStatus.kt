@@ -7,6 +7,6 @@ import java.util.UUID
 
 @Parcelize
 data class BookChangeStatus(
-    val requestedBookID: UUID,
-    val bookStatus: BookStatus
+    val requestedBookId: String,
+    val newBookStatus: String
 ) : Parcelable

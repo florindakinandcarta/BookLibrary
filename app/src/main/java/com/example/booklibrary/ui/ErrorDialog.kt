@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -18,17 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.booklibrary.R
-
 @Composable
-fun SuccessDialog(onDismissRequest: () -> Unit) {
+fun ErrorDialog(message: String, onDismissRequest: () -> Unit) {
     Scaffold {
         it
         Dialog(onDismissRequest = { onDismissRequest() }) {
@@ -51,7 +49,7 @@ fun SuccessDialog(onDismissRequest: () -> Unit) {
                         .align(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.confirm_report_as_lost),
+                        text = message,
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterHorizontally),
@@ -63,7 +61,7 @@ fun SuccessDialog(onDismissRequest: () -> Unit) {
                         overflow = TextOverflow.Ellipsis,
                     )
                     Icon(
-                        imageVector = Icons.Filled.CheckCircle,
+                        imageVector = Icons.Filled.Cancel,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(16.dp)

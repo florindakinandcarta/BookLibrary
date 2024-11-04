@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,13 +24,10 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,6 +39,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,11 +59,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.SampleData
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
 import com.example.booklibrary.data.book.viewModels.OfficeViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,21 +74,21 @@ fun RegisterScreen(
     onLoginClick: () -> Unit,
     viewModel: OfficeViewModel = hiltViewModel()
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
-    val messageResponse by authViewModel.message.collectAsState()
+    val userViewModel: UserViewModel = hiltViewModel()
+    val messageResponse by userViewModel.usersWithRole.collectAsState()
     val context = LocalContext.current
-    val offices = viewModel.offices.collectAsState().value
-
+//    val offices = viewModel.offices.collectAsState().value
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                context.showToast((messageResponse as Resource.Success<String>).data.toString())
+//                context.showToast("User ${messageResponse.data} successfully created.")
                 onLoginClick()
             }
 
             is Resource.Error -> {
-                context.showToast((messageResponse as Resource.Error<String>).data.toString())
+                context.showToast(messageResponse.message.toString())
             }
 
             else -> {
@@ -108,6 +108,9 @@ fun RegisterScreen(
             mutableStateOf("")
         }
         var confirmPassword by remember {
+            mutableStateOf("")
+        }
+        var officeName by remember {
             mutableStateOf("")
         }
         var showPassword by remember { mutableStateOf(false) }
@@ -202,27 +205,28 @@ fun RegisterScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.exposedDropdownSize()
                 ) {
-                    if (offices is Resource.Success) {
-                        offices.data?.let { offices ->
-                            offices.forEach { office ->
-                                office.name?.let { officeName ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                                text = officeName,
-                                            )
-                                        },
-                                        onClick = {
-                                            text = officeName
-                                            expanded = false
-                                        },
-                                        contentPadding = ItemContentPadding,
-                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
-                                    )
-                                }
-                            }
-                        }
-                    }
+//                    if (offices is Resource.Success) {
+//                        offices.data?.let { offices ->
+//                            offices.forEach { office ->
+//                                office.name?.let { officeNameSelected ->
+//                                    DropdownMenuItem(
+//                                        text = {
+//                                            Text(
+//                                                text = officeNameSelected,
+//                                            )
+//                                        },
+//                                        onClick = {
+//                                            text = officeNameSelected
+//                                            officeName = officeNameSelected
+//                                            expanded = false
+//                                        },
+//                                        contentPadding = ItemContentPadding,
+//                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
                 }
             }
             OutlinedTextField(
@@ -376,7 +380,15 @@ fun RegisterScreen(
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
-                    authViewModel.createUserWithEmailAndPassword(email, password)
+                    val userRegisterRequest = UserRegistrationRequest(
+                        name,
+                        email,
+                        "Skopje",
+                        password
+                    )
+                    scope.launch {
+                        userViewModel.registerUser(userRegisterRequest)
+                    }
                 },
                 modifier = Modifier
                     .padding(vertical = 16.dp)

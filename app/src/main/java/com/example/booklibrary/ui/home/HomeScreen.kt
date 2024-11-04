@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import com.example.booklibrary.data.book.models.Languages
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
+import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -55,10 +57,14 @@ fun HomeScreen(
     var selectedLanguage by remember {
         mutableStateOf("Languages")
     }
+    var swipedDown by remember {
+        mutableStateOf(false)
+    }
+    val scope = rememberCoroutineScope()
 //    val listOfBooks = viewModel.books.collectAsState().value
-//    LaunchedEffect() {
+    LaunchedEffect(swipedDown) {
 //        viewModel.getAvailableBooks()
-//    }
+    }
     Scaffold(
         topBar = { TopBarHome(onNotificationClick, onSearchClick) },
     ) { paddingValues ->
@@ -121,6 +127,9 @@ fun HomeScreen(
                                             },
                                             onClick = {
                                                 selectedLanguage = option.name
+                                                scope.launch {
+//                                                    viewModel.getBooksByLanguage(selectedLanguage)
+                                                }
                                                 expanded = false
                                             },
                                         )
@@ -133,6 +142,9 @@ fun HomeScreen(
                                 selected = option == selectedFilter,
                                 onClick = {
                                     selectedFilter = option
+                                    scope.launch {
+//                                        viewModel.getBooksByGenre(selectedFilter)
+                                    }
                                 },
                                 label = {
                                     Text(text = option)
@@ -142,13 +154,25 @@ fun HomeScreen(
                     }
                 }
             }
-//            if (listOfBooks is Resource.Success) {
-//                listOfBooks.data?.let { books ->
-//                    items(books) { book ->
-//                        ItemBook(
-//                            book = book,
-//                            onClickedBook = onClickedBook
-//                        )
+//            when (listOfBooks) {
+//                is Resource.Success -> {
+//                    listOfBooks.data?.let { books ->
+//                        items(books) { book ->
+//                            ItemBook(
+//                                book = book,
+//                                onClickedBook = onClickedBook
+//                            )
+//                        }
+//                    }
+//                }
+//
+//                is Resource.Loading -> {
+//                    //loader display
+//                }
+//
+//                is Resource.Error -> {
+//                    listOfBooks.data?.let { error ->
+//                        //call the dialog pop up for error display it for 5s and dismiss it
 //                    }
 //                }
 //            }

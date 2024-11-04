@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,11 +27,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,47 +51,49 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.showToast
-import com.example.booklibrary.util.validateEmail
+import com.example.booklibrary.data.book.models.request.UserLoginRequest
 import com.example.booklibrary.data.book.viewModels.AuthViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.util.validateEmail
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit,
+    onLoginClick: (UserLoginRequest) -> Unit,
     onForgotPasswordClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
+    val userViewModel: UserViewModel = hiltViewModel()
     val context = LocalContext.current
-    LaunchedEffect(messageResponse) {
-        when (messageResponse) {
-            is Resource.Success -> {
-                context.showToast((messageResponse as Resource.Success<String>).data.toString())
-                onLoginClick()
-            }
-
-            is Resource.Error -> {
-                when ((messageResponse as Resource.Error<String>).message.toString()) {
-                    context.resources.getString(R.string.error_code_message_incorrect) ->
-                        context.showToast(context.getString(R.string.wrong_password_email))
-
-                    context.resources.getString(R.string.error_code_message_connection) ->
-                        context.showToast(context.getString(R.string.error_connection))
-
-                    else -> {
-                        context.showToast(context.getString(R.string.default_error))
-
-                    }
-                }
-            }
-
-            else -> {
-
-            }
-        }
-    }
+    val scope = rememberCoroutineScope()
+//    LaunchedEffect(messageResponse) {
+//        when (messageResponse) {
+//            is Resource.Success -> {
+//                context.showToast((messageResponse as Resource.Success<String>).data.toString())
+//                onLoginClick()
+//            }
+//
+//            is Resource.Error -> {
+//                when ((messageResponse as Resource.Error<String>).message.toString()) {
+//                    context.resources.getString(R.string.error_code_message_incorrect) ->
+//                        context.showToast(context.getString(R.string.wrong_password_email))
+//
+//                    context.resources.getString(R.string.error_code_message_connection) ->
+//                        context.showToast(context.getString(R.string.error_connection))
+//
+//                    else -> {
+//                        context.showToast(context.getString(R.string.default_error))
+//
+//                    }
+//                }
+//            }
+//
+//            else -> {
+//
+//            }
+//        }
+//    }
     Scaffold {
         it
         var emailInput by remember {
@@ -242,7 +244,11 @@ fun LoginScreen(
             }
             Button(
                 onClick = {
-                    authViewModel.signInWithEmailAndPassword(emailInput, passwordInput)
+                    val userLoginRequest = UserLoginRequest(
+                        emailInput,
+                        passwordInput
+                    )
+                    onLoginClick(userLoginRequest)
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

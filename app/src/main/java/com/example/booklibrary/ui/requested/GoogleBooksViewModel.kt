@@ -52,6 +52,25 @@ class GoogleBooksViewModel @Inject constructor(
             }
         }
     }
+    fun fetchBookByISBN(bookISBN: String) {
+        _loadingBooks.value = true
+        viewModelScope.launch {
+            try {
+                val response = googleBooksApi.getGoogleBooksWithISBN(bookISBN)
+                _responseBooks.value = Resource.Success(response)
+            } catch (httpException: HttpException) {
+                val errorResponse = Gson().fromJson(
+                    httpException.response()?.errorBody()?.string(),
+                    ExceptionResponse::class.java
+                )
+                _responseBooks.value = Resource.Error(errorResponse?.message ?: "")
+            } catch (e: Exception) {
+                _responseBooks.value = Resource.Error()
+            } finally {
+                _loadingBooks.value = false
+            }
+        }
+    }
     fun clearSearchResults() {
         _responseBooks.value = Resource.Success(GoogleBooks())
         _isResponseZero.value = false

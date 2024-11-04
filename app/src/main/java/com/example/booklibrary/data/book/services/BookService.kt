@@ -14,8 +14,7 @@ import retrofit2.http.Query
 
 interface BookService {
     @GET("books")
-    suspend fun getAllBooks(
-    ): List<BookDisplay>
+    suspend fun getAllBooks(): List<BookDisplay>
 
     @GET("books/book")
     suspend fun getBookByISBN(

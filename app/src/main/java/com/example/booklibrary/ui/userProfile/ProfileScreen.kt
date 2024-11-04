@@ -57,18 +57,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
-    onChangePassword: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onAllUsersClicked: () -> Unit,
-    onChangeProfilePhotoClicked: () -> Unit
+    onChangeProfilePhotoClicked: () -> Unit,
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
-    val userViewModel: UserViewModel = hiltViewModel()
+//    val userViewModel: UserViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
     val user by authViewModel.user.collectAsState()
-    val userUpdate by userViewModel.user.collectAsState()
+//    val userUpdate by userViewModel.user.collectAsState()
     val isUserAdmin by authViewModel.userAdmin.collectAsState()
-    val response by userViewModel.response.collectAsState()
+//    val response by userViewModel.response.collectAsState()
     val scope = rememberCoroutineScope()
     var isEditMode by remember {
         mutableStateOf(false)
@@ -76,19 +76,20 @@ fun ProfileScreen(
     var displayName by remember {
         mutableStateOf(user?.displayName ?: "")
     }
-    LaunchedEffect(response) {
-        when(response){
-            is Resource.Success -> {
-                context.showToast((response as Resource.Success<String>).data.toString())
-            }
-            is Resource.Error -> {
-                context.showToast(context.getString(R.string.something_went_wrong))
-            }
-            else -> {
-                context.showToast(context.getString(R.string.unknown_error))
-            }
-        }
-    }
+//    LaunchedEffect(response) {
+//        when (response) {
+//            is Resource.Success -> {
+//                context.showToast((response as Resource.Success<String>).data.toString())
+//            }
+//
+//            is Resource.Error -> {
+//                context.showToast(context.getString(R.string.something_went_wrong))
+//            }
+//
+//            else -> {
+//            }
+//        }
+//    }
 
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
@@ -103,7 +104,7 @@ fun ProfileScreen(
             }
 
             else -> {
-                context.showToast(context.getString(R.string.unknown_error))
+
             }
         }
     }
@@ -185,28 +186,31 @@ fun ProfileScreen(
                     },
                     label = {
                         Text(
-                            stringResource(id = R.string.enter_old_password),
+                            stringResource(id = R.string.name),
                             style = TextStyle(
-                                color = Color.Gray
+                                Color.Unspecified
                             )
                         )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(8.dp),
                     singleLine = true,
+                    textStyle = TextStyle(color = Color.Black),
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                            val updatedName = UserUpdateDataRequest(
-                                userUpdate.data?.userId!!,
-                                displayName
-                            )
-                            scope.launch {
-                                userViewModel.updateUserData(updatedName)
-                                isEditMode = !isEditMode
-                            }
-                        }) {
+//                                userUpdate.data?.userId?.let { userId ->
+//                                    val updatedName = UserUpdateDataRequest(
+//                                        userId,
+//                                        displayName
+//                                    )
+//                                    scope.launch {
+//                                        userViewModel.updateUserData(updatedName)
+//                                        isEditMode = !isEditMode
+//                                    }
+//                                }
+                            }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = "Save",
@@ -215,7 +219,7 @@ fun ProfileScreen(
                         }
                     }
                 )
-            }else {
+            } else {
                 Text(
                     text = user?.displayName.toString(),
                     modifier = Modifier
@@ -271,7 +275,7 @@ fun ProfileScreen(
                         .padding(start = 24.dp)
                         .align(Alignment.CenterVertically)
                         .clickable {
-                            onChangePassword()
+                            onSettingsClicked()
                         },
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold
@@ -281,7 +285,7 @@ fun ProfileScreen(
                 IconButton(
                     modifier = Modifier.size(32.dp),
                     onClick = {
-                        onChangePassword()
+                        onSettingsClicked()
                     }
                 ) {
                     Icon(
@@ -334,7 +338,9 @@ fun ProfileScreen(
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
-                    authViewModel.signOut()
+                    scope.launch {
+//                        userViewModel.signOutUser()
+                    }
                 },
                 modifier = Modifier
                     .padding(16.dp)

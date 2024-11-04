@@ -1,5 +1,6 @@
 package com.example.booklibrary.data.book.models
 
 data class ExceptionResponse(
-    val message: String?
+    val errorFields:  Any?,
+    val generalExceptionMessage: Any?
 )

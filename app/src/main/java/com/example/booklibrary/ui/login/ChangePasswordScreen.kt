@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -44,35 +44,32 @@ import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 @Composable
 fun ChangePasswordScreen(
     onBackClicked: () -> Unit
 ) {
     val userViewModel: UserViewModel = hiltViewModel()
-    val user by userViewModel.user.collectAsState()
-    val response by userViewModel.response.collectAsState()
+//    val user by userViewModel.user.collectAsState()
+//    val response by userViewModel.response.collectAsState()
     var oldPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(response) {
-        when(response){
-            is Resource.Success -> {
-                context.showToast((response as Resource.Success<String>).data.toString())
-                onBackClicked()
-            }
-            is Resource.Error -> {
-                context.showToast(context.getString(R.string.something_went_wrong))
-            }
-            else -> {
-                context.showToast(context.getString(R.string.unknown_error))
-            }
-        }
-    }
+//    LaunchedEffect(response) {
+//        when(response){
+//            is Resource.Success -> {
+//                context.showToast((response as Resource.Success<String>).data.toString())
+//                onBackClicked()
+//            }
+//            is Resource.Error -> {
+//                context.showToast(context.getString(R.string.something_went_wrong))
+//            }
+//            else -> {
+//            }
+//        }
+//    }
 
     Scaffold(
         topBar = {
@@ -168,43 +165,18 @@ fun ChangePasswordScreen(
                     .padding(vertical = 8.dp),
                 singleLine = true
             )
-            OutlinedTextField(
-                value = confirmPassword,
-                shape = RoundedCornerShape(12.dp),
-                onValueChange = {
-                    confirmPassword = it
-                },
-                label = {
-                    Text(
-                        text =
-                        if (newPassword != confirmPassword) {
-                            stringResource(id = R.string.passwords_dont_match)
-                        } else {
-                            stringResource(id = R.string.enter_email)
-                        },
-                        style = TextStyle(
-                            color = if (newPassword != confirmPassword) Color.Red else Color.Gray
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                singleLine = true,
-            )
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
-                    if (oldPassword.isBlank()|| newPassword.isBlank() || confirmPassword.isBlank()){
+                    if (oldPassword.isBlank()|| newPassword.isBlank()){
                         Toast.makeText(context, context.getString(R.string.all_fields_required), Toast.LENGTH_SHORT).show()
                     }else {
-                        val newPasswordRequest = UserChangePasswordRequest(
-                            user.data?.userId!!,
-                            oldPassword,
-                            confirmPassword
-                        )
+//                        val newPasswordRequest = UserChangePasswordRequest(
+//                            user.data?.userId!!,
+//                            oldPassword,
+//                        )
                         scope.launch {
-                            userViewModel.changePassword(newPasswordRequest)
+//                            userViewModel.changePassword(newPasswordRequest)
                         }
                     }
                 },

@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,16 +52,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.UserLoginRequest
-import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.showToast
-import com.example.booklibrary.util.validateEmail
 import com.example.booklibrary.data.book.viewModels.AuthViewModel
 import com.example.booklibrary.data.book.viewModels.UserViewModel
-import kotlinx.coroutines.launch
+import com.example.booklibrary.util.validateEmail
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit,
+    onLoginClick: (UserLoginRequest) -> Unit,
     onForgotPasswordClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
@@ -250,11 +246,9 @@ fun LoginScreen(
                 onClick = {
                     val userLoginRequest = UserLoginRequest(
                         emailInput,
-                        passwordInput)
-                    scope.launch {
-                        println("button click")
-                        userViewModel.loginUser(userLoginRequest)
-                    }
+                        passwordInput
+                    )
+                    onLoginClick(userLoginRequest)
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

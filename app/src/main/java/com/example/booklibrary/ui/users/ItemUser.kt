@@ -120,7 +120,7 @@ fun ItemUser(
                     .size(32.dp),
                 onClick = {
                     scope.launch {
-                        userViewModel.deleteAccount(user.userId)
+//                        userViewModel.deleteAccount(user.userId)
                     }
                 }
             ) {

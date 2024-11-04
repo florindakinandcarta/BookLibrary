@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,13 +24,10 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -77,16 +74,16 @@ fun RegisterScreen(
     onLoginClick: () -> Unit,
     viewModel: OfficeViewModel = hiltViewModel()
 ) {
-    val authViewModel: UserViewModel = hiltViewModel()
-    val messageResponse by authViewModel.userWithRole.collectAsState()
+    val userViewModel: UserViewModel = hiltViewModel()
+    val messageResponse by userViewModel.usersWithRole.collectAsState()
     val context = LocalContext.current
-    val offices = viewModel.offices.collectAsState().value
+//    val offices = viewModel.offices.collectAsState().value
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
             is Resource.Success -> {
-                context.showToast("User ${messageResponse.data?.fullName} successfully created.")
+//                context.showToast("User ${messageResponse.data} successfully created.")
                 onLoginClick()
             }
 
@@ -208,28 +205,28 @@ fun RegisterScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.exposedDropdownSize()
                 ) {
-                    if (offices is Resource.Success) {
-                        offices.data?.let { offices ->
-                            offices.forEach { office ->
-                                office.name?.let { officeNameSelected ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                                text = officeNameSelected,
-                                            )
-                                        },
-                                        onClick = {
-                                            text = officeNameSelected
-                                            officeName = officeNameSelected
-                                            expanded = false
-                                        },
-                                        contentPadding = ItemContentPadding,
-                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
-                                    )
-                                }
-                            }
-                        }
-                    }
+//                    if (offices is Resource.Success) {
+//                        offices.data?.let { offices ->
+//                            offices.forEach { office ->
+//                                office.name?.let { officeNameSelected ->
+//                                    DropdownMenuItem(
+//                                        text = {
+//                                            Text(
+//                                                text = officeNameSelected,
+//                                            )
+//                                        },
+//                                        onClick = {
+//                                            text = officeNameSelected
+//                                            officeName = officeNameSelected
+//                                            expanded = false
+//                                        },
+//                                        contentPadding = ItemContentPadding,
+//                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
                 }
             }
             OutlinedTextField(
@@ -390,7 +387,7 @@ fun RegisterScreen(
                         password
                     )
                     scope.launch {
-                        authViewModel.registerUser(userRegisterRequest)
+                        userViewModel.registerUser(userRegisterRequest)
                     }
                 },
                 modifier = Modifier

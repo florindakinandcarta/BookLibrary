@@ -71,18 +71,18 @@ fun BookCheckoutsScreen(
         mutableIntStateOf(5)
     }
     val isUserAdmin by authViewModel.userAdmin.collectAsState()
-    val listOfBooks = viewModel.books.collectAsState().value
+//    val listOfBooks = viewModel.books.collectAsState().value
     var swipedDown by remember {
         mutableStateOf(false)
     }
     LaunchedEffect(swipedDown) {
         if (isUserAdmin) {
-            viewModel.getAllBookCheckoutsPaginated(
-                numberOfPages,
-                pageSize
-            )
+//            viewModel.getAllBookCheckoutsPaginated(
+//                numberOfPages,
+//                pageSize
+//            )
         } else {
-            viewModel.getAllBookCheckouts()
+//            viewModel.getAllBookCheckouts()
         }
     }
     val context = LocalContext.current
@@ -184,7 +184,7 @@ fun BookCheckoutsScreen(
             }
         }
     ) { paddingValues ->
-        BorrowedBooksList(paddingValues, onBorrowedBookClick, listOfBooks)
+//        BorrowedBooksList(paddingValues, onBorrowedBookClick, listOfBooks)
     }
 }
 

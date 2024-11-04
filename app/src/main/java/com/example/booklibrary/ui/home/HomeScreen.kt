@@ -61,9 +61,9 @@ fun HomeScreen(
         mutableStateOf(false)
     }
     val scope = rememberCoroutineScope()
-    val listOfBooks = viewModel.books.collectAsState().value
+//    val listOfBooks = viewModel.books.collectAsState().value
     LaunchedEffect(swipedDown) {
-        viewModel.getAvailableBooks()
+//        viewModel.getAvailableBooks()
     }
     Scaffold(
         topBar = { TopBarHome(onNotificationClick, onSearchClick) },
@@ -128,7 +128,7 @@ fun HomeScreen(
                                             onClick = {
                                                 selectedLanguage = option.name
                                                 scope.launch {
-                                                    viewModel.getBooksByLanguage(selectedLanguage)
+//                                                    viewModel.getBooksByLanguage(selectedLanguage)
                                                 }
                                                 expanded = false
                                             },
@@ -143,7 +143,7 @@ fun HomeScreen(
                                 onClick = {
                                     selectedFilter = option
                                     scope.launch {
-                                        viewModel.getBooksByGenre(selectedFilter)
+//                                        viewModel.getBooksByGenre(selectedFilter)
                                     }
                                 },
                                 label = {
@@ -154,28 +154,28 @@ fun HomeScreen(
                     }
                 }
             }
-            when (listOfBooks) {
-                is Resource.Success -> {
-                    listOfBooks.data?.let { books ->
-                        items(books) { book ->
-                            ItemBook(
-                                book = book,
-                                onClickedBook = onClickedBook
-                            )
-                        }
-                    }
-                }
-
-                is Resource.Loading -> {
-                    //loader display
-                }
-
-                is Resource.Error -> {
-                    listOfBooks.data?.let { error ->
-                        //call the dialog pop up for error display it for 5s and dismiss it
-                    }
-                }
-            }
+//            when (listOfBooks) {
+//                is Resource.Success -> {
+//                    listOfBooks.data?.let { books ->
+//                        items(books) { book ->
+//                            ItemBook(
+//                                book = book,
+//                                onClickedBook = onClickedBook
+//                            )
+//                        }
+//                    }
+//                }
+//
+//                is Resource.Loading -> {
+//                    //loader display
+//                }
+//
+//                is Resource.Error -> {
+//                    listOfBooks.data?.let { error ->
+//                        //call the dialog pop up for error display it for 5s and dismiss it
+//                    }
+//                }
+//            }
         }
     }
 }

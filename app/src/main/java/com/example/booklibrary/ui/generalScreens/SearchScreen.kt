@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
 import com.example.booklibrary.ui.home.SearchViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -53,10 +54,12 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     onScanClick: () -> Unit,
     onBackClicked: () -> Unit,
+    onSearchClick: (String) -> Unit,
     onClickedBook: (String) -> Unit,
     viewModel: BookViewModel = hiltViewModel(),
 ) {
     val searchViewModel: SearchViewModel = viewModel()
+    val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
     val context = LocalContext.current
@@ -107,6 +110,7 @@ fun SearchScreen(
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
                 scope.launch {
+                   onSearchClick(searchText)
 //                    viewModel.getBooksByTitle(searchText)
                 }
             },

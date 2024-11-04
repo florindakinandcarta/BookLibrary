@@ -7,8 +7,8 @@ import java.util.UUID
 
 @Parcelize
 data class UserWithRoleResponse(
-    val userId: UUID,
+    val userId: String,
     val fullName: String? = null,
     val email: String? = null,
-    val role: UserRole? = null
+    val role: String? = null
 ) : Parcelable

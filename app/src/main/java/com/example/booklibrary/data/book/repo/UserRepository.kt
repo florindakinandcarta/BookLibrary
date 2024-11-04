@@ -1,5 +1,7 @@
 package com.example.booklibrary.data.book.repo
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
 import com.example.booklibrary.data.book.models.request.UserLoginRequest
@@ -10,17 +12,28 @@ import com.example.booklibrary.data.book.models.response.UserResponse
 import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
 import com.example.booklibrary.data.book.services.UserService
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.getUserJWTToken
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import java.util.UUID
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
-    private val userService: UserService
+    private val userService: UserService,
+    private val dataStore: DataStore<Preferences>
 ) {
-    suspend fun getUserProfile(userId: UUID): Resource<UserResponse> {
+    private val token: String by lazy {
+        runBlocking {
+            val jwtToken = getUserJWTToken(dataStore).first() ?: ""
+            "Bearer $jwtToken"
+        }
+    }
+
+    suspend fun getUserProfile(): Resource<UserResponse> {
         val response = try {
-            userService.getUserProfile(userId)
+            userService.getUserProfile(token = token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -39,7 +52,7 @@ class UserRepository @Inject constructor(
         fullName: String
     ): Resource<List<UserWithRoleResponse>> {
         val response = try {
-            userService.getAllUsersWithFullName(fullName)
+            userService.getAllUsersWithFullName(token = token, fullName = fullName)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

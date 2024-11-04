@@ -41,7 +41,7 @@ fun UsersScreen(
     val userViewModel: UserViewModel = hiltViewModel()
     val users by userViewModel.users.collectAsState()
     LaunchedEffect(Unit) {
-        userViewModel.getAllUsers()
+//        userViewModel.getAllUsers()
     }
     Scaffold(
         topBar = {

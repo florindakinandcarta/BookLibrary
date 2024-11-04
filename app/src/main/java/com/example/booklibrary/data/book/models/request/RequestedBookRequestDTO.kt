@@ -4,7 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class BookRequest(
-    val bookISBN: String,
-    val userEmail: String
+data class RequestedBookRequestDTO(
+    val bookIsbn: String
 ):Parcelable

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.book.models.BookDisplay
 import com.example.booklibrary.data.book.repo.BookRepository
+import com.example.booklibrary.data.googleBooks.GoogleBooks
 import com.example.booklibrary.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +42,9 @@ class BookViewModel @Inject constructor(
             val result = bookRepository.getBooksByTitle(title)
             _books.value = result
         }
+    }
+    fun clearSearchResults() {
+        _books.value = Resource.Success(emptyList())
     }
 
     suspend fun getAvailableBooks() {

@@ -1,12 +1,13 @@
 package com.example.booklibrary.data.book.services
 
-import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.RequestedBook
 import com.example.booklibrary.data.book.models.request.BookChangeStatus
-import com.example.booklibrary.data.book.models.request.BookRequest
+import com.example.booklibrary.data.book.models.request.RequestedBookRequestDTO
+import com.example.booklibrary.data.book.models.response.RequestedBookResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -14,12 +15,15 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface RequestedBookService {
-    @GET("requested-book/all")
-    suspend fun getAllRequestedBooks(): List<RequestedBook>
+    @GET("requested-books")
+    suspend fun getAllRequestedBooks(
+        @Header("Authorization") token: String
+    ): List<RequestedBook>
 
-    @GET("requested-book/{status}/all")
+    @GET("/requested-books/by-book-status")
     suspend fun getRequestedBooksByBookStatus(
-        @Path("status") status: String
+        @Header("Authorization") token: String,
+        @Query("status") status: String
     ): List<RequestedBook>
 
     @GET("requestedBook/{id}")
@@ -32,23 +36,26 @@ interface RequestedBookService {
         @Path("isbn") isbn: String
     ): RequestedBook
 
-    @POST("requested-book/insert")
+    @POST("requested-books/insert-requested-book")
     suspend fun insertNewRequestedBook(
-        @Body book: BookRequest
-    ): RequestedBook
+        @Header("Authorization") token: String,
+        @Body book: RequestedBookRequestDTO
+    ): RequestedBookResponse
 
     @DELETE("requested-book/delete")
     suspend fun deleteRequestedBook(
         @Path("bookISBN") bookISBN: String
     ): String
 
-    @PATCH("requested-book/change-status")
+    @PATCH("requested-books/change-book-status")
     suspend fun changeBookStatus(
+        @Header("Authorization") token: String,
         @Body book: BookChangeStatus
     ): RequestedBook
 
-    @POST("requested-book/handle-like")
+    @POST("requested-books/handle-like")
     suspend fun handleRequestedBookLike(
-        @Body book: BookRequest
+        @Header("Authorization") token: String,
+        @Body book: RequestedBookRequestDTO
     ): RequestedBook
 }

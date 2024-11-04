@@ -57,18 +57,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
-    onChangePassword: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onAllUsersClicked: () -> Unit,
     onChangeProfilePhotoClicked: () -> Unit,
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
-    val userViewModel: UserViewModel = hiltViewModel()
+//    val userViewModel: UserViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
     val user by authViewModel.user.collectAsState()
-    val userUpdate by userViewModel.user.collectAsState()
+//    val userUpdate by userViewModel.user.collectAsState()
     val isUserAdmin by authViewModel.userAdmin.collectAsState()
-    val response by userViewModel.response.collectAsState()
+//    val response by userViewModel.response.collectAsState()
     val scope = rememberCoroutineScope()
     var isEditMode by remember {
         mutableStateOf(false)
@@ -76,20 +76,20 @@ fun ProfileScreen(
     var displayName by remember {
         mutableStateOf(user?.displayName ?: "")
     }
-    LaunchedEffect(response) {
-        when (response) {
-            is Resource.Success -> {
-                context.showToast((response as Resource.Success<String>).data.toString())
-            }
-
-            is Resource.Error -> {
-                context.showToast(context.getString(R.string.something_went_wrong))
-            }
-
-            else -> {
-            }
-        }
-    }
+//    LaunchedEffect(response) {
+//        when (response) {
+//            is Resource.Success -> {
+//                context.showToast((response as Resource.Success<String>).data.toString())
+//            }
+//
+//            is Resource.Error -> {
+//                context.showToast(context.getString(R.string.something_went_wrong))
+//            }
+//
+//            else -> {
+//            }
+//        }
+//    }
 
     LaunchedEffect(messageResponse) {
         when (messageResponse) {
@@ -200,16 +200,16 @@ fun ProfileScreen(
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                                userUpdate.data?.userId?.let { userId ->
-                                    val updatedName = UserUpdateDataRequest(
-                                        userId,
-                                        displayName
-                                    )
-                                    scope.launch {
-                                        userViewModel.updateUserData(updatedName)
-                                        isEditMode = !isEditMode
-                                    }
-                                }
+//                                userUpdate.data?.userId?.let { userId ->
+//                                    val updatedName = UserUpdateDataRequest(
+//                                        userId,
+//                                        displayName
+//                                    )
+//                                    scope.launch {
+//                                        userViewModel.updateUserData(updatedName)
+//                                        isEditMode = !isEditMode
+//                                    }
+//                                }
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
@@ -275,7 +275,7 @@ fun ProfileScreen(
                         .padding(start = 24.dp)
                         .align(Alignment.CenterVertically)
                         .clickable {
-                            onChangePassword()
+                            onSettingsClicked()
                         },
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold
@@ -285,7 +285,7 @@ fun ProfileScreen(
                 IconButton(
                     modifier = Modifier.size(32.dp),
                     onClick = {
-                        onChangePassword()
+                        onSettingsClicked()
                     }
                 ) {
                     Icon(
@@ -339,7 +339,7 @@ fun ProfileScreen(
             Button(
                 onClick = {
                     scope.launch {
-                        userViewModel.signOutUser()
+//                        userViewModel.signOutUser()
                     }
                 },
                 modifier = Modifier

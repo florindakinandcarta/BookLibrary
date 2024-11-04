@@ -7,26 +7,26 @@ sealed class BottomTab(
     var title: String,
     var icon: Int
 ) {
-    data object Dashboard : BottomTab(
-        "dashboard",
-        "Dashboard",
+     object Home : BottomTab(
+        "HOME",
+        "Home",
         R.drawable.home
     )
 
-    data object Requested : BottomTab(
-        "requested",
+     object Requested : BottomTab(
+        "REQUESTED",
         "Requested",
         R.drawable.recommended
     )
 
-    data object Borrowed : BottomTab(
-        "borrowed",
-        "History",
+     object Borrowed : BottomTab(
+        "BORROWED",
+        "Borrowed",
         R.drawable.history_icon
     )
 
-    data object Profile : BottomTab(
-        "profile",
+     object Profile : BottomTab(
+        "PROFILE",
         "Profile",
         R.drawable.profile
     )

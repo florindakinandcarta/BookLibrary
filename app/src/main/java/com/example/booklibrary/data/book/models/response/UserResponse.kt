@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Parcelize
 data class UserResponse(
-    val userId: UUID,
+    val userId: String,
     val fullName: String? = null,
     val email: String? = null,
     val profilePicture: String? = null

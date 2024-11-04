@@ -1,4 +1,4 @@
-package com.example.booklibrary.login
+package com.example.booklibrary.ui.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

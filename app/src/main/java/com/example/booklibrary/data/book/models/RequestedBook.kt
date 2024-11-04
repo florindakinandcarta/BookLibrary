@@ -7,11 +7,12 @@ import java.util.UUID
 
 @Parcelize
 data class RequestedBook(
-    val id: UUID? = null,
-    val requestedDate: LocalDate? = null,
-    val likeCounter: Long? = null,
+    val id: String,
     val bookISBN: String? = null,
-    val bookStatus: BookStatus? = null,
+    val officeName: String? = null,
+    val requestedDate: String? = null,
+    val likeCounter: Int? = null,
+    val bookStatus: String? = null,
     val title: String? = null,
     val image: String? = null
 ) : Parcelable

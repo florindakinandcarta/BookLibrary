@@ -1,12 +1,15 @@
 package com.example.booklibrary.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.home.HomeScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeNavGraph(navHostController: NavHostController) {
@@ -16,10 +19,23 @@ fun HomeNavGraph(navHostController: NavHostController) {
         startDestination = BottomTab.Home.route
     ) {
         composable(route = BottomTab.Home.route) {
+            val bookViewModel: BookViewModel = hiltViewModel()
+            val scope = rememberCoroutineScope()
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    bookViewModel.getAllBooks()
+                }
+            }
             HomeScreen(
                 onSearchClick = {},
-                onClickedBook = {},
-                onNotificationClick = {}
+                onClickedBook = {
+                },
+                onNotificationClick = {},
+                onSelectedLanguageClick = { language ->
+                    scope.launch {
+                        bookViewModel.getBooksByLanguage(language)
+                    }
+                }
             )
         }
         composable(route = BottomTab.Requested.route) {

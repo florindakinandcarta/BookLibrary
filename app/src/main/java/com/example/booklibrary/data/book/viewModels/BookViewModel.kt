@@ -21,11 +21,28 @@ class BookViewModel @Inject constructor(
     private val _books = MutableStateFlow<Resource<List<BookDisplay>>>(Resource.Loading())
     val books: StateFlow<Resource<List<BookDisplay>>> = _books
 
+    private val _isRefreshing = MutableStateFlow(true)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     private val _bookDetails = MutableStateFlow<Resource<Book>?>(Resource.Loading())
     val bookDetails: StateFlow<Resource<Book>?> = _bookDetails
 
-    suspend fun getAllBooks(): Resource<List<BookDisplay>> {
-        return bookRepository.getAllBooks()
+    suspend fun getAllBooks(){
+        viewModelScope.launch {
+            when( val result = bookRepository.getAllBooks()){
+                is Resource.Success -> {
+                    _books.value = result
+                    _isRefreshing.value = false
+                }
+                is Resource.Error -> {
+                    _books.value = result
+                    _isRefreshing.value = false
+                }
+                is Resource.Loading -> {
+                    _isRefreshing.value = true
+                }
+            }
+        }
     }
 
     suspend fun getBookByISBN(isbn: String) {
@@ -66,10 +83,18 @@ class BookViewModel @Inject constructor(
     suspend fun getBooksByLanguage(
         language: String,
     ) {
-        viewModelScope.launch {
-            _books.value = Resource.Loading()
-            val result = bookRepository.getBooksByLanguage(language)
-            _books.value = result
+        when( val result = bookRepository.getBooksByLanguage(language)){
+            is Resource.Success -> {
+                _books.value = result
+                _isRefreshing.value = false
+            }
+            is Resource.Error -> {
+                _books.value = result
+                _isRefreshing.value = false
+            }
+            is Resource.Loading -> {
+                _isRefreshing.value = true
+            }
         }
     }
 

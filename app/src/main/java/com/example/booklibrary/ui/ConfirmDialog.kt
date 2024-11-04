@@ -51,7 +51,7 @@ fun SuccessDialog(onDismissRequest: () -> Unit) {
                         .align(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.confirm_report_as_lost),
+                        text = stringResource(id = R.string.success_request),
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterHorizontally),

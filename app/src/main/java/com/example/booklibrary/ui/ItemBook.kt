@@ -72,7 +72,7 @@ fun ItemBook(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = book.languages.toString(),
+                    text = book.language.toString(),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .align(Alignment.Start),

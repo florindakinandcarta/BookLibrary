@@ -89,7 +89,7 @@ fun RequestedBookDetails(book: VolumeInfo, onRequestClick: () -> Unit, onBackCli
                         )
                     )
                     Text(
-                        text = book.authors.get(0),
+                        text = book.authors.joinToString(", "),
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.CenterHorizontally)
@@ -170,7 +170,7 @@ fun RequestedBookDetails(book: VolumeInfo, onRequestClick: () -> Unit, onBackCli
                         }
                         Column {
                             Text(
-                                text = book.categories.get(0),
+                                text = book.categories.joinToString(", "),
                                 modifier = Modifier
                                     .padding(bottom = 8.dp)
                                     .align(Alignment.CenterHorizontally),
@@ -217,26 +217,28 @@ fun RequestedBookDetails(book: VolumeInfo, onRequestClick: () -> Unit, onBackCli
                             fontWeight = FontWeight.SemiBold,
                         )
                     )
-                    Text(
-                        text = book.description!!,
-                        modifier = Modifier
-                            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
-                            .fillMaxSize()
-                            .align(Alignment.CenterHorizontally),
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Justify
-                        ),
-                        lineHeight = 25.sp,
-                        maxLines = maxLines,
-                        overflow = TextOverflow.Ellipsis,
-                        onTextLayout = { textLayoutResult: TextLayoutResult ->
-                            if (textLayoutResult.lineCount > minimumLineLength - 1) {
-                                if (textLayoutResult.isLineEllipsized(minimumLineLength - 1)) showReadMoreButtonState =
-                                    true
+                    book.description?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                                .fillMaxSize()
+                                .align(Alignment.CenterHorizontally),
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Justify
+                            ),
+                            lineHeight = 25.sp,
+                            maxLines = maxLines,
+                            overflow = TextOverflow.Ellipsis,
+                            onTextLayout = { textLayoutResult: TextLayoutResult ->
+                                if (textLayoutResult.lineCount > minimumLineLength - 1) {
+                                    if (textLayoutResult.isLineEllipsized(minimumLineLength - 1)) showReadMoreButtonState =
+                                        true
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                     if (showReadMoreButtonState) {
                         Text(
                             text = if (expandedState) stringResource(id = R.string.read_less) else stringResource(

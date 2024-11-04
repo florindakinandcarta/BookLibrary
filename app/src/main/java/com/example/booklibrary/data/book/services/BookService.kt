@@ -9,12 +9,15 @@ import com.example.booklibrary.data.book.models.request.BookInsertRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface BookService {
     @GET("books")
-    suspend fun getAllBooks(): List<BookDisplay>
+    suspend fun getAllBooks(
+        @Header("Authorization") token: String
+    ): List<BookDisplay>
 
     @GET("books/book")
     suspend fun getBookByISBN(
@@ -23,6 +26,7 @@ interface BookService {
 
     @GET("books/available-books")
     suspend fun getAvailableBooks(
+        @Header("Authorization") token: String
     ): List<BookDisplay>
 
     @GET("books/paginated-books")
@@ -41,8 +45,9 @@ interface BookService {
     @GET("book/requested-books")
     suspend fun getRequestedBooks(): List<BookDisplay>
 
-    @GET("books")
+    @GET("books/by-language")
     suspend fun getBooksByLanguage(
+        @Header("Authorization") token: String,
         @Query("language") languages: String
     ): List<BookDisplay>
 

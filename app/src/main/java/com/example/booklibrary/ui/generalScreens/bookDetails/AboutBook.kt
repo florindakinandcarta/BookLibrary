@@ -29,7 +29,7 @@ import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.googleBooks.Items
 
 @Composable
-fun AboutBook(book: com.example.booklibrary.data.Book) {
+fun AboutBook(book: Book) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +55,7 @@ fun AboutBook(book: com.example.booklibrary.data.Book) {
             )
         )
         Text(
-            text = book.title.toString(),
+            text = book.description,
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                 .fillMaxSize()

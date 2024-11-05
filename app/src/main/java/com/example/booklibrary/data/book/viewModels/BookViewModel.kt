@@ -47,17 +47,36 @@ class BookViewModel @Inject constructor(
 
     suspend fun getBookByISBN(isbn: String) {
         viewModelScope.launch {
-            _bookDetails.value = Resource.Loading()
-            val result = bookRepository.getBookByISBN(isbn)
-            _bookDetails.value = result
+            when( val result = bookRepository.getBookByISBN(isbn)){
+                is Resource.Success -> {
+                    _bookDetails.value = result
+                }
+                is Resource.Error -> {
+                    _bookDetails.value = result
+                    _isRefreshing.value = false
+                }
+                is Resource.Loading -> {
+                    _bookDetails.value = Resource.Loading()
+                }
+            }
         }
     }
 
     suspend fun getBooksByTitle(title: String) {
         viewModelScope.launch {
-            _books.value = Resource.Loading()
-            val result = bookRepository.getBooksByTitle(title)
-            _books.value = result
+            when( val result = bookRepository.getBooksByTitle(title)){
+                is Resource.Success -> {
+                    println("result $result")
+                    _books.value = result
+                }
+                is Resource.Error -> {
+                    println("result $result")
+                    _books.value = result
+                }
+                is Resource.Loading -> {
+                    _books.value = Resource.Loading()
+                }
+            }
         }
     }
     fun clearSearchResults() {
@@ -99,10 +118,18 @@ class BookViewModel @Inject constructor(
     }
 
     suspend fun getBooksByGenre(genre: String) {
-        viewModelScope.launch {
-            _books.value = Resource.Loading()
-            val result = bookRepository.getBooksByGenre(genre)
-            _books.value = result
+        when( val result = bookRepository.getBooksByGenre(genre)){
+            is Resource.Success -> {
+                _books.value = result
+                _isRefreshing.value = false
+            }
+            is Resource.Error -> {
+                _books.value = result
+                _isRefreshing.value = false
+            }
+            is Resource.Loading -> {
+                _isRefreshing.value = true
+            }
         }
     }
 }

@@ -7,9 +7,13 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.QrCode
@@ -29,20 +33,25 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
+import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.ui.home.SearchViewModel
+import com.example.booklibrary.util.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -59,7 +68,8 @@ fun SearchScreen(
     viewModel: BookViewModel = hiltViewModel(),
 ) {
     val searchViewModel: SearchViewModel = viewModel()
-    val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
+    val bookViewModel: BookViewModel = hiltViewModel()
+    val books = bookViewModel.books.collectAsState().value
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
     val context = LocalContext.current
@@ -88,12 +98,9 @@ fun SearchScreen(
             }
         }
     }
-
-//    val listOfBooks = viewModel.books.collectAsState().value
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
-        paddingValues
         if (isSearching) {
             BackHandler {
                 searchViewModel.onToggleSearch()
@@ -109,10 +116,7 @@ fun SearchScreen(
             onSearch = {
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
-                scope.launch {
-                   onSearchClick(searchText)
-//                    viewModel.getBooksByTitle(searchText)
-                }
+                    onSearchClick(searchText)
             },
             leadingIcon = {
                 IconButton(
@@ -206,6 +210,46 @@ fun SearchScreen(
                 )
             ),
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(bottom = 60.dp)
+            ) {
+                when (books) {
+                    is Resource.Success -> {
+                        books.data?.let { books ->
+                            println("books $books")
+                            items(books) { book ->
+                                ItemBook(book = book, onClickedBook = onClickedBook)
+                            }
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        //loader display
+                    }
+
+                    is Resource.Error -> {
+                        books.message?.let { error ->
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = error.toString(),
+                                        style = TextStyle(
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 //            if (listOfBooks is Resource.Success) {
 //                LazyColumn {
 //                    listOfBooks.data?.let { books ->

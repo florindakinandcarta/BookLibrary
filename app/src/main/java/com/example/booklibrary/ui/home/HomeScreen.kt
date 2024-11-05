@@ -37,9 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.models.Genres
 import com.example.booklibrary.data.book.models.Languages
-import com.example.booklibrary.data.book.models.displayName
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
@@ -55,7 +54,8 @@ fun HomeScreen(
     viewModel: BookViewModel = hiltViewModel(),
     onSearchClick: () -> Unit,
     onSelectedLanguageClick: (String) -> Unit,
-    onClickedBook: (String) -> Unit
+    onClickedBook: (String) -> Unit,
+    onGetBookByGenreClicked: (String) -> Unit
 ) {
     var selectedFilter by remember { mutableStateOf("") }
     var expanded by remember {
@@ -150,17 +150,15 @@ fun HomeScreen(
                                     }
                                 }
                             }
-                            items(SampleData.genres) { option ->
+                            items(Genres.entries) { genre ->
                                 FilterChip(
-                                    selected = option == selectedFilter,
+                                    selected = genre.displayName == selectedFilter,
                                     onClick = {
-                                        selectedFilter = option
-                                        scope.launch {
-//                                        viewModel.getBooksByGenre(selectedFilter)
-                                        }
+                                        selectedFilter = genre.displayName
+                                        onGetBookByGenreClicked(selectedFilter)
                                     },
                                     label = {
-                                        Text(text = option)
+                                        Text(text = genre.displayName)
                                     }
                                 )
                             }

@@ -43,44 +43,42 @@ fun ItemBook(
                 }
             }
     ) {
-        book.let {
-            GlideImage(
-                model = book.image,
-                contentDescription = null,
+        GlideImage(
+            model = book.image,
+            contentDescription = null,
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .padding(16.dp)
+                .height(90.dp)
+                .width(65.dp),
+            contentScale = ContentScale.Crop,
+            loading = placeholder(R.drawable.reading_time)
+        )
+        Column(
+            modifier = Modifier.padding(start = 8.dp, top = 8.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = book.title.toString(),
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .padding(16.dp)
-                    .height(90.dp)
-                    .width(65.dp),
-                contentScale = ContentScale.Crop,
-                loading = placeholder(R.drawable.reading_time)
+                    .padding(8.dp)
+                    .align(Alignment.Start),
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                ),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
-            Column(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = book.title.toString(),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.Start),
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                    ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    text = book.language.toString(),
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .align(Alignment.Start),
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                    ),
-                )
-            }
+            Text(
+                text = book.language.toString(),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .align(Alignment.Start),
+                style = TextStyle(
+                    fontSize = 10.sp,
+                ),
+            )
         }
     }
 }

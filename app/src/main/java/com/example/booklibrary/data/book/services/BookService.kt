@@ -19,8 +19,9 @@ interface BookService {
         @Header("Authorization") token: String
     ): List<BookDisplay>
 
-    @GET("books/book")
+    @GET("books/get-book")
     suspend fun getBookByISBN(
+        @Header("Authorization") token: String,
         @Query("isbn") isbn: String
     ): Book
 
@@ -37,9 +38,10 @@ interface BookService {
         @Query("size") size: Int
     ): List<BookDisplay>
 
-    @GET("books")
+    @GET("books/by-title")
     suspend fun getBooksByTitle(
-        @Query("title") title: String
+        @Header("Authorization") token: String,
+        @Query("titleSearchTerm") title: String
     ): List<BookDisplay>
 
     @GET("book/requested-books")
@@ -51,8 +53,9 @@ interface BookService {
         @Query("language") languages: String
     ): List<BookDisplay>
 
-    @GET("books")
+    @GET("books/by-genres")
     suspend fun getBooksByGenre(
+        @Header("Authorization") token: String,
         @Query("genres") genres: String
     ): List<BookDisplay>
 

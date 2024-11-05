@@ -47,7 +47,7 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
                     navHostController.navigate(RequestedScreen.AddNewBook.route)
                 },
                 onClickedBook = { bookISBN ->
-                    navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
+//                    navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
                 },
                 onLikeBook = { bookISBN ->
                     val bookLikeRequest = RequestedBookRequestDTO(bookISBN)
@@ -67,54 +67,54 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
                 }
             )
         }
-        composable(
-            route = "${RequestedScreen.RequestedDetails.route}/{bookISBN}",
-            arguments = listOf(
-                navArgument("bookISBN") {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStackEntry ->
-            val bookData = backStackEntry.arguments?.getString("bookISBN")
-            val bookRequest = bookData?.let { RequestedBookRequestDTO(it) }
-            val googleBooksViewModel: GoogleBooksViewModel = hiltViewModel()
-            val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
-            val scope = rememberCoroutineScope()
-            val book = requestedBookViewModel.book.collectAsState().value
-            LaunchedEffect(book) {
-                when (book) {
-                    is Resource.Success -> {
-                        navHostController.navigate(RequestedScreen.SuccessDialog.route)
-                    }
-
-                    is Resource.Error -> {
-                        navHostController.navigate("${RequestedScreen.ErrorDialog.route}/${book.message}")
-                    }
-
-                    is Resource.Loading -> {
-                        // loader
-                    }
-                }
-            }
-            bookData?.let { googleBooksViewModel.fetchBookByISBN(it) }
-            val responseBooks by googleBooksViewModel.responseBooks.collectAsState()
-            responseBooks?.data?.items?.forEach { bookItem ->
-                bookItem.volumeInfo?.let { volumeInfo ->
-                    RequestedBookDetails(
-                        volumeInfo,
-                        onRequestClick = {
-                            scope.launch {
-                                bookRequest?.let { requestedBookViewModel.insertNewRequestedBook(it) }
-                            }
-                        },
-                        onBackClick = {
-                            navHostController.popBackStack()
-                        }
-                    )
-                }
-            }
-
-        }
+//        composable(
+//            route = "${RequestedScreen.RequestedDetails.route}/{bookISBN}",
+//            arguments = listOf(
+//                navArgument("bookISBN") {
+//                    type = NavType.StringType
+//                }
+//            )
+//        ) { backStackEntry ->
+//            val bookData = backStackEntry.arguments?.getString("bookISBN")
+//            val bookRequest = bookData?.let { RequestedBookRequestDTO(it) }
+//            val googleBooksViewModel: GoogleBooksViewModel = hiltViewModel()
+//            val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
+//            val scope = rememberCoroutineScope()
+//            val book = requestedBookViewModel.book.collectAsState().value
+//            LaunchedEffect(book) {
+//                when (book) {
+//                    is Resource.Success -> {
+//                        navHostController.navigate(RequestedScreen.SuccessDialog.route)
+//                    }
+//
+//                    is Resource.Error -> {
+//                        navHostController.navigate("${RequestedScreen.ErrorDialog.route}/${book.message}")
+//                    }
+//
+//                    is Resource.Loading -> {
+//                        // loader
+//                    }
+//                }
+//            }
+//            bookData?.let { googleBooksViewModel.fetchBookByISBN(it) }
+//            val responseBooks by googleBooksViewModel.responseBooks.collectAsState()
+//            responseBooks?.data?.items?.forEach { bookItem ->
+//                bookItem.volumeInfo?.let { volumeInfo ->
+//                    RequestedBookDetails(
+//                        volumeInfo,
+//                        onRequestClick = {
+//                            scope.launch {
+//                                bookRequest?.let { requestedBookViewModel.insertNewRequestedBook(it) }
+//                            }
+//                        },
+//                        onBackClick = {
+//                            navHostController.popBackStack()
+//                        }
+//                    )
+//                }
+//            }
+//
+//        }
         composable(RequestedScreen.SuccessDialog.route) {
             SuccessDialog(
                 onDismissRequest = {
@@ -140,6 +140,24 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
             }
         }
         composable(RequestedScreen.AddNewBook.route) {
+            val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
+            val scope = rememberCoroutineScope()
+            val book = requestedBookViewModel.book.collectAsState().value
+            LaunchedEffect(book) {
+                when (book) {
+                    is Resource.Success -> {
+                        navHostController.navigate(RequestedScreen.SuccessDialog.route)
+                    }
+
+                    is Resource.Error -> {
+                        navHostController.navigate("${RequestedScreen.ErrorDialog.route}/${book.message}")
+                    }
+
+                    is Resource.Loading -> {
+                        // loader
+                    }
+                }
+            }
             SearchScreen(
                 onScanClick = {},
                 onBackClicked = {
@@ -147,7 +165,11 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
                 },
                 onClickedBook = {},
                 onSearchClick = { bookISBN ->
-                    navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
+                    val bookRequest =RequestedBookRequestDTO(bookISBN)
+//                    navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
+                    scope.launch {
+                        requestedBookViewModel.insertNewRequestedBook(bookRequest)
+                    }
                 }
             )
         }

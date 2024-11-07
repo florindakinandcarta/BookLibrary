@@ -1,5 +1,7 @@
 package com.example.booklibrary.data.book.repo
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
@@ -7,14 +9,24 @@ import com.example.booklibrary.data.book.models.response.BookCheckoutReturnRemin
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.data.book.services.BookCheckoutService
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.getUserJWTToken
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import java.util.UUID
 import javax.inject.Inject
 
 class BookCheckoutRepository @Inject constructor(
-    private val bookCheckoutService: BookCheckoutService
+    private val bookCheckoutService: BookCheckoutService,
+    private val dataStore: DataStore<Preferences>
 ) {
+    private val token: String by lazy {
+        runBlocking {
+            val jwtToken = getUserJWTToken(dataStore).first() ?: ""
+            "Bearer $jwtToken"
+        }
+    }
     suspend fun getAllBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         val response = try {
             bookCheckoutService.getAllBookCheckouts()
@@ -108,9 +120,9 @@ class BookCheckoutRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun getAllBookCheckoutsFromUserWithId(userId: UUID): Resource<List<BookCheckoutResponse>> {
+    suspend fun getAllBookCheckoutsForUser(): Resource<List<BookCheckoutResponse>> {
         val response = try {
-            bookCheckoutService.getAllBookCheckoutsForUserWithId(userId)
+            bookCheckoutService.getAllBookCheckoutsForUser(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -164,7 +176,7 @@ class BookCheckoutRepository @Inject constructor(
 
     suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
         val response = try {
-            bookCheckoutService.borrowBookItem(bookCheckoutRequest)
+            bookCheckoutService.borrowBookItem(token, bookCheckoutRequest)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

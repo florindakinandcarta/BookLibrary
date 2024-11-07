@@ -5,6 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BookID(
-    val isbn: String,
-    val officeName: String
+    val isbn: String
 ):Parcelable

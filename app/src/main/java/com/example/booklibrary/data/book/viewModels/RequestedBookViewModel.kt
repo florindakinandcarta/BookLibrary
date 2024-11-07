@@ -68,10 +68,16 @@ class RequestedBookViewModel @Inject constructor(
     }
 
     suspend fun insertNewRequestedBook(book: RequestedBookRequestDTO) {
-        viewModelScope.launch {
-            _book.value = Resource.Loading()
-            val result = requestedBookRepository.insertNewRequestedBook(book)
-            _book.value = result
+        when( val result = requestedBookRepository.insertNewRequestedBook(book)){
+            is Resource.Success -> {
+                _book.value = result
+            }
+            is Resource.Error -> {
+                _book.value = result
+            }
+            is Resource.Loading -> {
+               _book.value = Resource.Loading()
+            }
         }
     }
 

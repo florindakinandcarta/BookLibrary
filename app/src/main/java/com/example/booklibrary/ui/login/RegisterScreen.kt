@@ -72,9 +72,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit,
-    viewModel: OfficeViewModel = hiltViewModel()
+    viewModel: OfficeViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val userViewModel: UserViewModel = hiltViewModel()
     val messageResponse by userViewModel.usersWithRole.collectAsState()
     val context = LocalContext.current
 //    val offices = viewModel.offices.collectAsState().value

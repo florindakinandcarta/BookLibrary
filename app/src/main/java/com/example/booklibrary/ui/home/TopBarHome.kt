@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
@@ -16,26 +14,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun TopBarHome(
     onNotificationClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
+    val userInfo = userViewModel.userInfo.collectAsState().value
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -43,20 +40,9 @@ fun TopBarHome(
             .height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GlideImage(
-            model = "",
-            modifier = Modifier
-                .clip(CircleShape)
-                .padding(vertical = 8.dp)
-                .height(30.dp)
-                .width(30.dp),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            loading = placeholder(R.drawable.profile),
-        )
         Column(modifier = Modifier.align(Alignment.CenterVertically)) {
             Text(
-                text = stringResource(id = R.string.hey_florinda),
+                text = "Hey, ${userInfo.data?.fullName}",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(horizontal = 6.dp),

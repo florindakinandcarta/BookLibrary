@@ -50,6 +50,7 @@
     <string name="borrowed_history">Borrowed Books History</string>
     <string name="date_borrowed">Date borrowed: </string>
     <string name="date_returned">Date returned: </string>
+    <string name="scheduled_return">Scheduled date to return: </string>
     <string name="date_borrowed_number">1 Jun. 2024</string>
     <string name="date_returned_number">14 Jun. 2024</string>
     <string name="user_reviews">User Reviews</string>

@@ -39,9 +39,9 @@ import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @Composable
 fun ForgotPasswordScreen(
-    onSendEmailClick: () -> Unit
+    onSendEmailClick: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(messageResponse) {

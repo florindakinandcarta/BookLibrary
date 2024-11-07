@@ -47,9 +47,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChangePasswordScreen(
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val userViewModel: UserViewModel = hiltViewModel()
 //    val user by userViewModel.user.collectAsState()
 //    val response by userViewModel.response.collectAsState()
     var oldPassword by remember { mutableStateOf("") }

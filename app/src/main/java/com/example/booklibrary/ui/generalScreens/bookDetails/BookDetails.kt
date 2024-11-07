@@ -28,16 +28,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
-import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.ui.review.ItemUserReview
 import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun BookDetails(
-    bookISBN: String,
+    book: com.example.booklibrary.data.book.models.Book,
     onBackClicked: () -> Unit,
-    onAddReviewClicked: () -> Unit
+    onAddReviewClicked: () -> Unit,
+    onBorrowClick: () -> Unit
 ) {
     Scaffold(topBar = {
         IconButton(
@@ -55,84 +54,72 @@ fun BookDetails(
             )
         }
     }) { paddingValues ->
-        SampleData.books.let { book ->
-            LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
-                item {
-                    BookDetailsSection(book[1])
-                }
-                item {
-                    AboutBook(book[1])
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.user_reviews),
-                            modifier = Modifier
-                                .padding(20.dp)
-                                .clickable {
-                                    onAddReviewClicked()
-                                },
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            ),
-                        )
-                        Spacer(Modifier.weight(1f))
-                        IconButton(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .size(32.dp),
-                            onClick = {
+        LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            item {
+                BookDetailsSection(book)
+            }
+            item {
+                AboutBook(book)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.user_reviews),
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .clickable {
                                 onAddReviewClicked()
                             },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.RateReview,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                }
-                items(3) {
-                    ItemUserReview()
-                }
-                item {
-                    Box(
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                    )
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
+                            .padding(16.dp)
+                            .size(32.dp),
+                        onClick = {
+                            onAddReviewClicked()
+                        },
                     ) {
-                        Button(
-                            onClick = {
-                                /*TODO()*/
-                            },
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxWidth()
-                                .height(60.dp),
-                            shape = RoundedCornerShape(32.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.borrow),
-                                style = TextStyle(
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.RateReview,
+                            contentDescription = null,
+                        )
                     }
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable 
-fun PreviewBookDetails(){
-    BookLibraryTheme {
-        BookDetails(bookISBN = "", onBackClicked = { /*TODO*/ }) {
-            
+            items(3) {
+                ItemUserReview()
+            }
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = {
+                            onBorrowClick()
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .height(60.dp),
+                        shape = RoundedCornerShape(32.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.borrow),
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 }

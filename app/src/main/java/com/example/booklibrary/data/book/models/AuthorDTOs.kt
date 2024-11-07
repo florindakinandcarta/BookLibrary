@@ -4,8 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class Languages : Parcelable {
-    English,
-    Albanian,
-    Macedonian,
-}
+data class AuthorDTOs(
+    val fullName: String
+) : Parcelable

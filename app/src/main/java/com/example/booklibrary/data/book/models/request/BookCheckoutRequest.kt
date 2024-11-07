@@ -6,6 +6,6 @@ import java.util.UUID
 
 @Parcelize
 data class BookCheckoutRequest(
-    val userId: UUID,
-    val bookItemId: UUID
+    val userId: String? = null,
+    val bookItemId: String? = null
 ):Parcelable

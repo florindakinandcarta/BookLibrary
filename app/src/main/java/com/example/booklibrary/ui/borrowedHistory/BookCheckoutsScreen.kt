@@ -6,14 +6,15 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AssignmentReturned
 import androidx.compose.material.icons.filled.Search
@@ -43,11 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.Book
-import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
 import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
-import com.example.booklibrary.ui.ItemBook
+import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -55,28 +54,28 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BookCheckoutsScreen(
-    onBorrowedBookClick: (Book) -> Unit,
+    onBorrowedBookClick: (String) -> Unit,
     onReturnClick: () -> Unit,
     onSearchClick: () -> Unit,
-    viewModel: BookCheckoutViewModel = hiltViewModel(),
+    bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
     var numberOfPages by remember {
         mutableIntStateOf(0)
     }
     var pageSize by remember {
         mutableIntStateOf(5)
     }
-    val isUserAdmin by authViewModel.userAdmin.collectAsState()
-//    val listOfBooks = viewModel.books.collectAsState().value
+    val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
+    val listOfBooks = bookCheckoutViewModel.bookCheckouts.collectAsState().value
     var swipedDown by remember {
         mutableStateOf(false)
     }
     LaunchedEffect(swipedDown) {
-        if (isUserAdmin) {
+        if (isUserAdmin.value) {
 //            viewModel.getAllBookCheckoutsPaginated(
 //                numberOfPages,
 //                pageSize
@@ -184,48 +183,33 @@ fun BookCheckoutsScreen(
             }
         }
     ) { paddingValues ->
-//        BorrowedBooksList(paddingValues, onBorrowedBookClick, listOfBooks)
-    }
-}
-
-@Composable
-fun BorrowedBooksList(
-    paddingValues: PaddingValues,
-    onBorrowedBookClick: (Book) -> Unit,
-    listOfBooks: Resource<List<BookCheckoutWithUserAndBookItemResponse>>
-) {
-    LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
-        when (listOfBooks) {
-            is Resource.Success -> {
-                listOfBooks.data?.let { books ->
-                    items(books) { book ->
-//                        ItemBorrowedBooks(
-//                            book = book,
-//                            onBorrowedBookClick = onBorrowedBookClick
-//                        )
+        LazyColumn(
+            modifier = Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .fillMaxHeight()
+        ) {
+            when (listOfBooks) {
+                is Resource.Success -> {
+                    listOfBooks.data?.let { books ->
+                        items(books) { book ->
+                            ItemBorrowedBooks(
+                                book = book,
+                                onBorrowedBookClick = onBorrowedBookClick
+                            )
+                        }
                     }
                 }
-            }
 
-            is Resource.Loading -> {
-                //loader display
-            }
+                is Resource.Loading -> {
+                    //loader display
+                }
 
-            is Resource.Error -> {
-                listOfBooks.data?.let { error ->
-                    //call the dialog pop up for error display it for 5s and dismiss it
+                is Resource.Error -> {
+                    listOfBooks.data?.let { error ->
+                        //call the dialog pop up for error display it for 5s and dismiss it
+                    }
                 }
             }
         }
     }
 }
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewBorrowedBooksScreen() {
-//    BookLibraryTheme {
-//        BookCheckoutsScreen(
-//            onBorrowedBookClick = {},
-//            onReturnClick = { /*TODO*/ },
-//            onSearchClick = { /*TODO*/ })
-//    }
-//}

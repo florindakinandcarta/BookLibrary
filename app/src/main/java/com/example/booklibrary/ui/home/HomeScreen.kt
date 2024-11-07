@@ -3,13 +3,19 @@ package com.example.booklibrary.ui.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +25,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,23 +37,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.models.Genres
 import com.example.booklibrary.data.book.models.Languages
 import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
 import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
 )
 @Composable
 fun HomeScreen(
     onNotificationClick: () -> Unit,
     viewModel: BookViewModel = hiltViewModel(),
     onSearchClick: () -> Unit,
-    onClickedBook: (String) -> Unit
+    onSelectedLanguageClick: (String) -> Unit,
+    onClickedBook: (String) -> Unit,
+    onGetBookByGenreClicked: (String) -> Unit,
 ) {
     var selectedFilter by remember { mutableStateOf("") }
     var expanded by remember {
@@ -57,125 +65,136 @@ fun HomeScreen(
     var selectedLanguage by remember {
         mutableStateOf("Languages")
     }
-    var swipedDown by remember {
-        mutableStateOf(false)
-    }
+    val isRefreshing = viewModel.isRefreshing.collectAsState().value
     val scope = rememberCoroutineScope()
-//    val listOfBooks = viewModel.books.collectAsState().value
-    LaunchedEffect(swipedDown) {
-//        viewModel.getAvailableBooks()
-    }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            scope.launch {
+                viewModel.getAllBooks()
+            }
+        }
+    )
+    val listOfBooks = viewModel.books.collectAsState().value
     Scaffold(
         topBar = { TopBarHome(onNotificationClick, onSearchClick) },
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
-                .fillMaxHeight()
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
         ) {
-            item {
-                ComposeSwipeablePages()
-            }
-            stickyHeader {
-                Column(
-                    modifier = Modifier
-                        .background(Color.White)
-                ) {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(12.dp)
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .fillMaxHeight()
+            ) {
+                item {
+                    ComposeSwipeablePages()
+                }
+                stickyHeader {
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
                     ) {
-                        item {
-                            ExposedDropdownMenuBox(
-                                expanded = expanded,
-                                onExpandedChange = { expanded = it },
-                            ) {
-                                AssistChip(
-                                    modifier = Modifier
-                                        .menuAnchor()
-                                        .width(140.dp),
-                                    onClick = {},
-                                    label = {
-                                        Text(
-                                            text = selectedLanguage,
-                                            style = TextStyle(
-                                                color = Color.Black
-                                            )
-                                        )
-                                    },
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expanded
-                                        )
-                                    },
-                                )
-                                ExposedDropdownMenu(
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+                            item {
+                                ExposedDropdownMenuBox(
                                     expanded = expanded,
-                                    onDismissRequest = { expanded = false },
-                                    modifier = Modifier
-                                        .width(140.dp)
-                                        .background(Color.White)
+                                    onExpandedChange = { expanded = it },
                                 ) {
-                                    Languages.entries.forEach { option ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    option.name,
-                                                    style = TextStyle(color = Color.Black)
+                                    AssistChip(
+                                        modifier = Modifier
+                                            .menuAnchor()
+                                            .width(140.dp),
+                                        onClick = {},
+                                        label = {
+                                            Text(
+                                                text = selectedLanguage,
+                                                style = TextStyle(
+                                                    color = Color.Black
                                                 )
-                                            },
-                                            onClick = {
-                                                selectedLanguage = option.name
-                                                scope.launch {
-//                                                    viewModel.getBooksByLanguage(selectedLanguage)
-                                                }
-                                                expanded = false
-                                            },
-                                        )
+                                            )
+                                        },
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expanded
+                                            )
+                                        },
+                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false },
+                                        modifier = Modifier
+                                            .width(140.dp)
+                                            .background(Color.White)
+                                    ) {
+                                        Languages.entries.forEach { languages ->
+                                            DropdownMenuItem(
+                                                text = {
+                                                    Text(
+                                                        languages.name,
+                                                        style = TextStyle(color = Color.Black)
+                                                    )
+                                                },
+                                                onClick = {
+                                                    selectedLanguage = languages.name
+                                                    onSelectedLanguageClick(languages.name)
+                                                    expanded = false
+                                                    selectedFilter = ""
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
-                        items(SampleData.genres) { option ->
-                            FilterChip(
-                                selected = option == selectedFilter,
-                                onClick = {
-                                    selectedFilter = option
-                                    scope.launch {
-//                                        viewModel.getBooksByGenre(selectedFilter)
+                            items(Genres.entries) { genre ->
+                                FilterChip(
+                                    selected = genre.displayName == selectedFilter,
+                                    onClick = {
+                                        selectedFilter = genre.displayName
+                                        onGetBookByGenreClicked(selectedFilter)
+                                    },
+                                    label = {
+                                        Text(text = genre.displayName)
                                     }
-                                },
-                                label = {
-                                    Text(text = option)
-                                }
-                            )
+                                )
+                            }
+                        }
+                    }
+                }
+                when (listOfBooks) {
+                    is Resource.Success -> {
+                        listOfBooks.data?.let { books ->
+                            items(books) { book ->
+                                ItemBook(
+                                    book = book,
+                                    onClickedBook = onClickedBook
+                                )
+                            }
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        //loader display
+                    }
+
+                    is Resource.Error -> {
+                        listOfBooks.data?.let { error ->
+                            //call the dialog pop up for error display it for 5s and dismiss it
                         }
                     }
                 }
             }
-//            when (listOfBooks) {
-//                is Resource.Success -> {
-//                    listOfBooks.data?.let { books ->
-//                        items(books) { book ->
-//                            ItemBook(
-//                                book = book,
-//                                onClickedBook = onClickedBook
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                is Resource.Loading -> {
-//                    //loader display
-//                }
-//
-//                is Resource.Error -> {
-//                    listOfBooks.data?.let { error ->
-//                        //call the dialog pop up for error display it for 5s and dismiss it
-//                    }
-//                }
-//            }
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+            )
         }
     }
 }

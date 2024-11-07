@@ -58,7 +58,8 @@ fun RequestedScreen(
     viewModel: RequestedBookViewModel = hiltViewModel(),
     onLikeBook: (String) -> Unit,
     onGetBookByStatusClicked: (String) -> Unit,
-    onChangeStatusClicked: (BookChangeStatus) -> Unit
+    onChangeStatusClicked: (BookChangeStatus) -> Unit,
+    requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -67,7 +68,6 @@ fun RequestedScreen(
         mutableStateOf("")
     }
     val scope = rememberCoroutineScope()
-    val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
     val listOfBooks = viewModel.books.collectAsState().value
     val isRefreshing = viewModel.isRefreshing.collectAsState().value
     val pullRefreshState = rememberPullRefreshState(

@@ -7,5 +7,5 @@ import java.util.UUID
 @Parcelize
 data class BookItem(
     val isbn: String? = null,
-    val id: UUID? = null,
+    val id: String? = null,
 ) : Parcelable

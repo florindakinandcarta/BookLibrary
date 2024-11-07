@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class BookDisplay(
     val isbn: String? = null,
     val title: String? = null,
-    val languages: Languages? = null,
+    val language: String? = null,
     val image: String? = null
 ):Parcelable

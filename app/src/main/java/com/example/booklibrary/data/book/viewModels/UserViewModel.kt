@@ -91,7 +91,6 @@ class UserViewModel @Inject constructor(
             }
         }
     }
-///FIX THE USER ADMIN SHIT IS HAVING PROBLEMS
     private suspend fun getAllUsersWithFullName(fullName: String) {
         when (userRepository.getAllUsersWithFullName(fullName)) {
             is Resource.Success -> {

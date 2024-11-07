@@ -55,9 +55,9 @@ import kotlinx.coroutines.launch
 fun SearchWithGoogleBookScreen(
     onBackClicked: () -> Unit,
     onBookClicked: (String) -> Unit,
-    viewModel: BookViewModel = hiltViewModel()
+    viewModel: BookViewModel = hiltViewModel(),
+    searchBookViewModel: GoogleBooksViewModel = hiltViewModel()
 ) {
-    val searchBookViewModel: GoogleBooksViewModel = hiltViewModel()
     val responseBooks by searchBookViewModel.responseBooks.collectAsState()
     val loadingBooks by searchBookViewModel.loadingBooks.collectAsState()
     val isSaved by searchBookViewModel.isSaved.collectAsState()

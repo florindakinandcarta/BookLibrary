@@ -5,15 +5,17 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Book(
-    val isbn: String? = null,
+    val isbn: String,
     val title: String,
     val description: String,
-    val languages: Languages? = null,
-    val genre: String? = null,
-    val totalPages: Int? = null,
-    val bookStatus: BookStatus? = null,
-    val image: String? = null,
+    val language: String,
+    val genres: ArrayList<String> = arrayListOf(),
+    val totalPages: Int,
+    val bookStatus: String,
+    val image: String,
     val ratingFromWeb: Double? = null,
     val ratingFromFirm: Double? = null,
-    val author: String? = null
+    val authorDTOs: ArrayList<AuthorDTOs> = arrayListOf(),
+    val officeName: String,
+    var responseDTOs: ArrayList<String> = arrayListOf()
 ) : Parcelable

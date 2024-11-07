@@ -35,7 +35,8 @@ import com.example.booklibrary.ui.theme.BookLibraryTheme
 fun BookDetails(
     book: com.example.booklibrary.data.book.models.Book,
     onBackClicked: () -> Unit,
-    onAddReviewClicked: () -> Unit
+    onAddReviewClicked: () -> Unit,
+    onBorrowClick: () -> Unit
 ) {
     Scaffold(topBar = {
         IconButton(
@@ -102,7 +103,7 @@ fun BookDetails(
                 ) {
                     Button(
                         onClick = {
-                            /*TODO()*/
+                            onBorrowClick()
                         },
                         modifier = Modifier
                             .padding(16.dp)

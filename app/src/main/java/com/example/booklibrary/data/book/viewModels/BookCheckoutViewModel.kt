@@ -27,7 +27,14 @@ class BookCheckoutViewModel @Inject constructor(
     private val _bookDetails = MutableStateFlow<Resource<Book>?>(Resource.Loading())
     val bookDetails: StateFlow<Resource<Book>?> = _bookDetails
 
-    suspend fun getAllBookCheckouts(){
+    private val _bookCheckouts =
+        MutableStateFlow<Resource<List<BookCheckoutResponse>>>(Resource.Loading())
+    val bookCheckouts: StateFlow<Resource<List<BookCheckoutResponse>>> = _bookCheckouts
+
+    private val _checkoutMessage = MutableStateFlow<Resource<String>>(Resource.Loading())
+    val checkoutMessage: StateFlow<Resource<String>> = _checkoutMessage
+
+    suspend fun getAllBookCheckouts() {
         viewModelScope.launch {
             _books.value = Resource.Loading()
             val result = bookCheckoutRepository.getAllBookCheckouts()
@@ -65,8 +72,20 @@ class BookCheckoutViewModel @Inject constructor(
         )
     }
 
-    suspend fun getAllBookCheckoutsForBookTitle(userId: UUID): Resource<List<BookCheckoutResponse>> {
-        return bookCheckoutRepository.getAllBookCheckoutsFromUserWithId(userId)
+    suspend fun getAllBookCheckoutsForUser(){
+        when (val result = bookCheckoutRepository.getAllBookCheckoutsForUser()) {
+            is Resource.Success -> {
+                _bookCheckouts.value = result
+            }
+
+            is Resource.Error -> {
+                _bookCheckouts.value = result
+            }
+
+            is Resource.Loading -> {
+                _bookCheckouts.value = Resource.Loading()
+            }
+        }
     }
 
     suspend fun getAllNearReturnDate(): Resource<List<BookCheckoutReturnReminderResponse>> {
@@ -83,8 +102,21 @@ class BookCheckoutViewModel @Inject constructor(
         )
     }
 
-    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
-        return bookCheckoutRepository.borrowBookItem(bookCheckoutRequest)
+    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest){
+        when (bookCheckoutRepository.borrowBookItem(bookCheckoutRequest)) {
+            is Resource.Success -> {
+                _checkoutMessage.value = Resource.Error(message = "Book borrowed successfully")
+            }
+
+            is Resource.Error -> {
+                _checkoutMessage.value = Resource.Error(message = "Book is not available to borrow")
+            }
+
+            is Resource.Loading -> {
+
+            }
+        }
+
     }
 
     suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {

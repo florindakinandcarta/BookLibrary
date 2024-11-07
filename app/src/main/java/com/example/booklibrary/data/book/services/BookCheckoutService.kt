@@ -6,6 +6,7 @@ import com.example.booklibrary.data.book.models.response.BookCheckoutReturnRemin
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 import java.util.UUID
@@ -31,10 +32,10 @@ interface BookCheckoutService {
         @Query("titleSearchTerm") titleSearchTerm: String
     ): List<BookCheckoutWithUserAndBookItemResponse>
 
-    @GET("book-checkouts/getAllBooksForUser")
-    suspend fun getAllBookCheckoutsForUserWithId(
-        @Query("userId") userId: UUID
-    ): List<BookCheckoutResponse>
+    @GET("book-checkouts/by-user")
+    suspend fun getAllBookCheckoutsForUser(
+        @Header("Authorization") token: String,
+        ): List<BookCheckoutResponse>
 
     @GET("book-checkouts/getAllNearReturnDate")
     suspend fun getAllNearReturnDate(): List<BookCheckoutReturnReminderResponse>
@@ -47,6 +48,7 @@ interface BookCheckoutService {
 
     @POST("book-checkouts/borrow")
     suspend fun borrowBookItem(
+        @Header("Authorization") token: String,
         @Body bookCheckoutRequest: BookCheckoutRequest
     ): BookCheckoutResponse
 

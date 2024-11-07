@@ -65,10 +65,9 @@ fun SearchScreen(
     onBackClicked: () -> Unit,
     onSearchClick: (String) -> Unit,
     onClickedBook: (String) -> Unit,
-    viewModel: BookViewModel = hiltViewModel(),
+    bookViewModel: BookViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel = viewModel()
 ) {
-    val searchViewModel: SearchViewModel = viewModel()
-    val bookViewModel: BookViewModel = hiltViewModel()
     val books = bookViewModel.books.collectAsState().value
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
@@ -218,7 +217,6 @@ fun SearchScreen(
                 when (books) {
                     is Resource.Success -> {
                         books.data?.let { books ->
-                            println("books $books")
                             items(books) { book ->
                                 ItemBook(book = book, onClickedBook = onClickedBook)
                             }

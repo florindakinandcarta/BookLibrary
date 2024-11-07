@@ -6,6 +6,8 @@ import com.example.booklibrary.data.book.models.BookItem
 import com.example.booklibrary.data.book.repo.BookItemRepository
 import com.example.booklibrary.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 import javax.inject.Inject
 
@@ -13,12 +15,48 @@ import javax.inject.Inject
 class BookItemViewModel @Inject constructor(
     private val bookItemRepository: BookItemRepository
 ) : ViewModel() {
-    suspend fun getBookItemsByBookIsbn(isbn: String): Resource<List<BookItem>> {
-        return bookItemRepository.getBookItemsByBookIsbn(isbn)
+
+    private val _bookItemResponse = MutableStateFlow<Resource<BookItem>>(Resource.Loading())
+    val bookItemResponse: StateFlow<Resource<BookItem>> = _bookItemResponse
+
+    private val _bookItemsResponse = MutableStateFlow<Resource<List<BookItem>>>(Resource.Loading())
+    val bookItemsResponse: StateFlow<Resource<List<BookItem>>> = _bookItemsResponse
+
+    private val _message = MutableStateFlow<Resource<String>>(Resource.Loading())
+    val message: StateFlow<Resource<String>> = _message
+
+    suspend fun getBookItemsByBookIsbn(isbn: String) {
+        when (val result = bookItemRepository.getBookItemsByBookIsbn(isbn)) {
+            is Resource.Success -> {
+                _bookItemsResponse.value = result
+            }
+
+            is Resource.Error -> {
+                _bookItemsResponse.value = result
+            }
+
+            is Resource.Loading -> {
+                _bookItemsResponse.value = Resource.Loading()
+            }
+        }
     }
 
-    suspend fun saveBookItem(bookID: BookID): Resource<BookItem> {
-        return bookItemRepository.saveBookItem(bookID)
+    suspend fun createBookItem(bookISBN: BookID) {
+        when (val result = bookItemRepository.createBookItem(bookISBN)) {
+            is Resource.Success -> {
+                _bookItemResponse.value = result
+                _message.value = Resource.Success( "Book item created successfully")
+            }
+
+            is Resource.Error -> {
+                _bookItemResponse.value = result
+                _message.value = Resource.Error(result.message.toString())
+            }
+
+            is Resource.Loading -> {
+                _bookItemResponse.value = Resource.Loading()
+            }
+        }
     }
 
     suspend fun deleteBookItem(id: UUID): Resource<UUID> {

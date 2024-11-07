@@ -37,8 +37,8 @@ fun UsersScreen(
     onDeleteUser: (User) -> Unit,
     onChangeRole: (UserUpdateRoleRequest) -> Unit,
     onBackClicked: () -> Unit,
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val userViewModel: UserViewModel = hiltViewModel()
     val users by userViewModel.users.collectAsState()
     LaunchedEffect(Unit) {
 //        userViewModel.getAllUsers()

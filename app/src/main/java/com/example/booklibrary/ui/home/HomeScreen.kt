@@ -40,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.data.book.models.Genres
 import com.example.booklibrary.data.book.models.Languages
 import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ fun HomeScreen(
     onSearchClick: () -> Unit,
     onSelectedLanguageClick: (String) -> Unit,
     onClickedBook: (String) -> Unit,
-    onGetBookByGenreClicked: (String) -> Unit
+    onGetBookByGenreClicked: (String) -> Unit,
 ) {
     var selectedFilter by remember { mutableStateOf("") }
     var expanded by remember {
@@ -144,6 +145,7 @@ fun HomeScreen(
                                                     selectedLanguage = languages.name
                                                     onSelectedLanguageClick(languages.name)
                                                     expanded = false
+                                                    selectedFilter = ""
                                                 },
                                             )
                                         }

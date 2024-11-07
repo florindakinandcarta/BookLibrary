@@ -3,8 +3,8 @@ package com.example.booklibrary.data.book.services
 import com.example.booklibrary.data.book.models.BookID
 import com.example.booklibrary.data.book.models.BookItem
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -12,14 +12,16 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface BookItemService {
-    @GET("bookItems")
+    @GET("book-items")
     suspend fun getBookItemsByBookIsbn(
+        @Header("Authorization") token: String,
         @Query("isbn") isbn: String
     ): List<BookItem>
 
-    @POST("saveBookItem")
-    suspend fun saveBookItem(
-        @Body bookID: BookID
+    @POST("book-items/insert")
+    suspend fun createBookItem(
+        @Header("Authorization") token: String,
+        @Body isbn: BookID
     ): BookItem
 
     @POST("deleteBookItem/{id}")

@@ -1,12 +1,12 @@
 package com.example.booklibrary.ui.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,61 +16,96 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
-import com.example.booklibrary.ui.theme.BookLibraryTheme
+import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
+import com.example.booklibrary.data.book.viewModels.BookViewModel
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ComposeSwipeablePages() {
-    val animals = listOf(
-        R.drawable.profile,
-        R.drawable.profile_pic,
-        R.drawable.reading,
-    )
+fun ComposeSwipeablePages(
+    bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel(),
+    bookViewModel: BookViewModel = hiltViewModel()
+) {
+    val bookCheckouts = bookCheckoutViewModel.bookCheckouts.collectAsState().value
+    val bookDetails = bookViewModel.bookDetails.collectAsState().value
     val pagerState = rememberPagerState {
-        animals.size
+        bookCheckouts.data?.size ?: 0
     }
-    Column {
-        HorizontalPager(
-            state = pagerState,
-            key = { animals[it] },
-            pageSize = PageSize.Fill,
-            modifier = Modifier.padding(8.dp)
-        ) { index ->
-            Image(
-                painter = painterResource(id = animals[index]),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(150.dp)
-            )
-            Text(
-                text = stringResource(id = R.string.return_date),
-                modifier = Modifier.padding(16.dp),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        bookCheckouts.data?.let { books ->
+            HorizontalPager(
+                state = pagerState,
+                pageSize = PageSize.Fill,
+                modifier = Modifier.padding(8.dp)
+            ) { index ->
+                val book = books[index]
+                LaunchedEffect(Unit) {
+                    bookViewModel.getBookByISBN(book.bookISBN)
+                }
+                GlideImage(
+                    model = bookDetails?.data?.image ?: R.drawable.reading_time,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                        .height(90.dp)
+                        .width(65.dp),
+                    contentScale = ContentScale.Crop,
+                    loading = placeholder(R.drawable.reading_time)
+                )
+                Column {
+                    Text(
+                        text = book.bookTitle,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.Start),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        "Return date: ${book.scheduledReturnDate}",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.Start),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -79,8 +114,9 @@ fun ComposeSwipeablePages() {
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            animals.forEachIndexed { index, _ ->
-                val color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+            bookCheckouts.data?.forEachIndexed { index, _ ->
+                val color =
+                    if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
                 Box(
                     modifier = Modifier
                         .size(8.dp)

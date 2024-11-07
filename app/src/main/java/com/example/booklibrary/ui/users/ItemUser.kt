@@ -45,8 +45,8 @@ fun ItemUser(
     user: UserWithRoleResponse,
     userRoleChange: UserUpdateRoleRequest,
     onChangeRole: (UserUpdateRoleRequest) -> Unit,
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val userViewModel: UserViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier

@@ -60,8 +60,8 @@ fun ProfileScreen(
     onSettingsClicked: () -> Unit,
     onAllUsersClicked: () -> Unit,
     onChangeProfilePhotoClicked: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
 //    val userViewModel: UserViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
     val context = LocalContext.current

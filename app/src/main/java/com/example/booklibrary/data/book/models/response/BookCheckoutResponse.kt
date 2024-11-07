@@ -8,7 +8,7 @@ import java.time.LocalDate
 data class BookCheckoutResponse(
     val bookTitle: String,
     val bookISBN: String,
-    val dateBorrowed: LocalDate,
-    val dateReturned: LocalDate,
-    val scheduledReturn: LocalDate
+    val dateBorrowed: String,
+    val dateReturned: String,
+    val scheduledReturnDate: String
 ) : Parcelable

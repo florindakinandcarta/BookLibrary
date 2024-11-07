@@ -66,11 +66,9 @@ class BookViewModel @Inject constructor(
         viewModelScope.launch {
             when( val result = bookRepository.getBooksByTitle(title)){
                 is Resource.Success -> {
-                    println("result $result")
                     _books.value = result
                 }
                 is Resource.Error -> {
-                    println("result $result")
                     _books.value = result
                 }
                 is Resource.Loading -> {
@@ -85,9 +83,19 @@ class BookViewModel @Inject constructor(
 
     suspend fun getAvailableBooks() {
         viewModelScope.launch {
-            _books.value = Resource.Loading()
-            val result = bookRepository.getAvailableBooks()
-            _books.value = result
+            when( val result = bookRepository.getAvailableBooks()){
+                is Resource.Success -> {
+                    _books.value = result
+                    _isRefreshing.value = false
+                }
+                is Resource.Error -> {
+                    _books.value = result
+                    _isRefreshing.value = false
+                }
+                is Resource.Loading -> {
+                    _isRefreshing.value = true
+                }
+            }
         }
     }
 

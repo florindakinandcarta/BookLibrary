@@ -10,7 +10,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.room.util.copy
+import com.example.booklibrary.data.User
+import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
+import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
+import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.generalScreens.bookDetails.BookDetails
 import com.example.booklibrary.ui.home.HomeScreen
@@ -25,10 +31,14 @@ fun HomeNavGraph(navHostController: NavHostController) {
     ) {
         composable(route = BottomTab.Home.route) {
             val bookViewModel: BookViewModel = hiltViewModel()
+            val bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
+            val userViewModel: UserViewModel = hiltViewModel()
             val scope = rememberCoroutineScope()
             LaunchedEffect(Unit) {
                 scope.launch {
+                    userViewModel.getUserInfo()
                     bookViewModel.getAllBooks()
+                    bookCheckoutViewModel.getAllBookCheckoutsForUser()
                 }
             }
             HomeScreen(
@@ -45,8 +55,14 @@ fun HomeNavGraph(navHostController: NavHostController) {
                     }
                 },
                 onGetBookByGenreClicked = { genre ->
-                    scope.launch {
-                        bookViewModel.getBooksByGenre(genre)
+                    if (genre == "Available") {
+                        scope.launch {
+                            bookViewModel.getAvailableBooks()
+                        }
+                    } else {
+                        scope.launch {
+                            bookViewModel.getBooksByGenre(genre)
+                        }
                     }
                 }
             )
@@ -82,13 +98,22 @@ fun HomeNavGraph(navHostController: NavHostController) {
                 })
         ) { backStackEntry ->
             val bookViewModel: BookViewModel = hiltViewModel()
+            val userViewModel: UserViewModel = hiltViewModel()
+            val bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
+            val userID = userViewModel.userInfo.collectAsState().value
+            val bookItemViewModel: BookItemViewModel = hiltViewModel()
             val scope = rememberCoroutineScope()
             val book = backStackEntry.arguments?.getString("book")
             val bookDetails = bookViewModel.bookDetails.collectAsState().value
+            val bookID = bookItemViewModel.bookItemsResponse.collectAsState().value
+            val borrowBookRequest = bookID.data?.firstOrNull()?.let { bookItem ->
+                BookCheckoutRequest(userID.data?.userId, bookItem.id)
+            }
             LaunchedEffect(Unit) {
                 scope.launch {
                     book?.let {
                         bookViewModel.getBookByISBN(book)
+                        bookItemViewModel.getBookItemsByBookIsbn(book)
                     }
                 }
             }
@@ -98,7 +123,16 @@ fun HomeNavGraph(navHostController: NavHostController) {
                     onBackClicked = {
                         navHostController.popBackStack()
                     },
-                    onAddReviewClicked = {})
+                    onAddReviewClicked = {
+
+                    },
+                    onBorrowClick = {
+                        scope.launch {
+                            borrowBookRequest?.let {
+                                bookCheckoutViewModel.borrowBookItem(it)
+                            }
+                        }
+                    })
             }
         }
         composable(route = BottomTab.Requested.route) {

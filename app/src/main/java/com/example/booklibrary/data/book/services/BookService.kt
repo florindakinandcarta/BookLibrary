@@ -25,7 +25,7 @@ interface BookService {
         @Query("isbn") isbn: String
     ): Book
 
-    @GET("books/available-books")
+    @GET("books/available")
     suspend fun getAvailableBooks(
         @Header("Authorization") token: String
     ): List<BookDisplay>

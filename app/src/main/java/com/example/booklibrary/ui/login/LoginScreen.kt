@@ -60,11 +60,11 @@ import com.example.booklibrary.util.validateEmail
 fun LoginScreen(
     onLoginClick: (UserLoginRequest) -> Unit,
     onForgotPasswordClick: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
     val messageResponse by authViewModel.message.collectAsState()
-    val userViewModel: UserViewModel = hiltViewModel()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 //    LaunchedEffect(messageResponse) {

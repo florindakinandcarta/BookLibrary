@@ -142,7 +142,7 @@ class UserRepository @Inject constructor(
 
     suspend fun updateUserData(user: UserUpdateDataRequest): Resource<String> {
         val response = try {
-            userService.updateUserData(user)
+            userService.updateUserData(token,user)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

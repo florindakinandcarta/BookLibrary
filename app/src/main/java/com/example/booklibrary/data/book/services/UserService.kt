@@ -19,8 +19,9 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface UserService {
-    @PATCH("user/updateData")
+    @PATCH("users/update-data")
     suspend fun updateUserData(
+        @Header("Authorization") token: String,
         @Body user: UserUpdateDataRequest
     ): String
 

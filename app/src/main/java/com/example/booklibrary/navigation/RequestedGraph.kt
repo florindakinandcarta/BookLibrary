@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.example.booklibrary.data.book.models.BookID
 import com.example.booklibrary.data.book.models.request.RequestedBookRequestDTO
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
@@ -24,111 +23,106 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("NewApi")
 fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
-    navigation(
-        route = Graph.REQUESTED,
-        startDestination = RequestedScreen.Requested.route
-    ) {
-        composable(RequestedScreen.Requested.route) {
-            val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
-            val scope = rememberCoroutineScope()
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    requestedBookViewModel.getAllRequestedBooks()
-                }
-            }
-            RequestedScreen(
-                onAddNewBook = {
-                    navHostController.navigate(RequestedScreen.AddNewBook.route)
-                },
-                onClickedBook = { bookISBN ->
-                    navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
-                },
-                onLikeBook = { bookISBN ->
-                    val bookLikeRequest = RequestedBookRequestDTO(bookISBN)
-                    scope.launch {
-                        requestedBookViewModel.handleRequestedBookLike(bookLikeRequest)
-                    }
-                },
-                onGetBookByStatusClicked = { status ->
-                    scope.launch {
-                        requestedBookViewModel.getRequestedBooksByBookStatus(status)
-                    }
-                },
-                onChangeStatusClicked = { bookChangeStatus ->
-                    scope.launch {
-                        requestedBookViewModel.changeBookStatus(bookChangeStatus)
-                    }
-                }
-            )
-        }
-        composable(
-            route = "${RequestedScreen.RequestedDetails.route}/{bookISBN}",
-            arguments = listOf(
-                navArgument("bookISBN") {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStackEntry ->
-            val book = backStackEntry.arguments?.getString("bookISBN")
-            val bookViewModel: BookViewModel = hiltViewModel()
-            val bookItemViewModel: BookItemViewModel = hiltViewModel()
-            val scope = rememberCoroutineScope()
-            val bookDetails = bookViewModel.bookDetails.collectAsState().value
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    book?.let {
-                        bookViewModel.getBookByISBN(book)
-                    }
-                }
-            }
-            bookDetails?.data?.let { bookItem ->
-                RequestedBookDetails(
-                    book = bookItem,
-                    onBackClick = {
-                        navHostController.popBackStack()
-                    },
-                    onCreateItemClick = { bookISBN ->
-                        scope.launch {
-                            val bookItemRequest = BookID(bookISBN)
-                            bookItemViewModel.createBookItem(bookItemRequest)
-                        }
-                    }
-                )
+    composable(RequestedScreen.Requested.route) {
+        val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(Unit) {
+            scope.launch {
+                requestedBookViewModel.getAllRequestedBooks()
             }
         }
-        composable(
-            route = "${RequestedScreen.SuccessDialog.route}/{bookISBN}",
-            arguments = listOf(navArgument("bookISBN") {
+        RequestedScreen(
+            onAddNewBook = {
+                navHostController.navigate(RequestedScreen.AddNewBook.route)
+            },
+            onClickedBook = { bookISBN ->
+                navHostController.navigate("${RequestedScreen.RequestedDetails.route}/$bookISBN")
+            },
+            onLikeBook = { bookISBN ->
+                val bookLikeRequest = RequestedBookRequestDTO(bookISBN)
+                scope.launch {
+                    requestedBookViewModel.handleRequestedBookLike(bookLikeRequest)
+                }
+            },
+            onGetBookByStatusClicked = { status ->
+                scope.launch {
+                    requestedBookViewModel.getRequestedBooksByBookStatus(status)
+                }
+            },
+            onChangeStatusClicked = { bookChangeStatus ->
+                scope.launch {
+                    requestedBookViewModel.changeBookStatus(bookChangeStatus)
+                }
+            }
+        )
+    }
+    composable(
+        route = "${RequestedScreen.RequestedDetails.route}/{bookISBN}",
+        arguments = listOf(
+            navArgument("bookISBN") {
                 type = NavType.StringType
-            })
-        ) { backStackEntry ->
-            val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
-            val scope = rememberCoroutineScope()
-            val bookISBN = backStackEntry.arguments?.getString("bookISBN")
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    val bookRequest = bookISBN?.let { RequestedBookRequestDTO(it) }
-                    bookRequest?.let { requestedBookViewModel.insertNewRequestedBook(it) }
+            }
+        )
+    ) { backStackEntry ->
+        val book = backStackEntry.arguments?.getString("bookISBN")
+        val bookViewModel: BookViewModel = hiltViewModel()
+        val bookItemViewModel: BookItemViewModel = hiltViewModel()
+        val scope = rememberCoroutineScope()
+        val bookDetails = bookViewModel.bookDetails.collectAsState().value
+        LaunchedEffect(Unit) {
+            scope.launch {
+                book?.let {
+                    bookViewModel.getBookByISBN(book)
                 }
             }
-            BookRequestedSuccessDialog(
-                onDismissRequest = {
-                    navHostController.navigate(RequestedScreen.Requested.route)
-                }
-            )
         }
-        composable(RequestedScreen.AddNewBook.route) {
-            SearchScreen(
-                onScanClick = {},
-                onBackClicked = {
+        bookDetails?.data?.let { bookItem ->
+            RequestedBookDetails(
+                book = bookItem,
+                onBackClick = {
                     navHostController.popBackStack()
                 },
-                onClickedBook = {},
-                onSearchClick = { bookISBN ->
-                    navHostController.navigate("${RequestedScreen.SuccessDialog.route}/$bookISBN")
+                onCreateItemClick = { bookISBN ->
+                    scope.launch {
+                        val bookItemRequest = BookID(bookISBN)
+                        bookItemViewModel.createBookItem(bookItemRequest)
+                    }
                 }
             )
         }
+    }
+    composable(
+        route = "${RequestedScreen.SuccessDialog.route}/{bookISBN}",
+        arguments = listOf(navArgument("bookISBN") {
+            type = NavType.StringType
+        })
+    ) { backStackEntry ->
+        val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
+        val scope = rememberCoroutineScope()
+        val bookISBN = backStackEntry.arguments?.getString("bookISBN")
+        LaunchedEffect(Unit) {
+            scope.launch {
+                val bookRequest = bookISBN?.let { RequestedBookRequestDTO(it) }
+                bookRequest?.let { requestedBookViewModel.insertNewRequestedBook(it) }
+            }
+        }
+        BookRequestedSuccessDialog(
+            onDismissRequest = {
+                navHostController.navigate(RequestedScreen.Requested.route)
+            }
+        )
+    }
+    composable(RequestedScreen.AddNewBook.route) {
+        SearchScreen(
+            onScanClick = {},
+            onBackClicked = {
+                navHostController.popBackStack()
+            },
+            onClickedBook = {},
+            onSearchClick = { bookISBN ->
+                navHostController.navigate("${RequestedScreen.SuccessDialog.route}/$bookISBN")
+            }
+        )
     }
 }
 

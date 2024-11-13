@@ -62,7 +62,7 @@ fun RequestedBookDetails(
     bookItemViewModel: BookItemViewModel = hiltViewModel(),
     onCreateItemClick: (String) -> Unit,
 ) {
-    val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false).value
+    val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
     val message = bookItemViewModel.message.collectAsState().value
     val context = LocalContext.current
     LaunchedEffect(message) {
@@ -288,7 +288,7 @@ fun RequestedBookDetails(
                 }
             }
             item {
-                if (isUserAdmin) {
+                if (isUserAdmin.value) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

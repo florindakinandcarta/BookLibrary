@@ -35,31 +35,11 @@ import com.example.booklibrary.R
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
 
 @Composable
 fun ForgotPasswordScreen(
     onSendEmailClick: () -> Unit,
-    authViewModel: AuthViewModel = hiltViewModel()
 ) {
-    val messageResponse by authViewModel.message.collectAsState()
-    val context = LocalContext.current
-    LaunchedEffect(messageResponse) {
-        when (messageResponse) {
-            is Resource.Success -> {
-                context.showToast((messageResponse as Resource.Success<String>).data.toString())
-                onSendEmailClick()
-            }
-
-            is Resource.Error -> {
-                context.showToast((messageResponse as Resource.Error<String>).data.toString())
-            }
-
-            else -> {
-
-            }
-        }
-    }
     Scaffold {
         it
         var isEmailValid by remember { mutableStateOf(false) }
@@ -129,7 +109,7 @@ fun ForgotPasswordScreen(
 
             Button(
                 onClick = {
-                    authViewModel.sendPasswordResetEmail(emailInput)
+//                    authViewModel.sendPasswordResetEmail(emailInput)
                 },
                 modifier = Modifier
                     .padding(16.dp)

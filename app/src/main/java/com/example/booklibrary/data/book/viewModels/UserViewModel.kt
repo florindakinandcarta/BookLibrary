@@ -147,6 +147,8 @@ class UserViewModel @Inject constructor(
         viewModelScope.launch {
             _response.value = Resource.Loading()
             val response = userRepository.updateUserData(user)
+            println(response.data)
+            println(response.message)
             _response.value = response
         }
     }

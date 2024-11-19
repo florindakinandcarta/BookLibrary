@@ -1,9 +1,11 @@
 package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
+import com.example.booklibrary.data.book.models.request.BookReturnRequest
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
+import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -12,8 +14,10 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface BookCheckoutService {
-    @GET("book-checkouts/getAll")
-    suspend fun getAllBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
+    @GET("book-checkouts")
+    suspend fun getAllBookCheckouts(
+        @Header(AUTHORIZATION) token: String,
+    ): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/getAllPaginated")
     suspend fun getAllBookCheckoutsPaginated(
@@ -21,24 +25,31 @@ interface BookCheckoutService {
         @Query("pageSize") pageSize: Int = 5
     ): List<BookCheckoutWithUserAndBookItemResponse>
 
-    @GET("book-checkouts/getAllActive")
-    suspend fun getAllActiveBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
+    @GET("book-checkouts/active")
+    suspend fun getAllActiveBookCheckouts(
+        @Header(AUTHORIZATION) token: String
+    ): List<BookCheckoutWithUserAndBookItemResponse>
 
-    @GET("book-checkouts/getAllPast")
-    suspend fun getAllPastBookCheckouts(): List<BookCheckoutWithUserAndBookItemResponse>
+    @GET("book-checkouts/past")
+    suspend fun getAllPastBookCheckouts(
+        @Header(AUTHORIZATION) token: String
+    ): List<BookCheckoutWithUserAndBookItemResponse>
 
-    @GET("book-checkouts/getAllByTitleContaining")
+    @GET("book-checkouts/by-title")
     suspend fun getAllBookCheckoutsForBookTitle(
+        @Header(AUTHORIZATION) token: String,
         @Query("titleSearchTerm") titleSearchTerm: String
     ): List<BookCheckoutWithUserAndBookItemResponse>
 
     @GET("book-checkouts/by-user")
     suspend fun getAllBookCheckoutsForUser(
-        @Header("Authorization") token: String,
+        @Header(AUTHORIZATION) token: String,
         ): List<BookCheckoutResponse>
 
-    @GET("book-checkouts/getAllNearReturnDate")
-    suspend fun getAllNearReturnDate(): List<BookCheckoutReturnReminderResponse>
+    @GET("book-checkouts/near-return-date")
+    suspend fun getAllNearReturnDate(
+        @Header(AUTHORIZATION) token: String
+    ): List<BookCheckoutReturnReminderResponse>
 
     @GET("bookCheckoutQuery/getAllBooksForUserByTitleContaining")
     suspend fun getAllBooksForUserByTitleContaining(
@@ -48,12 +59,13 @@ interface BookCheckoutService {
 
     @POST("book-checkouts/borrow")
     suspend fun borrowBookItem(
-        @Header("Authorization") token: String,
+        @Header(AUTHORIZATION) token: String,
         @Body bookCheckoutRequest: BookCheckoutRequest
     ): BookCheckoutResponse
 
     @POST("book-checkouts/return")
     suspend fun returnBookItem(
-        @Body bookCheckoutRequest: BookCheckoutRequest
+        @Header(AUTHORIZATION) token: String,
+        @Body bookCheckoutRequest: BookReturnRequest
     ): BookCheckoutResponse
 }

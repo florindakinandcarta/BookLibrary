@@ -7,7 +7,7 @@ import java.util.UUID
 
 @Parcelize
 data class BookCheckoutReturnReminderResponse(
-    val userId: UUID? = null,
+    val userId: String? = null,
     val bookTitle: String? = null,
-    val scheduledReturnDate: LocalDate? = null
+    val scheduledReturnDate: String? = null
 ) : Parcelable

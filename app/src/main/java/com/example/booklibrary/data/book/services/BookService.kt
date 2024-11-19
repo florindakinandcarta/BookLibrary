@@ -6,7 +6,6 @@ import com.example.booklibrary.data.book.models.BookID
 import com.example.booklibrary.data.book.models.BookState
 import com.example.booklibrary.data.book.models.BookStatus
 import com.example.booklibrary.data.book.models.request.BookInsertRequest
-import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -17,18 +16,18 @@ import retrofit2.http.Query
 interface BookService {
     @GET("books")
     suspend fun getAllBooks(
-        @Header(AUTHORIZATION) token: String
+        @Header("Authorization") token: String
     ): List<BookDisplay>
 
     @GET("books/get-book")
     suspend fun getBookByISBN(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("isbn") isbn: String
     ): Book
 
     @GET("books/available")
     suspend fun getAvailableBooks(
-        @Header(AUTHORIZATION) token: String
+        @Header("Authorization") token: String
     ): List<BookDisplay>
 
     @GET("books/paginated-books")
@@ -41,7 +40,7 @@ interface BookService {
 
     @GET("books/by-title")
     suspend fun getBooksByTitle(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("titleSearchTerm") title: String
     ): List<BookDisplay>
 
@@ -50,13 +49,13 @@ interface BookService {
 
     @GET("books/by-language")
     suspend fun getBooksByLanguage(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("language") languages: String
     ): List<BookDisplay>
 
     @GET("books/by-genres")
     suspend fun getBooksByGenre(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("genres") genres: String
     ): List<BookDisplay>
 

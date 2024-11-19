@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.booklibrary.data.book.models.Book
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
-import com.example.booklibrary.data.book.models.request.BookReturnRequest
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
+import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.data.book.repo.BookCheckoutRepository
 import com.example.booklibrary.util.Resource
@@ -34,25 +34,11 @@ class BookCheckoutViewModel @Inject constructor(
     private val _checkoutMessage = MutableStateFlow<Resource<String>>(Resource.Loading())
     val checkoutMessage: StateFlow<Resource<String>> = _checkoutMessage
 
-    private val _bookReturnResponse =
-        MutableStateFlow<Resource<BookCheckoutResponse>>(Resource.Loading())
-    val bookReturnResponse: StateFlow<Resource<BookCheckoutResponse>> = _bookReturnResponse
-
     suspend fun getAllBookCheckouts() {
         viewModelScope.launch {
-            when (val result = bookCheckoutRepository.getAllBookCheckouts()) {
-                is Resource.Success -> {
-                    _books.value = result
-                }
-
-                is Resource.Error -> {
-                    _books.value = result
-                }
-
-                is Resource.Loading -> {
-                    _books.value = Resource.Loading()
-                }
-            }
+            _books.value = Resource.Loading()
+            val result = bookCheckoutRepository.getAllBookCheckouts()
+            _books.value = result
         }
     }
 
@@ -70,64 +56,25 @@ class BookCheckoutViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAllActiveBookCheckouts() {
-        when (val result = bookCheckoutRepository.getAllActiveBookCheckouts()) {
-            is Resource.Success -> {
-                _books.value = result
-            }
-
-            is Resource.Error -> {
-                _books.value = result
-            }
-
-            is Resource.Loading -> {
-                _books.value = Resource.Loading()
-            }
-        }
+    suspend fun getAllActiveBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllActiveBookCheckouts()
     }
 
-    suspend fun getAllPastBookCheckouts() {
-        when (val result = bookCheckoutRepository.getAllPastBookCheckouts()) {
-            is Resource.Success -> {
-                _books.value = result
-            }
-
-            is Resource.Error -> {
-                _books.value = result
-            }
-
-            is Resource.Loading -> {
-                _books.value = Resource.Loading()
-            }
-        }
+    suspend fun getAllPastBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllPastBookCheckouts()
     }
 
     suspend fun getAllBookCheckoutsForBookTitle(
         titleSearchTerm: String
-    ){
-        when (val result =
-            bookCheckoutRepository.getAllBookCheckoutsForBookTitle(titleSearchTerm)) {
-            is Resource.Success -> {
-                _books.value = result
-                println("result $result")
-            }
-
-            is Resource.Error -> {
-                _books.value = result
-                println("error ${result.message}")
-
-            }
-
-            is Resource.Loading -> {
-                _books.value = Resource.Loading()
-            }
-        }
+    ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
+        return bookCheckoutRepository.getAllBookCheckoutsForBookTitle(
+            titleSearchTerm
+        )
     }
 
-    suspend fun getAllBookCheckoutsForUser() {
+    suspend fun getAllBookCheckoutsForUser(){
         when (val result = bookCheckoutRepository.getAllBookCheckoutsForUser()) {
             is Resource.Success -> {
-                _books.value = Resource.Loading()
                 _bookCheckouts.value = result
             }
 
@@ -141,6 +88,10 @@ class BookCheckoutViewModel @Inject constructor(
         }
     }
 
+    suspend fun getAllNearReturnDate(): Resource<List<BookCheckoutReturnReminderResponse>> {
+        return bookCheckoutRepository.getAllNearReturnDate()
+    }
+
     suspend fun getAllBooksForUserByTitleContaining(
         userId: UUID,
         titleSearchTerm: String
@@ -151,7 +102,7 @@ class BookCheckoutViewModel @Inject constructor(
         )
     }
 
-    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest) {
+    suspend fun borrowBookItem(bookCheckoutRequest: BookCheckoutRequest){
         when (bookCheckoutRepository.borrowBookItem(bookCheckoutRequest)) {
             is Resource.Success -> {
                 _checkoutMessage.value = Resource.Error(message = "Book borrowed successfully")
@@ -168,19 +119,7 @@ class BookCheckoutViewModel @Inject constructor(
 
     }
 
-    suspend fun returnBookItem(bookCheckoutRequest: BookReturnRequest) {
-        when (val result = bookCheckoutRepository.returnBookItem(bookCheckoutRequest)) {
-            is Resource.Success -> {
-                _bookReturnResponse.value = result
-            }
-
-            is Resource.Error -> {
-                _bookReturnResponse.value = result
-            }
-
-            is Resource.Loading -> {
-                _bookReturnResponse.value = Resource.Loading()
-            }
-        }
+    suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
+        return bookCheckoutRepository.returnBookItem(bookCheckoutRequest)
     }
 }

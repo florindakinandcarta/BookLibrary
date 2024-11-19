@@ -7,6 +7,7 @@ import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
 import com.example.booklibrary.data.book.models.response.UserResponse
 import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
+import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -19,8 +20,9 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface UserService {
-    @PATCH("user/updateData")
+    @PATCH("users/update-data")
     suspend fun updateUserData(
+        @Header(AUTHORIZATION) token: String,
         @Body user: UserUpdateDataRequest
     ): String
 
@@ -49,13 +51,13 @@ interface UserService {
 
     @GET("users/by-full-name")
     suspend fun getAllUsersWithFullName(
-        @Header("Authorization") token: String,
+        @Header(AUTHORIZATION) token: String,
         @Query("fullName") fullName: String,
     ): List<UserWithRoleResponse>
 
     @GET("users/profile")
     suspend fun getUserProfile(
-        @Header("Authorization") token: String
+        @Header(AUTHORIZATION) token: String
     ): UserResponse
 
     @POST("users/login")

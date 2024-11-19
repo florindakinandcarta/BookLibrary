@@ -26,7 +26,6 @@ fun ItemBorrowedBooks(
     book: BookCheckoutResponse,
     onBorrowedBookClick: (String) -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .padding(16.dp)

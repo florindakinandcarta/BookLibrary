@@ -4,7 +4,6 @@ import com.example.booklibrary.data.book.models.RequestedBook
 import com.example.booklibrary.data.book.models.request.BookChangeStatus
 import com.example.booklibrary.data.book.models.request.RequestedBookRequestDTO
 import com.example.booklibrary.data.book.models.response.RequestedBookResponse
-import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -18,12 +17,12 @@ import java.util.UUID
 interface RequestedBookService {
     @GET("requested-books")
     suspend fun getAllRequestedBooks(
-        @Header(AUTHORIZATION) token: String
+        @Header("Authorization") token: String
     ): List<RequestedBook>
 
     @GET("/requested-books/by-book-status")
     suspend fun getRequestedBooksByBookStatus(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("status") status: String
     ): List<RequestedBook>
 
@@ -39,7 +38,7 @@ interface RequestedBookService {
 
     @POST("requested-books/insert-requested-book")
     suspend fun insertNewRequestedBook(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Body book: RequestedBookRequestDTO
     ): RequestedBookResponse
 
@@ -50,13 +49,13 @@ interface RequestedBookService {
 
     @PATCH("requested-books/change-book-status")
     suspend fun changeBookStatus(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Body book: BookChangeStatus
     ): RequestedBook
 
     @POST("requested-books/handle-like")
     suspend fun handleRequestedBookLike(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Body book: RequestedBookRequestDTO
     ): RequestedBook
 }

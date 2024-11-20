@@ -1,8 +1,6 @@
 package com.example.booklibrary.data.book.viewModels
 
 import android.app.Application
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
@@ -91,16 +89,17 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
     private suspend fun getAllUsersWithFullName(fullName: String) {
         when (userRepository.getAllUsersWithFullName(fullName)) {
             is Resource.Success -> {
                 viewModelScope.launch {
-                    saveUserRole(dataStore,true)
+                    saveUserRole(dataStore, true)
                 }
             }
 
             is Resource.Error -> {
-                saveUserRole(dataStore,false)
+                saveUserRole(dataStore, false)
             }
 
             is Resource.Loading -> {

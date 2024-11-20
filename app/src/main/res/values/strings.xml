@@ -78,6 +78,7 @@
     <string name="password_min_char">Your password must be at least 6 characters</string>
     <string name="read_less">Read Less</string>
     <string name="read_more">Read More</string>
+    <string name="return_book">Return</string>
     <string name="all_fields_required">All fields are required!</string>
     <string name="return_date">Return date: 08/07/2024</string>
     <string name="filter_applied">Filter Applied</string>

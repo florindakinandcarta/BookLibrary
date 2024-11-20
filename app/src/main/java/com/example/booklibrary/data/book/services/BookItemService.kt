@@ -2,6 +2,7 @@ package com.example.booklibrary.data.book.services
 
 import com.example.booklibrary.data.book.models.BookID
 import com.example.booklibrary.data.book.models.BookItem
+import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -14,13 +15,13 @@ import java.util.UUID
 interface BookItemService {
     @GET("book-items")
     suspend fun getBookItemsByBookIsbn(
-        @Header("Authorization") token: String,
+        @Header(AUTHORIZATION) token: String,
         @Query("isbn") isbn: String
     ): List<BookItem>
 
     @POST("book-items/insert")
     suspend fun createBookItem(
-        @Header("Authorization") token: String,
+        @Header(AUTHORIZATION) token: String,
         @Body isbn: BookID
     ): BookItem
 

@@ -8,10 +8,10 @@ import java.util.UUID
 @Parcelize
 data class BookCheckoutWithUserAndBookItemResponse(
     val userFullName: String? = null,
-    val bookItemID: UUID? = null,
+    val bookItemId: String? = null,
     val bookTitle: String? = null,
     val bookISBN: String? = null,
-    val dateBorrowed: LocalDate? = null,
-    val dateReturned: LocalDate? = null,
-    val scheduledReturnDate: LocalDate? = null
+    val dateBorrowed: String? = null,
+    val dateReturned: String? = null,
+    val scheduledReturnDate: String? = null
 ) : Parcelable

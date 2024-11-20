@@ -6,18 +6,23 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AssignmentReturned
+import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -44,8 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.data.book.models.ReturnStatus
 import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
-import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -62,6 +67,7 @@ fun BookCheckoutsScreen(
     onSearchClick: () -> Unit,
     bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel(),
+    onGetByStatusClicked: (String) -> Unit,
 ) {
     var numberOfPages by remember {
         mutableIntStateOf(0)
@@ -71,22 +77,16 @@ fun BookCheckoutsScreen(
     }
     val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
     val listOfBooks = bookCheckoutViewModel.bookCheckouts.collectAsState().value
-    var swipedDown by remember {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(swipedDown) {
-        if (isUserAdmin.value) {
-//            viewModel.getAllBookCheckoutsPaginated(
-//                numberOfPages,
-//                pageSize
-//            )
-        } else {
-//            viewModel.getAllBookCheckouts()
-        }
-    }
+    val books = bookCheckoutViewModel.books.collectAsState().value
     val context = LocalContext.current
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     val scope = rememberCoroutineScope()
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    var selectedStatusFilter by remember {
+        mutableStateOf("")
+    }
     val snackbarHostState = remember { SnackbarHostState() }
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -128,19 +128,52 @@ fun BookCheckoutsScreen(
                     ),
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .size(24.dp),
-                    onClick = {
-                        onSearchClick()
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(32.dp)
-                    )
+                if (isUserAdmin.value) {
+                    IconButton(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .size(24.dp),
+                        onClick = {
+                            onSearchClick()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize(Alignment.TopEnd)
+                    ) {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .size(24.dp),
+                            onClick = {
+                                expanded = !expanded
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.FilterAlt,
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                            ReturnStatus.entries.forEach { returnStatus ->
+                                DropdownMenuItem(
+                                    text = { Text(text = returnStatus.displayName) },
+                                    onClick = {
+                                        expanded = false
+                                        selectedStatusFilter = returnStatus.name
+                                        onGetByStatusClicked(returnStatus.name)
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
                 IconButton(
                     modifier = Modifier
@@ -185,28 +218,67 @@ fun BookCheckoutsScreen(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
+                .padding(paddingValues)
+                .padding(bottom = 80.dp)
                 .fillMaxHeight()
         ) {
-            when (listOfBooks) {
-                is Resource.Success -> {
-                    listOfBooks.data?.let { books ->
-                        items(books) { book ->
-                            ItemBorrowedBooks(
-                                book = book,
-                                onBorrowedBookClick = onBorrowedBookClick
-                            )
+            if (isUserAdmin.value) {
+                item {
+                    LaunchedEffect(Unit) {
+                        scope.launch {
+                            bookCheckoutViewModel.getAllBookCheckouts()
                         }
                     }
                 }
+                when (books) {
+                    is Resource.Success -> {
+                        books.data?.let { bookItems ->
+                            items(bookItems) { item ->
+                                ItemBorrowedBooksAdmin(
+                                    book = item,
+                                    onBorrowedBookClick = onBorrowedBookClick
+                                )
+                            }
+                        }
+                    }
 
-                is Resource.Loading -> {
-                    //loader display
+                    is Resource.Error -> {
+                        books.message?.let { error ->
+
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                    }
                 }
+            } else {
+                item {
+                    LaunchedEffect(Unit) {
+                        scope.launch {
+                            bookCheckoutViewModel.getAllBookCheckoutsForUser()
+                        }
+                    }
+                }
+                when (listOfBooks) {
+                    is Resource.Success -> {
+                        listOfBooks.data?.let { books ->
+                            items(books) { book ->
+                                ItemBorrowedBooks(
+                                    book = book,
+                                    onBorrowedBookClick = onBorrowedBookClick
+                                )
+                            }
+                        }
+                    }
 
-                is Resource.Error -> {
-                    listOfBooks.data?.let { error ->
-                        //call the dialog pop up for error display it for 5s and dismiss it
+                    is Resource.Loading -> {
+                        //loader display
+                    }
+
+                    is Resource.Error -> {
+                        listOfBooks.message?.let { error ->
+                            //call the dialog pop up for error display it for 5s and dismiss it
+                        }
                     }
                 }
             }

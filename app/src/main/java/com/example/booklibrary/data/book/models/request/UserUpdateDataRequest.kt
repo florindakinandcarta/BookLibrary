@@ -6,7 +6,6 @@ import java.util.UUID
 
 @Parcelize
 data class UserUpdateDataRequest(
-    val userID: UUID,
     val fullName: String? = null,
-    val profilePicture: String? = null
+    val image: String? = null
 ) : Parcelable

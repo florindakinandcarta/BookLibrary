@@ -7,7 +7,6 @@ import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
 import com.example.booklibrary.data.book.models.response.UserResponse
 import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
-import com.example.booklibrary.util.AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -22,7 +21,7 @@ import java.util.UUID
 interface UserService {
     @PATCH("users/update-data")
     suspend fun updateUserData(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Body user: UserUpdateDataRequest
     ): String
 
@@ -31,8 +30,9 @@ interface UserService {
         @Body user: UserRegistrationRequest
     ): UserWithRoleResponse
 
-    @POST("user/updateRole")
+    @PATCH("users/update-role")
     suspend fun updateUserRole(
+        @Header("Authorization") token: String,
         @Body user: UserUpdateRoleRequest
     ): String
 
@@ -41,23 +41,26 @@ interface UserService {
         @Path("USER_ID") USER_ID: UUID
     ): String
 
-    @PUT("user/changePassword")
+    @PATCH("users/change-password")
     suspend fun changeUserPassword(
+        @Header("Authorization") token: String,
         @Body user: UserChangePasswordRequest
     ): String
 
-    @GET("user/getAll")
-    suspend fun getAllUsers(): List<UserWithRoleResponse>
+    @GET("users")
+    suspend fun getAllUsers(
+        @Header("Authorization") token: String,
+    ): List<UserWithRoleResponse>
 
     @GET("users/by-full-name")
     suspend fun getAllUsersWithFullName(
-        @Header(AUTHORIZATION) token: String,
+        @Header("Authorization") token: String,
         @Query("fullName") fullName: String,
     ): List<UserWithRoleResponse>
 
     @GET("users/profile")
     suspend fun getUserProfile(
-        @Header(AUTHORIZATION) token: String
+        @Header("Authorization") token: String
     ): UserResponse
 
     @POST("users/login")

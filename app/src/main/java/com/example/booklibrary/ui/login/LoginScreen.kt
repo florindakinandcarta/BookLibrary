@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.UserLoginRequest
-import com.example.booklibrary.data.book.viewModels.AuthViewModel
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.validateEmail
 
@@ -61,39 +60,8 @@ fun LoginScreen(
     onLoginClick: (UserLoginRequest) -> Unit,
     onForgotPasswordClick: () -> Unit,
     onRegisterClick: () -> Unit,
-    authViewModel: AuthViewModel = hiltViewModel(),
     userViewModel: UserViewModel = hiltViewModel()
 ) {
-    val messageResponse by authViewModel.message.collectAsState()
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-//    LaunchedEffect(messageResponse) {
-//        when (messageResponse) {
-//            is Resource.Success -> {
-//                context.showToast((messageResponse as Resource.Success<String>).data.toString())
-//                onLoginClick()
-//            }
-//
-//            is Resource.Error -> {
-//                when ((messageResponse as Resource.Error<String>).message.toString()) {
-//                    context.resources.getString(R.string.error_code_message_incorrect) ->
-//                        context.showToast(context.getString(R.string.wrong_password_email))
-//
-//                    context.resources.getString(R.string.error_code_message_connection) ->
-//                        context.showToast(context.getString(R.string.error_connection))
-//
-//                    else -> {
-//                        context.showToast(context.getString(R.string.default_error))
-//
-//                    }
-//                }
-//            }
-//
-//            else -> {
-//
-//            }
-//        }
-//    }
     Scaffold {
         it
         var emailInput by remember {

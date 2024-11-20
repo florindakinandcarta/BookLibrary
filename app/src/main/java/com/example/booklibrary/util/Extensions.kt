@@ -1,6 +1,9 @@
 package com.example.booklibrary.util
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.widget.Toast
 
 fun String.toHttpsUrl(): String {

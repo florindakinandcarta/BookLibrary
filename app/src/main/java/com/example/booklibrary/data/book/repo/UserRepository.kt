@@ -67,7 +67,7 @@ class UserRepository @Inject constructor(
 
     suspend fun getAllUsers(): Resource<List<UserWithRoleResponse>> {
         val response = try {
-            userService.getAllUsers()
+            userService.getAllUsers(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -82,7 +82,7 @@ class UserRepository @Inject constructor(
 
     suspend fun changeUserPassword(user: UserChangePasswordRequest): Resource<String> {
         val response = try {
-            userService.changeUserPassword(user)
+            userService.changeUserPassword(token,user)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -112,7 +112,7 @@ class UserRepository @Inject constructor(
 
     suspend fun updateUserRole(user: UserUpdateRoleRequest): Resource<String> {
         val response = try {
-            userService.updateUserRole(user)
+            userService.updateUserRole(token,user)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -142,7 +142,7 @@ class UserRepository @Inject constructor(
 
     suspend fun updateUserData(user: UserUpdateDataRequest): Resource<String> {
         val response = try {
-            userService.updateUserData(user)
+            userService.updateUserData(token,user)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

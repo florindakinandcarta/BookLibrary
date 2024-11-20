@@ -30,8 +30,9 @@ interface UserService {
         @Body user: UserRegistrationRequest
     ): UserWithRoleResponse
 
-    @POST("user/updateRole")
+    @PATCH("users/update-role")
     suspend fun updateUserRole(
+        @Header("Authorization") token: String,
         @Body user: UserUpdateRoleRequest
     ): String
 
@@ -40,13 +41,16 @@ interface UserService {
         @Path("USER_ID") USER_ID: UUID
     ): String
 
-    @PUT("user/changePassword")
+    @PATCH("users/change-password")
     suspend fun changeUserPassword(
+        @Header("Authorization") token: String,
         @Body user: UserChangePasswordRequest
     ): String
 
-    @GET("user/getAll")
-    suspend fun getAllUsers(): List<UserWithRoleResponse>
+    @GET("users")
+    suspend fun getAllUsers(
+        @Header("Authorization") token: String,
+    ): List<UserWithRoleResponse>
 
     @GET("users/by-full-name")
     suspend fun getAllUsersWithFullName(

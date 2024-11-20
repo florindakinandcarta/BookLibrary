@@ -6,6 +6,6 @@ import java.util.UUID
 
 @Parcelize
 data class UserUpdateRoleRequest(
-    val userId: UUID,
+    val userId: String,
     val role: String
 ) : Parcelable

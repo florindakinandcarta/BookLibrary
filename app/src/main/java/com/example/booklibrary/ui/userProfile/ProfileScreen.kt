@@ -1,5 +1,6 @@
 package com.example.booklibrary.ui.userProfile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -20,16 +22,19 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,13 +48,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
+import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.convertBase64ToBitmap
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
-    onSettingsClicked: () -> Unit,
+    onChangePasswordClicked: () -> Unit,
     onAllUsersClicked: () -> Unit,
     onClickUpdateUserData: (UserUpdateDataRequest) -> Unit,
     onChangeProfilePhotoClicked: () -> Unit,
@@ -57,11 +64,14 @@ fun ProfileScreen(
 ) {
     val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
     val userInfo = userViewModel.userInfo.collectAsState().value
+    val scope = rememberCoroutineScope()
     var isEditMode by remember {
         mutableStateOf(false)
     }
-    var displayName = userInfo.data?.fullName
-
+    var displayName by remember { mutableStateOf(userInfo.data?.fullName ?: "") }
+    LaunchedEffect(userInfo) {
+        displayName = userInfo.data?.fullName ?: ""
+    }
     Scaffold(topBar = {
         Row(
             modifier = Modifier
@@ -139,7 +149,7 @@ fun ProfileScreen(
             }
             if (isEditMode) {
                 OutlinedTextField(
-                    value = displayName.toString(),
+                    value = displayName,
                     shape = RoundedCornerShape(12.dp),
                     onValueChange = {
                         displayName = it
@@ -162,6 +172,7 @@ fun ProfileScreen(
                             onClick = {
                                 val updateUserData = UserUpdateDataRequest(fullName = displayName)
                                 onClickUpdateUserData(updateUserData)
+                                isEditMode = false
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
@@ -227,7 +238,7 @@ fun ProfileScreen(
                         .padding(start = 24.dp)
                         .align(Alignment.CenterVertically)
                         .clickable {
-                            onSettingsClicked()
+                            onChangePasswordClicked()
                         },
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold
@@ -237,7 +248,7 @@ fun ProfileScreen(
                 IconButton(
                     modifier = Modifier.size(32.dp),
                     onClick = {
-                        onSettingsClicked()
+                        onChangePasswordClicked()
                     }
                 ) {
                     Icon(
@@ -286,6 +297,27 @@ fun ProfileScreen(
                         )
                     }
                 }
+            }
+            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = {
+                    scope.launch {
+                        userViewModel.signOutUser()
+                    }
+                },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .padding(bottom = 100.dp)
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(32.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.log_out),
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                    )
+                )
             }
         }
     }

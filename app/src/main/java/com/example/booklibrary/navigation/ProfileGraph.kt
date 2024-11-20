@@ -7,6 +7,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.ui.userProfile.AllUsersScreen
+import com.example.booklibrary.ui.userProfile.ChangePasswordScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 import kotlinx.coroutines.launch
 
@@ -20,7 +22,7 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
             }
         }
         ProfileScreen(
-            onSettingsClicked = {
+            onChangePasswordClicked = {
                 navHostController.navigate(ProfileScreen.Settings.route)
             },
             onAllUsersClicked = {
@@ -40,10 +42,43 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
         //the screen where we open the camera
     }
     composable(ProfileScreen.Settings.route) {
-        //settings screen to log out and the darkmode option
+        val userViewModel: UserViewModel = hiltViewModel()
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(Unit) {
+            scope.launch {
+                userViewModel.getUserInfo()
+            }
+        }
+        ChangePasswordScreen(
+            onBackClicked = {
+                navHostController.popBackStack()
+            },
+            onChangePasswordRequest = { userChangePasswordRequest ->
+                scope.launch {
+                    println(userChangePasswordRequest)
+                    userViewModel.changePassword(userChangePasswordRequest)
+                }
+            }
+        )
     }
     composable(ProfileScreen.AllUsers.route) {
-        // All users screen
+        val userViewModel: UserViewModel = hiltViewModel()
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(Unit) {
+            scope.launch {
+                userViewModel.getAllUsers()
+            }
+        }
+        AllUsersScreen(
+            onBackClicked = {
+                navHostController.popBackStack()
+            },
+            onChangeRoleClicked = { userRole ->
+                scope.launch {
+                    userViewModel.updateUserRole(userRole)
+                }
+            }
+        )
     }
 }
 

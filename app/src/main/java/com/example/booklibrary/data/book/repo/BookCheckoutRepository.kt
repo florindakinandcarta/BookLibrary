@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.booklibrary.data.book.models.ExceptionResponse
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
+import com.example.booklibrary.data.book.models.request.BookReturnRequest
 import com.example.booklibrary.data.book.models.response.BookCheckoutResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutReturnReminderResponse
 import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
@@ -29,7 +30,7 @@ class BookCheckoutRepository @Inject constructor(
     }
     suspend fun getAllBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         val response = try {
-            bookCheckoutService.getAllBookCheckouts()
+            bookCheckoutService.getAllBookCheckouts(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -69,7 +70,7 @@ class BookCheckoutRepository @Inject constructor(
 
     suspend fun getAllActiveBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         val response = try {
-            bookCheckoutService.getAllActiveBookCheckouts()
+            bookCheckoutService.getAllActiveBookCheckouts(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -86,7 +87,7 @@ class BookCheckoutRepository @Inject constructor(
 
     suspend fun getAllPastBookCheckouts(): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         val response = try {
-            bookCheckoutService.getAllPastBookCheckouts()
+            bookCheckoutService.getAllPastBookCheckouts(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -105,7 +106,7 @@ class BookCheckoutRepository @Inject constructor(
         titleSearchTerm: String
     ): Resource<List<BookCheckoutWithUserAndBookItemResponse>> {
         val response = try {
-            bookCheckoutService.getAllBookCheckoutsForBookTitle(titleSearchTerm)
+            bookCheckoutService.getAllBookCheckoutsForBookTitle(token, titleSearchTerm)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -139,7 +140,7 @@ class BookCheckoutRepository @Inject constructor(
 
     suspend fun getAllNearReturnDate(): Resource<List<BookCheckoutReturnReminderResponse>> {
         val response = try {
-            bookCheckoutService.getAllNearReturnDate()
+            bookCheckoutService.getAllNearReturnDate(token)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -191,9 +192,9 @@ class BookCheckoutRepository @Inject constructor(
         return Resource.Success(response)
     }
 
-    suspend fun returnBookItem(bookCheckoutRequest: BookCheckoutRequest): Resource<BookCheckoutResponse> {
+    suspend fun returnBookItem(bookCheckoutRequest: BookReturnRequest): Resource<BookCheckoutResponse> {
         val response = try {
-            bookCheckoutService.returnBookItem(bookCheckoutRequest)
+            bookCheckoutService.returnBookItem(token,bookCheckoutRequest)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

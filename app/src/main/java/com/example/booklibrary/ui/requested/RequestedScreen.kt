@@ -152,7 +152,7 @@ fun RequestedScreen(
             LazyColumn(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .padding(bottom = 60.dp)
+                    .padding(bottom = 80.dp)
             ) {
                 when (listOfBooks) {
                     is Resource.Success -> {

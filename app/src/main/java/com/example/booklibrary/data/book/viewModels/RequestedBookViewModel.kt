@@ -53,6 +53,7 @@ class RequestedBookViewModel @Inject constructor(
                     _isRefreshing.value = false
                 }
                 is Resource.Loading -> {
+                    _books.value = Resource.Loading()
                     _isRefreshing.value = true
                 }
             }
@@ -76,6 +77,7 @@ class RequestedBookViewModel @Inject constructor(
                 _book.value = result
             }
             is Resource.Loading -> {
+                _books.value = Resource.Loading()
                _book.value = Resource.Loading()
             }
         }
@@ -98,7 +100,7 @@ class RequestedBookViewModel @Inject constructor(
                     _message.value = Resource.Error("Something went wrong!")
                 }
                 is Resource.Loading -> {
-
+                    _books.value = Resource.Loading()
                 }
             }
 

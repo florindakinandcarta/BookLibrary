@@ -3,6 +3,7 @@ package com.example.booklibrary.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,6 +17,7 @@ import com.example.booklibrary.ui.login.LoginScreen
 import com.example.booklibrary.ui.login.RegisterScreen
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.saveUserJWTToken
+import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
 
 
@@ -34,7 +36,7 @@ fun NavGraphBuilder.authGraph(
             LaunchedEffect(userJWTToken) {
                 when (userJWTToken) {
                     is Resource.Success -> {
-                        userJWTToken.data?.let {userJWTToken ->
+                        userJWTToken.data?.let { userJWTToken ->
                             saveUserJWTToken(dataStore, userJWTToken)
                         }
                         scope.launch {
@@ -68,9 +70,34 @@ fun NavGraphBuilder.authGraph(
             )
         }
         composable(AuthScreen.Register.route) {
+            val userViewModel: UserViewModel = hiltViewModel()
+            val scope = rememberCoroutineScope()
+            val userWithRole = userViewModel.usersWithRole.collectAsState().value
+            val context = LocalContext.current
+            LaunchedEffect(userWithRole) {
+                when (userWithRole) {
+                    is Resource.Success -> {
+                        navHostController.navigate(AuthScreen.Login.route)
+                        context.showToast("User successfully registered!")
+                    }
+
+                    is Resource.Error -> {
+                        context.showToast(userWithRole.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+
+                    }
+                }
+            }
             RegisterScreen(
                 onLoginClick = {
                     navHostController.popBackStack()
+                },
+                onRegisterUserClick = { userData ->
+                    scope.launch {
+                        userViewModel.registerUser(userData)
+                    }
                 }
             )
         }

@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
@@ -21,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -82,6 +85,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .padding(16.dp)
+                .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
                 .windowInsetsPadding(insets = WindowInsets.ime.union(WindowInsets.navigationBars))
         ) {
@@ -210,6 +214,7 @@ fun LoginScreen(
                 )
 
             }
+            Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
                     val userLoginRequest = UserLoginRequest(
@@ -225,6 +230,12 @@ fun LoginScreen(
                     .height(60.dp),
                 shape = RoundedCornerShape(32.dp),
                 enabled = isError && isPasswordValid,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = Color.White,
+                    disabledContentColor = Color.White
+                )
             ) {
                 Text(
                     text = stringResource(id = R.string.login),

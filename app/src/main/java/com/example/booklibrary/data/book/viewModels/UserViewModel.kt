@@ -40,8 +40,8 @@ class UserViewModel @Inject constructor(
     val user: StateFlow<Resource<UserResponse>> = _user
 
     private val _usersWithRole =
-        MutableStateFlow<Resource<List<UserWithRoleResponse>>>(Resource.Loading())
-    val usersWithRole: StateFlow<Resource<List<UserWithRoleResponse>>> = _usersWithRole
+        MutableStateFlow<Resource<UserWithRoleResponse>>(Resource.Loading())
+    val usersWithRole: StateFlow<Resource<UserWithRoleResponse>> = _usersWithRole
 
     private val _response = MutableStateFlow<Resource<String>>(Resource.Loading())
     val response: StateFlow<Resource<String>> = _response
@@ -139,9 +139,9 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun registerUser(user: UserRegistrationRequest) {
-//        _usersWithRole.value = Resource.Loading()
-//        val response = userRepository.registerUser(user)
-//        _usersWithRole.value = response
+        _usersWithRole.value = Resource.Loading()
+        val response = userRepository.registerUser(user)
+        _usersWithRole.value = response
     }
 
     suspend fun updateUserData(user: UserUpdateDataRequest) {

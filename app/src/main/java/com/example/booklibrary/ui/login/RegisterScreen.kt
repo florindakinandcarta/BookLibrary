@@ -1,5 +1,6 @@
 package com.example.booklibrary.ui.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,18 +24,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,43 +64,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.SampleData
+import com.example.booklibrary.data.book.models.Offices
 import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
 import com.example.booklibrary.data.book.viewModels.OfficeViewModel
-import com.example.booklibrary.data.book.viewModels.UserViewModel
-import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit,
-    viewModel: OfficeViewModel = hiltViewModel(),
-    userViewModel: UserViewModel = hiltViewModel()
+    onRegisterUserClick: (UserRegistrationRequest) -> Unit
 ) {
-    val messageResponse by userViewModel.usersWithRole.collectAsState()
-    val context = LocalContext.current
-//    val offices = viewModel.offices.collectAsState().value
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(messageResponse) {
-        when (messageResponse) {
-            is Resource.Success -> {
-//                context.showToast("User ${messageResponse.data} successfully created.")
-                onLoginClick()
-            }
-
-            is Resource.Error -> {
-                context.showToast(messageResponse.message.toString())
-            }
-
-            else -> {
-
-            }
-        }
-    }
     Scaffold { paddingValues ->
         paddingValues
         var name by remember {
@@ -181,12 +161,13 @@ fun RegisterScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(vertical = 8.dp)
+                    .fillMaxWidth()
             ) {
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
-                    value = text,
+                    value = officeName,
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
@@ -205,28 +186,22 @@ fun RegisterScreen(
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.exposedDropdownSize()
                 ) {
-//                    if (offices is Resource.Success) {
-//                        offices.data?.let { offices ->
-//                            offices.forEach { office ->
-//                                office.name?.let { officeNameSelected ->
-//                                    DropdownMenuItem(
-//                                        text = {
-//                                            Text(
-//                                                text = officeNameSelected,
-//                                            )
-//                                        },
-//                                        onClick = {
-//                                            text = officeNameSelected
-//                                            officeName = officeNameSelected
-//                                            expanded = false
-//                                        },
-//                                        contentPadding = ItemContentPadding,
-//                                        colors = MenuDefaults.itemColors(textColor = Color.Black)
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
+                    Offices.entries.forEach { office ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = office.displayName,
+                                )
+                            },
+                            onClick = {
+                                officeName = office.displayName
+                                expanded = false
+                            },
+                            contentPadding = ItemContentPadding,
+                            colors = MenuDefaults.itemColors(textColor = Color.Black)
+                        )
+
+                    }
                 }
             }
             OutlinedTextField(
@@ -383,19 +358,24 @@ fun RegisterScreen(
                     val userRegisterRequest = UserRegistrationRequest(
                         name,
                         email,
-                        "Skopje",
+                        officeName,
                         password
                     )
-                    scope.launch {
-                        userViewModel.registerUser(userRegisterRequest)
-                    }
+                    onRegisterUserClick(userRegisterRequest)
+
                 },
                 modifier = Modifier
                     .padding(vertical = 16.dp)
                     .fillMaxWidth()
                     .height(60.dp),
                 shape = RoundedCornerShape(32.dp),
-                enabled = isError
+                enabled = isError,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = Color.White,
+                    disabledContentColor = Color.White
+                )
             ) {
                 Text(
                     text = stringResource(id = R.string.sign_up),

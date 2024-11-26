@@ -40,6 +40,7 @@ class BookViewModel @Inject constructor(
                 }
 
                 is Resource.Loading -> {
+                    _books.value = Resource.Loading()
                     _isRefreshing.value = true
                 }
             }
@@ -101,6 +102,7 @@ class BookViewModel @Inject constructor(
                 }
 
                 is Resource.Loading -> {
+                    _books.value = Resource.Loading()
                     _isRefreshing.value = true
                 }
             }
@@ -130,6 +132,7 @@ class BookViewModel @Inject constructor(
             }
 
             is Resource.Loading -> {
+                _books.value = Resource.Loading()
                 _isRefreshing.value = true
             }
         }
@@ -148,6 +151,7 @@ class BookViewModel @Inject constructor(
             }
 
             is Resource.Loading -> {
+                _books.value = Resource.Loading()
                 _isRefreshing.value = true
             }
         }

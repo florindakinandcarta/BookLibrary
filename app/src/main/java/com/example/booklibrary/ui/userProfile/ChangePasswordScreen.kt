@@ -57,25 +57,11 @@ fun ChangePasswordScreen(
     var newPassword by remember { mutableStateOf("") }
     val context = LocalContext.current
     val userInfo = userViewModel.userInfo.collectAsState().value
-    val user = userViewModel.user.collectAsState().value
     var isPasswordValid by remember {
         mutableStateOf(false)
     }
     var showPassword by remember { mutableStateOf(false) }
     val passwordVisualTransformation = remember { PasswordVisualTransformation() }
-//    LaunchedEffect(response) {
-//        when(response){
-//            is Resource.Success -> {
-//                context.showToast((response as Resource.Success<String>).data.toString())
-//                onBackClicked()
-//            }
-//            is Resource.Error -> {
-//                context.showToast(context.getString(R.string.something_went_wrong))
-//            }
-//            else -> {
-//            }
-//        }
-//    }
 
     Scaffold(
         topBar = {

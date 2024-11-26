@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.UserLoginRequest
 import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
 
 @Composable
@@ -65,6 +68,20 @@ fun LoginScreen(
     onRegisterClick: () -> Unit,
     userViewModel: UserViewModel = hiltViewModel()
 ) {
+    val userJWTToken = userViewModel.userJWTToken.collectAsState().value
+    val context = LocalContext.current
+    LaunchedEffect(userJWTToken) {
+       when(userJWTToken){
+           is Resource.Loading -> {
+           }
+           is Resource.Error -> {
+               context.showToast(userJWTToken.message.toString())
+           }
+           is Resource.Success -> {
+
+           }
+       }
+    }
     Scaffold {
         it
         var emailInput by remember {

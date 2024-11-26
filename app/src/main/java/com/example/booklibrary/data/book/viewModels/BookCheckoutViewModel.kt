@@ -169,7 +169,7 @@ class BookCheckoutViewModel @Inject constructor(
             }
 
             is Resource.Loading -> {
-
+                _checkoutMessage.value = Resource.Loading()
             }
         }
 

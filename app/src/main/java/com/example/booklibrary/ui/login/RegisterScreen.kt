@@ -74,31 +74,8 @@ import com.example.booklibrary.util.validateEmail
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit,
-    officeViewModel: OfficeViewModel = hiltViewModel(),
     onRegisterUserClick: (UserRegistrationRequest) -> Unit
 ) {
-//    val messageResponse by userViewModel.usersWithRole.collectAsState()
-    val context = LocalContext.current
-//    val offices = viewModel.offices.collectAsState().value
-    val scope = rememberCoroutineScope()
-    val offices = officeViewModel.offices.collectAsState().value
-
-//    LaunchedEffect(messageResponse) {
-//        when (messageResponse) {
-//            is Resource.Success -> {
-////                context.showToast("User ${messageResponse.data} successfully created.")
-//                onLoginClick()
-//            }
-//
-//            is Resource.Error -> {
-//                context.showToast(messageResponse.message.toString())
-//            }
-//
-//            else -> {
-//
-//            }
-//        }
-//    }
     Scaffold { paddingValues ->
         paddingValues
         var name by remember {

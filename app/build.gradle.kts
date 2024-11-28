@@ -106,6 +106,10 @@ dependencies {
     implementation (libs.androidx.hilt.work)
     kapt (libs.androidx.hilt.compiler)
     implementation (libs.androidx.material.v140beta01)
+    implementation (libs.androidx.camera.camera2.v140)
+    implementation (libs.androidx.camera.lifecycle.v140)
+    implementation (libs.androidx.camera.view.v140)
+    implementation (libs.barcode.scanning)
 
 
 }

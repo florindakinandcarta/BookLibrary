@@ -16,6 +16,7 @@ import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
 import com.example.booklibrary.ui.BookRequestedSuccessDialog
+import com.example.booklibrary.ui.camera.PreviewView
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.requested.RequestedBookDetails
 import com.example.booklibrary.ui.requested.RequestedScreen
@@ -65,6 +66,7 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
         )
     ) { backStackEntry ->
         val book = backStackEntry.arguments?.getString("bookISBN")
+        println("isbn: $book")
         val bookViewModel: BookViewModel = hiltViewModel()
         val bookItemViewModel: BookItemViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
@@ -114,13 +116,22 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
     }
     composable(RequestedScreen.AddNewBook.route) {
         SearchScreen(
-            onScanClick = {},
+            onScanClick = {
+                navHostController.navigate(RequestedScreen.Barcode.route)
+            },
             onBackClicked = {
                 navHostController.popBackStack()
             },
+            placeholderText = "Insert ISBN or scan",
             onClickedBook = {},
             onSearchClick = { bookISBN ->
                 navHostController.navigate("${RequestedScreen.SuccessDialog.route}/$bookISBN")
+            }
+        )
+    }
+    composable(route = RequestedScreen.Barcode.route) {
+        PreviewView(
+            onBarcodeFound = { bookISBN ->
             }
         )
     }
@@ -131,4 +142,5 @@ sealed class RequestedScreen(val route: String) {
     object RequestedDetails : RequestedScreen("DETAILS/{bookISBN}")
     object AddNewBook : RequestedScreen("ADDNEWBOOK")
     object SuccessDialog : RequestedScreen("SUCCESS/{bookISBN}")
+    object Barcode : RequestedScreen("BARCODE")
 }

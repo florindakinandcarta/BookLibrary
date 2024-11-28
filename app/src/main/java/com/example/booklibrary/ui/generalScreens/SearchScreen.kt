@@ -51,7 +51,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.viewModels.BookViewModel
-import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.ui.home.SearchViewModel
 import com.example.booklibrary.util.Resource
@@ -68,6 +67,7 @@ fun SearchScreen(
     onBackClicked: () -> Unit,
     onSearchClick: (String) -> Unit,
     onClickedBook: (String) -> Unit,
+    placeholderText: String,
     bookViewModel: BookViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = viewModel()
 ) {
@@ -118,7 +118,7 @@ fun SearchScreen(
             onSearch = {
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
-                    onSearchClick(searchText)
+                onSearchClick(searchText)
             },
             leadingIcon = {
                 IconButton(
@@ -198,7 +198,7 @@ fun SearchScreen(
             },
             placeholder = {
                 Text(
-                    stringResource(id = R.string.search),
+                    text = placeholderText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.Gray
@@ -263,15 +263,6 @@ fun SearchScreen(
                     }
                 }
             }
-//            if (listOfBooks is Resource.Success) {
-//                LazyColumn {
-//                    listOfBooks.data?.let { books ->
-//                        items(books) { book ->
-//                            ItemBook(book = book, onClickedBook = onClickedBook)
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

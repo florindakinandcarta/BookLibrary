@@ -14,8 +14,9 @@ import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.borrowedHistory.BookCheckoutsScreen
-import com.example.booklibrary.ui.borrowedHistory.BorrowedSearchScreen
+import com.example.booklibrary.ui.camera.PreviewView
 import com.example.booklibrary.ui.generalScreens.GeneralBookDetails
+import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.returnDialog.ReturnDialog
 import com.example.booklibrary.util.Resource
 import kotlinx.coroutines.launch
@@ -129,14 +130,30 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
     composable(BorrowedScreen.SearchBorrowed.route) {
         val bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
-        BorrowedSearchScreen(
+        SearchScreen(
+            onScanClick = {
+                navHostController.navigate(HomeScreen.Barcode.route)
+            },
             onBackClicked = {
                 navHostController.popBackStack()
             },
-            onSearchClick = { query ->
-                scope.launch {
-                    bookCheckoutViewModel.getAllBookCheckoutsForBookTitle(query)
+            onClickedBook = { bookISBN ->
+                navHostController.navigate("${BorrowedScreen.DetailsScreen.route}/$bookISBN")
+            },
+            placeholderText = "Search with title or scan",
+            onSearchClick = { bookTitle ->
+                val correctedBookTitle = bookTitle.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
                 }
+                scope.launch {
+                    bookCheckoutViewModel.getAllBookCheckoutsForBookTitle(correctedBookTitle)
+                }
+            }
+        )
+    }
+    composable(route = BorrowedScreen.Barcode.route) {
+        PreviewView(
+            onBarcodeFound = { isbn ->
             }
         )
     }
@@ -147,4 +164,6 @@ sealed class BorrowedScreen(val route: String) {
     object DetailsScreen : BorrowedScreen("DETAILS/{bookISBN}")
     object ReturnDialog : BorrowedScreen("RETURN/{message}")
     object SearchBorrowed : BorrowedScreen("SEARCH_BORROWED")
+    object Barcode : BorrowedScreen("BARCODE")
+
 }

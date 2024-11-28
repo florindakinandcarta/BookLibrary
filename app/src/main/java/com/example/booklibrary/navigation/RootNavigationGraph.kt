@@ -1,9 +1,11 @@
 package com.example.booklibrary.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavHostController
@@ -16,18 +18,20 @@ import com.example.booklibrary.util.getUserJWTToken
 fun RootNavigationGraph(navHostController: NavHostController, dataStore: DataStore<Preferences>) {
     val jwtTokenFlow = getUserJWTToken(dataStore)
     val jwtToken by jwtTokenFlow.collectAsState(initial = "")
+    val currentRoute =
+        navHostController.currentBackStackEntryFlow.collectAsState(initial = null).value?.destination?.route
     Scaffold(bottomBar = {
-        if (!jwtToken.isNullOrEmpty()) {
+        if (!jwtToken.isNullOrEmpty() && currentRoute != HomeScreen.Barcode.route) {
             MyBottomTabsBar(
                 navHostController = navHostController
             )
         }
-    }) {
-        it
+    }) { paddingValues ->
         NavHost(
             navController = navHostController,
             route = Graph.ROOT,
-            startDestination = if (jwtToken.isNullOrEmpty()) Graph.AUTHENTICATION else Graph.HOME
+            startDestination = if (jwtToken.isNullOrEmpty()) Graph.AUTHENTICATION else Graph.HOME,
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
             authGraph(navHostController = navHostController, dataStore = dataStore)
             navigation(route = Graph.HOME, startDestination = BottomTab.Home.route) {

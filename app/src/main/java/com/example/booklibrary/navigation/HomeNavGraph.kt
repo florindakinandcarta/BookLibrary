@@ -3,7 +3,6 @@ package com.example.booklibrary.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -15,10 +14,10 @@ import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.ui.camera.PreviewView
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.generalScreens.bookDetails.BookDetails
 import com.example.booklibrary.ui.home.HomeScreen
-import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
 
 
@@ -66,13 +65,16 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         val bookViewModel: BookViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         SearchScreen(
-            onScanClick = {},
+            onScanClick = {
+                navHostController.navigate(HomeScreen.Barcode.route)
+            },
             onBackClicked = {
                 navHostController.popBackStack()
             },
             onClickedBook = { bookISBN ->
                 navHostController.navigate("${HomeScreen.BookDetails.route}/$bookISBN")
             },
+            placeholderText = "Search with title or scan",
             onSearchClick = { bookTitle ->
                 val correctedBookTitle = bookTitle.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase() else it.toString()
@@ -80,6 +82,14 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
                 scope.launch {
                     bookViewModel.getBooksByTitle(correctedBookTitle)
                 }
+            }
+        )
+    }
+
+    composable(route = HomeScreen.Barcode.route) {
+        PreviewView(
+            onBarcodeFound = { isbn ->
+
             }
         )
     }
@@ -132,4 +142,5 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
 sealed class HomeScreen(val route: String) {
     object Search : HomeScreen("SEARCH")
     object BookDetails : HomeScreen("DETAILS/{book}")
+    object Barcode : HomeScreen("BARCODE")
 }

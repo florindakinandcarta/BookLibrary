@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
+import io.scanbot.sdk.barcode_scanner.ScanbotBarcodeScannerSDKInitializer
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -19,5 +20,7 @@ class BookLibraryApp:Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        ScanbotBarcodeScannerSDKInitializer()
+            .initialize(this)
     }
 }

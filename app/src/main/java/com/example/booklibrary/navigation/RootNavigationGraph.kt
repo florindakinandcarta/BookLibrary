@@ -20,8 +20,13 @@ fun RootNavigationGraph(navHostController: NavHostController, dataStore: DataSto
     val jwtToken by jwtTokenFlow.collectAsState(initial = "")
     val currentRoute =
         navHostController.currentBackStackEntryFlow.collectAsState(initial = null).value?.destination?.route
+    val excludedRoutes = listOf(
+        HomeScreen.BookISBNScanner.route,
+        RequestedScreen.BookISBNScanner.route,
+        BorrowedScreen.BookISBNScanner.route
+    )
     Scaffold(bottomBar = {
-        if (!jwtToken.isNullOrEmpty() && currentRoute != HomeScreen.Barcode.route) {
+        if (!jwtToken.isNullOrEmpty() && currentRoute !in excludedRoutes) {
             MyBottomTabsBar(
                 navHostController = navHostController
             )

@@ -110,6 +110,7 @@ dependencies {
     implementation (libs.androidx.camera.lifecycle.v140)
     implementation (libs.androidx.camera.view.v140)
     implementation (libs.barcode.scanning)
-
+    implementation(libs.scanbot.barcode.scanner.sdk)
+    implementation(libs.rtu.ui.v2.barcode)
 
 }

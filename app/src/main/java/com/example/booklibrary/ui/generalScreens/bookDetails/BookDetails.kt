@@ -87,8 +87,9 @@ fun BookDetails(
                             onBorrowClick()
                         },
                         modifier = Modifier
-                            .padding(16.dp)
                             .fillMaxWidth()
+                            .padding(16.dp)
+                            .padding(bottom = 40.dp)
                             .height(60.dp),
                         shape = RoundedCornerShape(32.dp)
                     ) {

@@ -3,6 +3,7 @@ package com.example.booklibrary.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -14,10 +15,11 @@ import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.UserViewModel
-import com.example.booklibrary.ui.camera.PreviewView
+import com.example.booklibrary.ui.barcode.BookISBNScanner
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.generalScreens.bookDetails.BookDetails
 import com.example.booklibrary.ui.home.HomeScreen
+import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
 
 
@@ -60,13 +62,12 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
             }
         )
     }
-
     composable(route = HomeScreen.Search.route) {
         val bookViewModel: BookViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         SearchScreen(
             onScanClick = {
-                navHostController.navigate(HomeScreen.Barcode.route)
+                navHostController.navigate(HomeScreen.BookISBNScanner.route)
             },
             onBackClicked = {
                 navHostController.popBackStack()
@@ -86,18 +87,10 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         )
     }
 
-    composable(route = HomeScreen.Barcode.route) {
-        PreviewView(
-            onBarcodeFound = { isbn ->
-
-            }
-        )
-    }
-
     composable(
-        route = "${HomeScreen.BookDetails.route}/{book}",
+        route = "${HomeScreen.BookDetails.route}/{bookISBN}",
         arguments = listOf(
-            navArgument("book") {
+            navArgument("bookISBN") {
                 type = NavType.StringType
             })
     ) { backStackEntry ->
@@ -107,40 +100,59 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         val userID = userViewModel.userInfo.collectAsState().value
         val bookItemViewModel: BookItemViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
-        val book = backStackEntry.arguments?.getString("book")
+        val bookISBN = backStackEntry.arguments?.getString("bookISBN")
         val bookDetails = bookViewModel.bookDetails.collectAsState().value
         val bookID = bookItemViewModel.bookItemsResponse.collectAsState().value
         val borrowBookRequest = bookID.data?.firstOrNull()?.let { bookItem ->
             BookCheckoutRequest(userID.data?.userId, bookItem.id)
         }
+        val context = LocalContext.current
         LaunchedEffect(Unit) {
             scope.launch {
-                book?.let {
-                    bookViewModel.getBookByISBN(book)
-                    bookItemViewModel.getBookItemsByBookIsbn(book)
+                bookISBN?.let {
+                    bookViewModel.getBookByISBN(bookISBN)
+                    bookItemViewModel.getBookItemsByBookIsbn(bookISBN)
                 }
             }
         }
-        bookDetails?.data?.let { bookItem ->
-            BookDetails(
-                book = bookItem,
-                onBackClicked = {
-                    navHostController.popBackStack()
-                },
-                onBorrowClick = {
-                    scope.launch {
-                        borrowBookRequest?.let {
-                            bookCheckoutViewModel.borrowBookItem(it)
+        if (!bookID.data.isNullOrEmpty()) {
+            bookDetails?.data?.let { bookItem ->
+                BookDetails(
+                    book = bookItem,
+                    onBackClicked = {
+                        navHostController.popBackStack()
+                    },
+                    onBorrowClick = {
+                        scope.launch {
+                            borrowBookRequest?.let {
+                                bookCheckoutViewModel.borrowBookItem(it)
+                            }
                         }
-                    }
-                })
+                    })
+
+            }
+        } else {
+            LaunchedEffect(Unit) {
+                context.showToast("We don't have this book in stock!")
+                navHostController.popBackStack(HomeScreen.Search.route, false)
+            }
         }
+    }
+    composable(HomeScreen.BookISBNScanner.route) {
+        BookISBNScanner(
+            onBarcodeScannerClosed = {
+                navHostController.popBackStack(HomeScreen.Search.route, false)
+            },
+            onSuccessfulScan = { bookISBN ->
+                navHostController.navigate("${HomeScreen.BookDetails.route}/$bookISBN")
+            }
+        )
     }
 }
 
 
 sealed class HomeScreen(val route: String) {
     object Search : HomeScreen("SEARCH")
-    object BookDetails : HomeScreen("DETAILS/{book}")
-    object Barcode : HomeScreen("BARCODE")
+    object BookDetails : HomeScreen("HOMEDETAILS/{bookISBN}")
+    object BookISBNScanner : HomeScreen("HOMESCANNER")
 }

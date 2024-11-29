@@ -92,8 +92,6 @@ fun TopBarHome(
                 modifier = Modifier.size(32.dp)
             )
         }
-
-
     }
 }
 

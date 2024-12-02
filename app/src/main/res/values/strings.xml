@@ -67,6 +67,7 @@
     <string name="rating">3.8</string>
     <string name="user_role">User role: </string>
     <string name="status">Status: </string>
+    <string name="book_not_available">You can\'t borrow this book! Please contact admin.</string>
     <string name="enter_old_password">Enter your old password</string>
     <string name="change_password_info">Please enter the required information to change your password.</string>
     <string name="available_books">Available Books</string>

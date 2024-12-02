@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.BookCheckoutRequest
 import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
@@ -115,27 +116,25 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
                 }
             }
         }
-        if (!bookID.data.isNullOrEmpty()) {
-            bookDetails?.data?.let { bookItem ->
-                BookDetails(
-                    book = bookItem,
-                    onBackClicked = {
-                        navHostController.popBackStack()
-                    },
-                    onBorrowClick = {
-                        scope.launch {
-                            borrowBookRequest?.let {
-                                bookCheckoutViewModel.borrowBookItem(it)
-                            }
+        LaunchedEffect(bookID) {
+            if (bookID.data.isNullOrEmpty()) {
+                context.showToast(context.getString(R.string.book_not_available))
+            }
+        }
+        bookDetails?.data?.let { bookItem ->
+            BookDetails(
+                book = bookItem,
+                onBackClicked = {
+                    navHostController.popBackStack()
+                },
+                onBorrowClick = {
+                    scope.launch {
+                        borrowBookRequest?.let {
+                            bookCheckoutViewModel.borrowBookItem(it)
                         }
-                    })
-
-            }
-        } else {
-            LaunchedEffect(Unit) {
-                context.showToast("We don't have this book in stock!")
-                navHostController.popBackStack(HomeScreen.Search.route, false)
-            }
+                    }
+                }
+            )
         }
     }
     composable(HomeScreen.BookISBNScanner.route) {

@@ -164,7 +164,7 @@ fun BookCheckoutsScreen(
 
                     is Resource.Error -> {
                         books.message?.let { error ->
-
+                            println(error)
                         }
                     }
 

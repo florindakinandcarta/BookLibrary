@@ -23,7 +23,6 @@ fun RootNavigationGraph(navHostController: NavHostController, dataStore: DataSto
     val excludedRoutes = listOf(
         HomeScreen.BookISBNScanner.route,
         RequestedScreen.BookISBNScanner.route,
-        BorrowedScreen.BookISBNScanner.route
     )
     Scaffold(bottomBar = {
         if (!jwtToken.isNullOrEmpty() && currentRoute !in excludedRoutes) {

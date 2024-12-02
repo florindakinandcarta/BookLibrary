@@ -152,47 +152,49 @@ fun SearchScreen(
                         style = TextStyle(color = Color.DarkGray)
                     )
                 } else {
-                    IconButton(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .size(32.dp),
-                        onClick = {
-                            when {
-                                cameraPermissionState.status.isGranted -> {
-                                    onScanClick()
-                                }
+                    if (placeholderText != "Search with title") {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .size(32.dp),
+                            onClick = {
+                                when {
+                                    cameraPermissionState.status.isGranted -> {
+                                        onScanClick()
+                                    }
 
-                                cameraPermissionState.status.shouldShowRationale -> {
-                                    scope.launch {
-                                        val result = snackbarHostState.showSnackbar(
-                                            message = context.resources.getString(R.string.camera_is_needed),
-                                            actionLabel = context.resources.getString(R.string.go_to_settings),
-                                        )
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            val intent = Intent(
-                                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                                Uri.fromParts(
-                                                    "package",
-                                                    context.packageName,
-                                                    null
-                                                )
+                                    cameraPermissionState.status.shouldShowRationale -> {
+                                        scope.launch {
+                                            val result = snackbarHostState.showSnackbar(
+                                                message = context.resources.getString(R.string.camera_is_needed),
+                                                actionLabel = context.resources.getString(R.string.go_to_settings),
                                             )
-                                            context.startActivity(intent)
+                                            if (result == SnackbarResult.ActionPerformed) {
+                                                val intent = Intent(
+                                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                                    Uri.fromParts(
+                                                        "package",
+                                                        context.packageName,
+                                                        null
+                                                    )
+                                                )
+                                                context.startActivity(intent)
+                                            }
                                         }
                                     }
-                                }
 
-                                else -> {
-                                    requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                    else -> {
+                                        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                    }
                                 }
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.QrCode,
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.QrCode,
-                            contentDescription = null,
-                            modifier = Modifier.size(32.dp)
-                        )
                     }
                 }
             },

@@ -15,7 +15,6 @@ import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.borrowedHistory.BookCheckoutsScreen
-import com.example.booklibrary.ui.barcode.BookISBNScanner
 import com.example.booklibrary.ui.generalScreens.GeneralBookDetails
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.returnDialog.ReturnDialog
@@ -140,7 +139,7 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
         val scope = rememberCoroutineScope()
         SearchScreen(
             onScanClick = {
-                navHostController.navigate(BorrowedScreen.BookISBNScanner.route)
+
             },
             onBackClicked = {
                 navHostController.popBackStack()
@@ -148,7 +147,7 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
             onClickedBook = { bookISBN ->
                 navHostController.navigate("${BorrowedScreen.DetailsScreen.route}/$bookISBN")
             },
-            placeholderText = "Search with title or scan",
+            placeholderText = "Search with title",
             onSearchClick = { bookTitle ->
                 val correctedBookTitle = bookTitle.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase() else it.toString()
@@ -159,16 +158,6 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
             }
         )
     }
-    composable(route = BorrowedScreen.BookISBNScanner.route) {
-        BookISBNScanner(
-            onBarcodeScannerClosed = {
-                navHostController.popBackStack(BorrowedScreen.SearchBorrowed.route, false)
-            },
-            onSuccessfulScan = { bookISBN ->
-                navHostController.navigate("${BorrowedScreen.DetailsScreen.route}/$bookISBN")
-            }
-        )
-    }
 }
 
 sealed class BorrowedScreen(val route: String) {
@@ -176,6 +165,5 @@ sealed class BorrowedScreen(val route: String) {
     object DetailsScreen : BorrowedScreen("DETAILS/{bookISBN}")
     object ReturnDialog : BorrowedScreen("RETURN/{message}")
     object SearchBorrowed : BorrowedScreen("SEARCH_BORROWED")
-    object BookISBNScanner : BorrowedScreen("BORROWEDSCANNER")
 
 }

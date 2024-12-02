@@ -17,6 +17,7 @@
     <string name="enter_email_forgot">Enter your email and we\'ll send an email to reset your password</string>
     <string name="send_email">Send Email</string>
     <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
     <string name="sign_up">Sign Up</string>
     <string name="hey_florinda">Hey, Florinda!</string>
     <string name="florinda_hasani">Florinda Hasani</string>
@@ -59,6 +60,7 @@
     <string name="change_status">Change status</string>
     <string name="books_by">Books by </string>
     <string name="all_users">All Users</string>
+    <string name="change_theme">Change theme</string>
     <string name="hello_there">Hello there, </string>
     <string name="most_popular">Most Popular Books</string>
     <string name="top_authors">Top Authors</string>

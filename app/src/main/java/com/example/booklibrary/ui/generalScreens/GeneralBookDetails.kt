@@ -48,7 +48,7 @@ fun GeneralBookDetails(
             )
         }
     }) { paddingValues ->
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(bottom = 80.dp)) {
+        LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 BookDetailsSection(book)
             }

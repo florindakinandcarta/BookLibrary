@@ -12,12 +12,13 @@ import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.userProfile.AllUsersScreen
 import com.example.booklibrary.ui.userProfile.ChangePasswordScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
+import com.example.booklibrary.ui.userProfile.Settings
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
-    composable(ProfileScreen.Profile.route) {
+    composable(BottomTab.Profile.route) {
         val userViewModel: UserViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
@@ -48,7 +49,7 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
         }
         ProfileScreen(
             onChangePasswordClicked = {
-                navHostController.navigate(ProfileScreen.Settings.route)
+                navHostController.navigate(ProfileScreen.ChangePassword.route)
             },
             onAllUsersClicked = {
                 navHostController.navigate(ProfileScreen.AllUsers.route)
@@ -60,13 +61,24 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
                 scope.launch {
                     userViewModel.updateUserData(userData)
                 }
+            },
+            onSettingsClicked = {
+                navHostController.navigate(ProfileScreen.Settings.route)
             }
         )
     }
     composable(ProfileScreen.ChangePicture.route) {
         //the screen where we open the camera
     }
-    composable(ProfileScreen.Settings.route) {
+
+    composable(ProfileScreen.Settings.route){
+        Settings(
+            onBackClicked = {
+                navHostController.popBackStack()
+            }
+        )
+    }
+    composable(ProfileScreen.ChangePassword.route) {
         val userViewModel: UserViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         val response = userViewModel.response.collectAsState().value
@@ -150,8 +162,8 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
 
 
 sealed class ProfileScreen(val route: String) {
-    object Profile : ProfileScreen("PROFILE")
     object ChangePicture : ProfileScreen("CAMERA")
     object Settings : ProfileScreen("SETTINGS")
+    object ChangePassword: ProfileScreen("CHANGEPASSWORD")
     object AllUsers : ProfileScreen("ALLUSERS")
 }

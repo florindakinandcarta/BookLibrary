@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
-    composable(BorrowedScreen.Borrowed.route) {
+    composable(BottomTab.Borrowed.route) {
         val bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         BookCheckoutsScreen(
@@ -129,7 +129,7 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
         val message = backStackEntry.arguments?.getString("message")
         ReturnDialog(
             onDismissRequest = {
-                navHostController.navigate(BorrowedScreen.Borrowed.route)
+                navHostController.navigate(BottomTab.Borrowed.route)
             },
             message = message.toString()
         )
@@ -161,7 +161,6 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
 }
 
 sealed class BorrowedScreen(val route: String) {
-    object Borrowed : BorrowedScreen("BORROWED")
     object DetailsScreen : BorrowedScreen("DETAILS/{bookISBN}")
     object ReturnDialog : BorrowedScreen("RETURN/{message}")
     object SearchBorrowed : BorrowedScreen("SEARCH_BORROWED")

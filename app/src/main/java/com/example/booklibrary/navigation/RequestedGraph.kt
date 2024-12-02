@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("NewApi")
 fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
-    composable(RequestedScreen.Requested.route) {
+    composable(BottomTab.Requested.route) {
         val requestedBookViewModel: RequestedBookViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         LaunchedEffect(Unit) {
@@ -110,7 +110,7 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
         }
         BookRequestedSuccessDialog(
             onDismissRequest = {
-                navHostController.navigate(RequestedScreen.Requested.route)
+                navHostController.navigate(BottomTab.Requested.route)
             }
         )
     }
@@ -142,7 +142,6 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
 }
 
 sealed class RequestedScreen(val route: String) {
-    object Requested : RequestedScreen("REQUESTED")
     object RequestedDetails : RequestedScreen("REQUESTEDDETAILS/{bookISBN}")
     object AddNewBook : RequestedScreen("ADDNEWBOOK")
     object SuccessDialog : RequestedScreen("SUCCESS/{bookISBN}")

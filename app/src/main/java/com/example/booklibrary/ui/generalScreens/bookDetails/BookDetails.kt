@@ -68,7 +68,7 @@ fun BookDetails(
             )
         }
     }) { paddingValues ->
-        LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding(), bottom = 80.dp)) {
+        LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
             item {
                 BookDetailsSection(book)
             }
@@ -89,7 +89,6 @@ fun BookDetails(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
-                            .padding(bottom = 40.dp)
                             .height(60.dp),
                         shape = RoundedCornerShape(32.dp)
                     ) {

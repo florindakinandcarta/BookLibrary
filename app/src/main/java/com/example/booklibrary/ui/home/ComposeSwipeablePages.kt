@@ -46,15 +46,16 @@ fun ComposeSwipeablePages(
     bookViewModel: BookViewModel = hiltViewModel()
 ) {
     val bookCheckouts = bookCheckoutViewModel.bookCheckouts.collectAsState().value
+    val limitedBookCheckouts = bookCheckouts.data?.take(3)
     val bookDetails = bookViewModel.bookDetails.collectAsState().value
     val pagerState = rememberPagerState {
-        bookCheckouts.data?.size ?: 0
+        limitedBookCheckouts?.size ?: 0
     }
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        bookCheckouts.data?.let { books ->
+        limitedBookCheckouts?.let { books ->
             HorizontalPager(
                 state = pagerState,
                 pageSize = PageSize.Fill,
@@ -114,7 +115,7 @@ fun ComposeSwipeablePages(
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            bookCheckouts.data?.forEachIndexed { index, _ ->
+            limitedBookCheckouts?.forEachIndexed { index, _ ->
                 val color =
                     if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
                 Box(

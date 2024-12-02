@@ -51,7 +51,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.book.viewModels.BookViewModel
-import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.ui.home.SearchViewModel
 import com.example.booklibrary.util.Resource
@@ -68,6 +67,7 @@ fun SearchScreen(
     onBackClicked: () -> Unit,
     onSearchClick: (String) -> Unit,
     onClickedBook: (String) -> Unit,
+    placeholderText: String,
     bookViewModel: BookViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = viewModel()
 ) {
@@ -118,7 +118,7 @@ fun SearchScreen(
             onSearch = {
                 searchViewModel.onSearchTextChange(it)
                 keyboardController?.hide()
-                    onSearchClick(searchText)
+                onSearchClick(searchText)
             },
             leadingIcon = {
                 IconButton(
@@ -152,53 +152,55 @@ fun SearchScreen(
                         style = TextStyle(color = Color.DarkGray)
                     )
                 } else {
-                    IconButton(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .size(32.dp),
-                        onClick = {
-                            when {
-                                cameraPermissionState.status.isGranted -> {
-                                    onScanClick()
-                                }
+                    if (placeholderText != "Search with title") {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .size(32.dp),
+                            onClick = {
+                                when {
+                                    cameraPermissionState.status.isGranted -> {
+                                        onScanClick()
+                                    }
 
-                                cameraPermissionState.status.shouldShowRationale -> {
-                                    scope.launch {
-                                        val result = snackbarHostState.showSnackbar(
-                                            message = context.resources.getString(R.string.camera_is_needed),
-                                            actionLabel = context.resources.getString(R.string.go_to_settings),
-                                        )
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            val intent = Intent(
-                                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                                Uri.fromParts(
-                                                    "package",
-                                                    context.packageName,
-                                                    null
-                                                )
+                                    cameraPermissionState.status.shouldShowRationale -> {
+                                        scope.launch {
+                                            val result = snackbarHostState.showSnackbar(
+                                                message = context.resources.getString(R.string.camera_is_needed),
+                                                actionLabel = context.resources.getString(R.string.go_to_settings),
                                             )
-                                            context.startActivity(intent)
+                                            if (result == SnackbarResult.ActionPerformed) {
+                                                val intent = Intent(
+                                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                                    Uri.fromParts(
+                                                        "package",
+                                                        context.packageName,
+                                                        null
+                                                    )
+                                                )
+                                                context.startActivity(intent)
+                                            }
                                         }
                                     }
-                                }
 
-                                else -> {
-                                    requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                    else -> {
+                                        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                    }
                                 }
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.QrCode,
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.QrCode,
-                            contentDescription = null,
-                            modifier = Modifier.size(32.dp)
-                        )
                     }
                 }
             },
             placeholder = {
                 Text(
-                    stringResource(id = R.string.search),
+                    text = placeholderText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.Gray
@@ -263,15 +265,6 @@ fun SearchScreen(
                     }
                 }
             }
-//            if (listOfBooks is Resource.Success) {
-//                LazyColumn {
-//                    listOfBooks.data?.let { books ->
-//                        items(books) { book ->
-//                            ItemBook(book = book, onClickedBook = onClickedBook)
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

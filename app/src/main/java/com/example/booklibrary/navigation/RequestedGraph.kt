@@ -16,6 +16,7 @@ import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
 import com.example.booklibrary.ui.BookRequestedSuccessDialog
+import com.example.booklibrary.ui.barcode.BookISBNScanner
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.requested.RequestedBookDetails
 import com.example.booklibrary.ui.requested.RequestedScreen
@@ -65,6 +66,7 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
         )
     ) { backStackEntry ->
         val book = backStackEntry.arguments?.getString("bookISBN")
+        println("isbn: $book")
         val bookViewModel: BookViewModel = hiltViewModel()
         val bookItemViewModel: BookItemViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
@@ -114,12 +116,25 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
     }
     composable(RequestedScreen.AddNewBook.route) {
         SearchScreen(
-            onScanClick = {},
+            onScanClick = {
+                navHostController.navigate(RequestedScreen.BookISBNScanner.route)
+            },
             onBackClicked = {
                 navHostController.popBackStack()
             },
+            placeholderText = "Insert ISBN or scan",
             onClickedBook = {},
             onSearchClick = { bookISBN ->
+                navHostController.navigate("${RequestedScreen.SuccessDialog.route}/$bookISBN")
+            }
+        )
+    }
+    composable(route = RequestedScreen.BookISBNScanner.route) {
+        BookISBNScanner(
+            onBarcodeScannerClosed = {
+                navHostController.popBackStack(RequestedScreen.AddNewBook.route, false)
+            },
+            onSuccessfulScan = { bookISBN ->
                 navHostController.navigate("${RequestedScreen.SuccessDialog.route}/$bookISBN")
             }
         )
@@ -128,7 +143,8 @@ fun NavGraphBuilder.requestedGraph(navHostController: NavHostController) {
 
 sealed class RequestedScreen(val route: String) {
     object Requested : RequestedScreen("REQUESTED")
-    object RequestedDetails : RequestedScreen("DETAILS/{bookISBN}")
+    object RequestedDetails : RequestedScreen("REQUESTEDDETAILS/{bookISBN}")
     object AddNewBook : RequestedScreen("ADDNEWBOOK")
     object SuccessDialog : RequestedScreen("SUCCESS/{bookISBN}")
+    object BookISBNScanner : RequestedScreen("REQUESTEDSCANNER")
 }

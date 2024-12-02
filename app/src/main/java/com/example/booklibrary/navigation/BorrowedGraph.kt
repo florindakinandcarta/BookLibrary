@@ -3,6 +3,7 @@ package com.example.booklibrary.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -14,10 +15,11 @@ import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
 import com.example.booklibrary.data.book.viewModels.BookItemViewModel
 import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.borrowedHistory.BookCheckoutsScreen
-import com.example.booklibrary.ui.borrowedHistory.BorrowedSearchScreen
 import com.example.booklibrary.ui.generalScreens.GeneralBookDetails
+import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.returnDialog.ReturnDialog
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.util.showToast
 import kotlinx.coroutines.launch
 
 
@@ -31,9 +33,6 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
             },
             onSearchClick = {
                 navHostController.navigate(BorrowedScreen.SearchBorrowed.route)
-            },
-            onReturnClick = {
-
             },
             onGetByStatusClicked = { returnStatus ->
                 scope.launch {
@@ -66,6 +65,7 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
         val bookItems = bookItemViewModel.bookItemsResponse.collectAsState().value
         val bookCheckoutResponse =
             bookCheckoutViewModel.bookReturnResponse.collectAsState().value
+        val context = LocalContext.current
 
         LaunchedEffect(bookCheckoutResponse) {
             when (bookCheckoutResponse) {
@@ -93,21 +93,29 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
                 }
             }
         }
-        bookDetails?.data?.let { bookItem ->
-            GeneralBookDetails(
-                book = bookItem,
-                onBackClicked = {
-                    navHostController.popBackStack()
-                },
-                onReturnClick = {
-                    scope.launch {
-                        bookItems.data?.forEach { book ->
-                            val bookCheckoutRequest = BookReturnRequest(book.id.toString())
-                            bookCheckoutViewModel.returnBookItem(bookCheckoutRequest)
+
+        if (!bookItems.data.isNullOrEmpty()) {
+            bookDetails?.data?.let { bookItemDetails ->
+                GeneralBookDetails(
+                    book = bookItemDetails,
+                    onBackClicked = {
+                        navHostController.popBackStack()
+                    },
+                    onReturnClick = {
+                        scope.launch {
+                            bookItems.data?.forEach { book ->
+                                val bookCheckoutRequest = BookReturnRequest(book.id.toString())
+                                bookCheckoutViewModel.returnBookItem(bookCheckoutRequest)
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
+        } else {
+            LaunchedEffect(Unit) {
+                context.showToast("You have not borrowed this book!")
+                navHostController.popBackStack(BorrowedScreen.SearchBorrowed.route, false)
+            }
         }
     }
     composable(
@@ -129,13 +137,23 @@ fun NavGraphBuilder.borrowedGraph(navHostController: NavHostController) {
     composable(BorrowedScreen.SearchBorrowed.route) {
         val bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
-        BorrowedSearchScreen(
+        SearchScreen(
+            onScanClick = {
+
+            },
             onBackClicked = {
                 navHostController.popBackStack()
             },
-            onSearchClick = { query ->
+            onClickedBook = { bookISBN ->
+                navHostController.navigate("${BorrowedScreen.DetailsScreen.route}/$bookISBN")
+            },
+            placeholderText = "Search with title",
+            onSearchClick = { bookTitle ->
+                val correctedBookTitle = bookTitle.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
+                }
                 scope.launch {
-                    bookCheckoutViewModel.getAllBookCheckoutsForBookTitle(query)
+                    bookCheckoutViewModel.getAllBookCheckoutsForBookTitle(correctedBookTitle)
                 }
             }
         )
@@ -147,4 +165,5 @@ sealed class BorrowedScreen(val route: String) {
     object DetailsScreen : BorrowedScreen("DETAILS/{bookISBN}")
     object ReturnDialog : BorrowedScreen("RETURN/{message}")
     object SearchBorrowed : BorrowedScreen("SEARCH_BORROWED")
+
 }

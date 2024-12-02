@@ -71,6 +71,7 @@
     <string name="status">Status: </string>
     <string name="book_not_available">You can\'t borrow this book! Please contact admin.</string>
     <string name="enter_old_password">Enter your old password</string>
+    <string name="book_not_borrowed">You have not borrowed this book!</string>
     <string name="change_password_info">Please enter the required information to change your password.</string>
     <string name="available_books">Available Books</string>
     <string name="quote">“The person, be it gentleman or lady, who has not pleasure in a good novel, must be intolerably stupid.”</string>

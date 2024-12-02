@@ -86,6 +86,7 @@ fun ChangePasswordScreen(
                         modifier = Modifier.size(32.dp)
                     )
                 }
+                Spacer(Modifier.weight(1f))
                 Text(
                     text = stringResource(id = R.string.change_password),
                     modifier = Modifier.padding(start = 16.dp),

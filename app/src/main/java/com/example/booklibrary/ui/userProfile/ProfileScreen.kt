@@ -1,6 +1,5 @@
 package com.example.booklibrary.ui.userProfile
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +21,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.request.UserChangePasswordRequest
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.convertBase64ToBitmap
@@ -60,11 +59,11 @@ fun ProfileScreen(
     onAllUsersClicked: () -> Unit,
     onClickUpdateUserData: (UserUpdateDataRequest) -> Unit,
     onChangeProfilePhotoClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     userViewModel: UserViewModel = hiltViewModel()
 ) {
     val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
     val userInfo = userViewModel.userInfo.collectAsState().value
-    val scope = rememberCoroutineScope()
     var isEditMode by remember {
         mutableStateOf(false)
     }
@@ -80,6 +79,20 @@ fun ProfileScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            IconButton(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .size(24.dp),
+                onClick = {
+                    isEditMode = !isEditMode
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Spacer(Modifier.weight(1f))
             Text(
                 text = stringResource(id = R.string.profile),
@@ -94,11 +107,11 @@ fun ProfileScreen(
                     .padding(6.dp)
                     .size(24.dp),
                 onClick = {
-                    isEditMode = !isEditMode
+                    onSettingsClicked()
                 },
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Edit,
+                    imageVector = Icons.Filled.Settings,
                     contentDescription = null,
                     modifier = Modifier.size(32.dp)
                 )
@@ -297,27 +310,6 @@ fun ProfileScreen(
                         )
                     }
                 }
-            }
-            Spacer(Modifier.weight(1f))
-            Button(
-                onClick = {
-                    scope.launch {
-                        userViewModel.signOutUser()
-                    }
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .padding(bottom = 120.dp)
-                    .fillMaxWidth()
-                    .height(60.dp),
-                shape = RoundedCornerShape(32.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.log_out),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                    )
-                )
             }
         }
     }

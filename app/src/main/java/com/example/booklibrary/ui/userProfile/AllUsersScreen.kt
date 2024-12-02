@@ -1,8 +1,12 @@
 package com.example.booklibrary.ui.userProfile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,20 +21,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.showToast
 
 @Composable
 fun AllUsersScreen(
@@ -41,19 +44,36 @@ fun AllUsersScreen(
     val listOfUsers = userViewModel.users.collectAsState().value
     Scaffold(
         topBar = {
-            IconButton(
+            Row(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .size(32.dp),
-                onClick = {
-                    onBackClicked()
-                }
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
+                IconButton(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(32.dp),
+                    onClick = {
+                        onBackClicked()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = stringResource(id = R.string.all_users),
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 )
+                Spacer(Modifier.weight(1f))
             }
         }
     ) { paddingValues ->

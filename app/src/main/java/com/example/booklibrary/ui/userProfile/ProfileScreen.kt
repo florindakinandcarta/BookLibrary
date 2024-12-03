@@ -1,5 +1,11 @@
 package com.example.booklibrary.ui.userProfile
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -22,11 +27,13 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -51,14 +59,19 @@ import com.example.booklibrary.R
 import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.convertBase64ToBitmap
+import com.example.booklibrary.util.convertBitmapToString
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
     onChangePasswordClicked: () -> Unit,
     onAllUsersClicked: () -> Unit,
     onClickUpdateUserData: (UserUpdateDataRequest) -> Unit,
-    onChangeProfilePhotoClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
     userViewModel: UserViewModel = hiltViewModel()
 ) {
@@ -68,6 +81,53 @@ fun ProfileScreen(
         mutableStateOf(false)
     }
     var displayName by remember { mutableStateOf(userInfo.data?.fullName ?: "") }
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val takePictureLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            bitmap?.let {
+                val encodedPhoto = convertBitmapToString(it)
+                val updateUserData = UserUpdateDataRequest(image = encodedPhoto)
+                onClickUpdateUserData(updateUserData)
+            }
+        }
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            takePictureLauncher.launch()
+        } else {
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(
+                    message = context.resources.getString(R.string.camera_is_needed),
+                    actionLabel = context.resources.getString(R.string.go_to_settings),
+                    withDismissAction = true
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    val intent = Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null)
+                    )
+                    val packageManager = context.packageManager
+                    if (intent.resolveActivity(packageManager) != null) {
+                        context.startActivity(intent)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.resources.getString(R.string.something_went_wrong),
+                            )
+                        }
+                    }
+                } else {
+                    snackbarHostState.showSnackbar(
+                        message = context.resources.getString(R.string.cant_scan)
+                    )
+                }
+            }
+        }
+    }
     LaunchedEffect(userInfo) {
         displayName = userInfo.data?.fullName ?: ""
     }
@@ -117,7 +177,10 @@ fun ProfileScreen(
                 )
             }
         }
-    }) { paddingValues ->
+    },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        modifier = Modifier.padding(bottom = 80.dp)
+    ) { paddingValues ->
         Column(
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
@@ -147,14 +210,51 @@ fun ProfileScreen(
                             .size(60.dp)
                             .padding(end = 16.dp, top = 16.dp),
                         onClick = {
-                            onChangeProfilePhotoClicked()
+                            when {
+                                cameraPermissionState.status.isGranted -> {
+                                    takePictureLauncher.launch()
+                                }
+
+                                cameraPermissionState.status.shouldShowRationale -> {
+                                    scope.launch {
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = context.resources.getString(R.string.camera_is_needed),
+                                            actionLabel = context.resources.getString(R.string.go_to_settings),
+                                            withDismissAction = true
+                                        )
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            val intent = Intent(
+                                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                                Uri.fromParts("package", context.packageName, null)
+                                            )
+                                            val packageManager = context.packageManager
+                                            if (intent.resolveActivity(packageManager) != null) {
+                                                context.startActivity(intent)
+                                            } else {
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = context.resources.getString(R.string.something_went_wrong),
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            snackbarHostState.showSnackbar(
+                                                message = context.resources.getString(R.string.cant_scan)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                else -> {
+                                    requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                }
+                            }
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.CameraAlt,
                             contentDescription = null,
-                            modifier = Modifier.size(60.dp),
-                            tint = Color(0xFF6200EE)
+                            modifier = Modifier.size(60.dp)
                         )
                     }
                 }

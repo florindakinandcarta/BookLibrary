@@ -54,9 +54,6 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
             onAllUsersClicked = {
                 navHostController.navigate(ProfileScreen.AllUsers.route)
             },
-            onChangeProfilePhotoClicked = {
-                navHostController.navigate(ProfileScreen.ChangePicture.route)
-            },
             onClickUpdateUserData = { userData ->
                 scope.launch {
                     userViewModel.updateUserData(userData)

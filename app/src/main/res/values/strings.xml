@@ -104,6 +104,7 @@
     <string name="photo_capture_failed">Photo capture failed</string>
     <string name="camera_is_needed">The camera is needed for this step.</string>
     <string name="enter_new_password">Enter new password </string>
+    <string name="cant_scan">Can\'t open the scanner!</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="choose_office">Choose Office</string>
     <string name="choose_role">Choose Role</string>

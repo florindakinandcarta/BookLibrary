@@ -89,13 +89,27 @@ fun SearchScreen(
                 val result = snackbarHostState.showSnackbar(
                     message = context.resources.getString(R.string.camera_is_needed),
                     actionLabel = context.resources.getString(R.string.go_to_settings),
+                    withDismissAction = true
                 )
                 if (result == SnackbarResult.ActionPerformed) {
                     val intent = Intent(
                         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.fromParts("package", context.packageName, null)
                     )
-                    context.startActivity(intent)
+                    val packageManager = context.packageManager
+                    if (intent.resolveActivity(packageManager) != null) {
+                        context.startActivity(intent)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.resources.getString(R.string.something_went_wrong),
+                            )
+                        }
+                    }
+                } else {
+                    snackbarHostState.showSnackbar(
+                        message = context.resources.getString(R.string.cant_scan)
+                    )
                 }
             }
         }
@@ -167,17 +181,27 @@ fun SearchScreen(
                                         val result = snackbarHostState.showSnackbar(
                                             message = context.resources.getString(R.string.camera_is_needed),
                                             actionLabel = context.resources.getString(R.string.go_to_settings),
+                                            withDismissAction = true
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             val intent = Intent(
                                                 Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                                Uri.fromParts(
-                                                    "package",
-                                                    context.packageName,
-                                                    null
-                                                )
+                                                Uri.fromParts("package", context.packageName, null)
                                             )
-                                            context.startActivity(intent)
+                                            val packageManager = context.packageManager
+                                            if (intent.resolveActivity(packageManager) != null) {
+                                                context.startActivity(intent)
+                                            } else {
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = context.resources.getString(R.string.something_went_wrong),
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            snackbarHostState.showSnackbar(
+                                                message = context.resources.getString(R.string.cant_scan)
+                                            )
                                         }
                                     }
                                 }

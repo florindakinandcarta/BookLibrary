@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
@@ -102,13 +103,27 @@ fun ProfileScreen(
                 val result = snackbarHostState.showSnackbar(
                     message = context.resources.getString(R.string.camera_is_needed),
                     actionLabel = context.resources.getString(R.string.go_to_settings),
+                    withDismissAction = true
                 )
                 if (result == SnackbarResult.ActionPerformed) {
                     val intent = Intent(
-                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.fromParts("package", context.packageName, null)
                     )
-                    context.startActivity(intent)
+                    val packageManager = context.packageManager
+                    if (intent.resolveActivity(packageManager) != null) {
+                        context.startActivity(intent)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.resources.getString(R.string.something_went_wrong),
+                            )
+                        }
+                    }
+                } else {
+                    snackbarHostState.showSnackbar(
+                        message = context.resources.getString(R.string.cant_scan)
+                    )
                 }
             }
         }
@@ -162,7 +177,10 @@ fun ProfileScreen(
                 )
             }
         }
-    }) { paddingValues ->
+    },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        modifier = Modifier.padding(bottom = 80.dp)
+    ) { paddingValues ->
         Column(
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
@@ -202,17 +220,27 @@ fun ProfileScreen(
                                         val result = snackbarHostState.showSnackbar(
                                             message = context.resources.getString(R.string.camera_is_needed),
                                             actionLabel = context.resources.getString(R.string.go_to_settings),
+                                            withDismissAction = true
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             val intent = Intent(
                                                 Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                                Uri.fromParts(
-                                                    "package",
-                                                    context.packageName,
-                                                    null
-                                                )
+                                                Uri.fromParts("package", context.packageName, null)
                                             )
-                                            context.startActivity(intent)
+                                            val packageManager = context.packageManager
+                                            if (intent.resolveActivity(packageManager) != null) {
+                                                context.startActivity(intent)
+                                            } else {
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = context.resources.getString(R.string.something_went_wrong),
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            snackbarHostState.showSnackbar(
+                                                message = context.resources.getString(R.string.cant_scan)
+                                            )
                                         }
                                     }
                                 }

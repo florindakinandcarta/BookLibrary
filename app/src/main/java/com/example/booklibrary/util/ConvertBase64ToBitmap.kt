@@ -8,15 +8,24 @@ import java.io.ByteArrayOutputStream
 
 fun convertBase64ToBitmap(profilePicture: String?): Bitmap? {
     return profilePicture?.let {
-        val decodedBytes = Base64.decode(it, it.length)
-        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        try {
+            val decodedBytes = Base64.decode(it, Base64.NO_WRAP)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            null
+        }
     }
 }
 
-fun convertBitmapToString(pictureTaken: Bitmap): String {
-    val outputStream = ByteArrayOutputStream()
-    pictureTaken.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-    val byteArray = outputStream.toByteArray()
-    return Base64.encodeToString(byteArray, Base64.NO_WRAP)
-
+fun convertBitmapToString(pictureTaken: Bitmap): String? {
+    try {
+        val outputStream = ByteArrayOutputStream()
+        pictureTaken.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        val byteArray = outputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
 }

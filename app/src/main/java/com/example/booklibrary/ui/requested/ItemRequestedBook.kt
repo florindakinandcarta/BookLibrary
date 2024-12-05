@@ -11,17 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.ThumbUpOffAlt
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,7 +49,6 @@ import com.example.booklibrary.data.book.models.RequestedBook
 import com.example.booklibrary.data.book.models.displayName
 import com.example.booklibrary.data.book.models.request.BookChangeStatus
 import com.example.booklibrary.data.book.viewModels.UserViewModel
-import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -69,143 +67,146 @@ fun ItemRequestedBook(
         mutableStateOf("")
     }
     val isUserAdmin = userViewModel.isUserAdminFlow.collectAsState(initial = false)
-
-    Row(
-        modifier = Modifier
-            .padding(4.dp)
-            .wrapContentSize()
-            .clickable {
-                book.bookISBN?.let { isbn ->
-                    onClickedBook(isbn)
-                }
-            },
-        verticalAlignment = Alignment.CenterVertically
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp
+        ),
+        modifier = Modifier.padding(6.dp)
     ) {
-        book.let {
-            GlideImage(
-                model = book.image,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .padding(16.dp)
-                    .height(150.dp)
-                    .width(100.dp),
-                contentScale = ContentScale.Crop,
-                loading = placeholder(R.drawable.reading_time)
-            )
-            Column(
-                modifier = Modifier
-                    .padding(start = 8.dp, top = 8.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = book.bookStatus.toString(),
+        Row(
+            modifier = Modifier
+                .padding(4.dp)
+                .wrapContentSize()
+                .clickable {
+                    book.bookISBN?.let { isbn ->
+                        onClickedBook(isbn)
+                    }
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            book.let {
+                GlideImage(
+                    model = book.image,
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(start = 8.dp)
-                        .align(Alignment.Start),
-                    style = TextStyle(
-                        fontSize = 8.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    ),
+                        .clip(RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                        .height(150.dp)
+                        .width(100.dp),
+                    contentScale = ContentScale.Crop,
+                    loading = placeholder(R.drawable.reading_time)
                 )
-                Text(
-                    text = book.title.toString(),
+                Column(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.Start),
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                    ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(start = 8.dp, top = 8.dp)
+                        .weight(1f),
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = stringResource(id = R.string.number_of_likes),
+                        text = book.bookStatus.toString(),
                         modifier = Modifier
-                            .padding(start = 8.dp),
+                            .padding(start = 8.dp)
+                            .align(Alignment.Start),
                         style = TextStyle(
-                            fontSize = 10.sp,
+                            fontSize = 8.sp,
                         ),
                     )
                     Text(
-                        text = book.likeCounter.toString(),
+                        text = book.title.toString(),
                         modifier = Modifier
-                            .padding(start = 8.dp),
+                            .padding(8.dp)
+                            .align(Alignment.Start),
                         style = TextStyle(
-                            fontSize = 10.sp,
-                            color = MaterialTheme.colorScheme.primary
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.number_of_likes),
+                            modifier = Modifier
+                                .padding(start = 8.dp),
+                            style = TextStyle(
+                                fontSize = 10.sp,
+                            ),
+                        )
+                        Text(
+                            text = book.likeCounter.toString(),
+                            modifier = Modifier
+                                .padding(start = 8.dp),
+                            style = TextStyle(
+                                fontSize = 10.sp,
+                            ),
+                        )
+                        Spacer(Modifier.weight(1f))
+                    }
+                    Text(
+                        text = book.requestedDate.toString(),
+                        modifier = Modifier
+                            .padding(8.dp),
+                        style = TextStyle(
+                            fontSize = 12.sp,
                         ),
                     )
-                    Spacer(Modifier.weight(1f))
                 }
-                Text(
-                    text = book.requestedDate.toString(),
-                    modifier = Modifier
-                        .padding(8.dp),
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    ),
-                )
             }
-        }
-        if (isUserAdmin.value) {
-            Box(
-                modifier = Modifier
-                    .wrapContentSize(Alignment.TopEnd)
-            ) {
+            if (isUserAdmin.value) {
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.TopEnd)
+                ) {
+                    IconButton(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .size(24.dp),
+                        onClick = {
+                            expanded = !expanded
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = null,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                        BookStatus.entries.forEach { bookStatus ->
+                            DropdownMenuItem(
+                                text = { Text(text = bookStatus.displayName) },
+                                onClick = {
+                                    expanded = false
+                                    selectedStatusFilter = bookStatus.name
+                                    val bookChangeStatus =
+                                        BookChangeStatus(book.id, selectedStatusFilter)
+                                    onChangeStatusClicked(bookChangeStatus)
+                                }
+                            )
+                        }
+                    }
+                }
+            } else {
                 IconButton(
                     modifier = Modifier
                         .padding(6.dp)
                         .size(24.dp),
                     onClick = {
+                        isLiked = !isLiked
                         expanded = !expanded
+                        book.bookISBN?.let { isbn ->
+                            onLikeBook(isbn)
+                        }
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Edit,
+                        imageVector = if (isLiked) Icons.Filled.ThumbUp else Icons.Filled.ThumbUpOffAlt,
                         contentDescription = null,
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    BookStatus.entries.forEach { bookStatus ->
-                        DropdownMenuItem(
-                            text = { Text(text = bookStatus.displayName) },
-                            onClick = {
-                                expanded = false
-                                selectedStatusFilter = bookStatus.name
-                                val bookChangeStatus =
-                                    BookChangeStatus(book.id, selectedStatusFilter)
-                                onChangeStatusClicked(bookChangeStatus)
-                            }
-                        )
-                    }
-                }
-            }
-        } else {
-            IconButton(
-                modifier = Modifier
-                    .padding(6.dp)
-                    .size(24.dp),
-                onClick = {
-                    isLiked = !isLiked
-                    expanded = !expanded
-                    book.bookISBN?.let { isbn ->
-                        onLikeBook(isbn)
-                    }
-                },
-            ) {
-                Icon(
-                    imageVector = if (isLiked) Icons.Filled.ThumbUp else Icons.Filled.ThumbUpOffAlt,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
             }
         }
     }

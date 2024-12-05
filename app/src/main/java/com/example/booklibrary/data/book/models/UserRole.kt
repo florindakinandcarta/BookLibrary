@@ -11,6 +11,6 @@ enum class UserRole : Parcelable {
 
 val UserRole.displayName: String
     get() = when (this) {
-            UserRole.USER -> "User"
-            UserRole.ADMIN -> "Admin"
+        UserRole.USER -> "User"
+        UserRole.ADMIN -> "Admin"
     }

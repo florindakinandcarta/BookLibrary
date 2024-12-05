@@ -8,7 +8,7 @@ import io.scanbot.sdk.barcode_scanner.ScanbotBarcodeScannerSDKInitializer
 import javax.inject.Inject
 
 @HiltAndroidApp
-class BookLibraryApp:Application(), Configuration.Provider {
+class BookLibraryApp : Application(), Configuration.Provider {
     @Inject
     lateinit var hiltWorkerFactory: HiltWorkerFactory
 

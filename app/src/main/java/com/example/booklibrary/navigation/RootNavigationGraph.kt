@@ -37,7 +37,7 @@ fun RootNavigationGraph(navHostController: NavHostController, dataStore: DataSto
             navController = navHostController,
             route = Graph.ROOT,
             startDestination = if (jwtToken.isNullOrEmpty()) Graph.AUTHENTICATION else Graph.HOME,
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding(), bottom = paddingValues.calculateBottomPadding())
         ) {
             authGraph(navHostController = navHostController, dataStore = dataStore)
             navigation(route = Graph.HOME, startDestination = BottomTab.Home.route) {

@@ -18,12 +18,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
 import com.example.booklibrary.ui.RatingBar
-import com.example.booklibrary.ui.theme.BookLibraryTheme
 
 @Composable
 fun ItemUserReview() {
@@ -50,9 +48,11 @@ fun ItemUserReview() {
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.weight(1f))
-            Box(modifier = Modifier
-                .padding(top = 2.dp)
-                .height(30.dp)) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 2.dp)
+                    .height(30.dp)
+            ) {
                 RatingBar(rating = 3.8, onRatingChanged = {})
             }
         }

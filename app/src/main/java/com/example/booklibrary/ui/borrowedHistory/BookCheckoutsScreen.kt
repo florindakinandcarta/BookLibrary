@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,12 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -138,9 +138,8 @@ fun BookCheckoutsScreen(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
-                .padding(paddingValues)
-                .padding(bottom = 80.dp)
-                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding())
+                .fillMaxHeight()
         ) {
             if (isUserAdmin.value) {
                 item {
@@ -172,8 +171,6 @@ fun BookCheckoutsScreen(
                         item {
                             CircularProgressIndicator(
                                 modifier = Modifier.width(64.dp),
-                                color = MaterialTheme.colors.primary,
-                                trackColor = MaterialTheme.colors.secondary,
                             )
                         }
                     }
@@ -207,8 +204,6 @@ fun BookCheckoutsScreen(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.width(64.dp),
-                                    color = MaterialTheme.colors.primary,
-                                    trackColor = MaterialTheme.colors.secondary,
                                 )
                             }
                         }

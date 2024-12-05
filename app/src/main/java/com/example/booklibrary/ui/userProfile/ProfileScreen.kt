@@ -131,58 +131,59 @@ fun ProfileScreen(
     LaunchedEffect(userInfo) {
         displayName = userInfo.data?.fullName ?: ""
     }
-    Scaffold(topBar = {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(
+    Scaffold(
+        topBar = {
+            Row(
                 modifier = Modifier
-                    .padding(6.dp)
-                    .size(24.dp),
-                onClick = {
-                    isEditMode = !isEditMode
-                },
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
+                IconButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(24.dp),
+                    onClick = {
+                        isEditMode = !isEditMode
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = stringResource(id = R.string.profile),
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 )
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(24.dp),
+                    onClick = {
+                        onSettingsClicked()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
-            Spacer(Modifier.weight(1f))
-            Text(
-                text = stringResource(id = R.string.profile),
-                style = TextStyle(
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            )
-            Spacer(Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier
-                    .padding(6.dp)
-                    .size(24.dp),
-                onClick = {
-                    onSettingsClicked()
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-        }
-    },
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         modifier = Modifier.padding(bottom = 80.dp)
     ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+            modifier = Modifier.padding(paddingValues)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -333,12 +334,16 @@ fun ProfileScreen(
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.padding(
-                    start = 32.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = 16.dp
-                )
+                modifier = Modifier
+                    .padding(
+                        start = 32.dp,
+                        top = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    )
+                    .clickable {
+                        onChangePasswordClicked()
+                    }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Lock,
@@ -349,36 +354,30 @@ fun ProfileScreen(
                     stringResource(id = R.string.change_password),
                     modifier = Modifier
                         .padding(start = 24.dp)
-                        .align(Alignment.CenterVertically)
-                        .clickable {
-                            onChangePasswordClicked()
-                        },
+                        .align(Alignment.CenterVertically),
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold
                     )
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(
-                    modifier = Modifier.size(32.dp),
-                    onClick = {
-                        onChangePasswordClicked()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null
-                    )
-                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null
+                )
             }
             if (isUserAdmin.value) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.padding(
-                        start = 32.dp,
-                        top = 16.dp,
-                        end = 16.dp,
-                        bottom = 16.dp
-                    )
+                    modifier = Modifier
+                        .padding(
+                            start = 32.dp,
+                            top = 16.dp,
+                            end = 16.dp,
+                            bottom = 16.dp
+                        )
+                        .clickable {
+                            onAllUsersClicked()
+                        }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Groups,
@@ -389,26 +388,17 @@ fun ProfileScreen(
                         stringResource(id = R.string.all_users),
                         modifier = Modifier
                             .padding(start = 24.dp)
-                            .align(Alignment.CenterVertically)
-                            .clickable {
-                                onAllUsersClicked()
-                            },
+                            .align(Alignment.CenterVertically),
                         style = TextStyle(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Spacer(Modifier.weight(1f))
-                    IconButton(
-                        modifier = Modifier.size(32.dp),
-                        onClick = {
-                            onAllUsersClicked()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = null
+                    )
+
                 }
             }
         }

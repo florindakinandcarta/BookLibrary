@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.example.booklibrary.navigation.RootNavigationGraph
-import com.example.booklibrary.ui.theme.BookLibraryTheme
+import com.example.compose.BookLibraryTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         var keepSplashScreen = true
         super.onCreate(savedInstanceState)
-        splashScreen.setKeepOnScreenCondition{keepSplashScreen}
+        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
         lifecycleScope.launch {
             delay(1500)
             keepSplashScreen = false

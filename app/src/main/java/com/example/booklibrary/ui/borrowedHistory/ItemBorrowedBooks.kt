@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +27,12 @@ fun ItemBorrowedBooks(
     book: BookCheckoutResponse,
     onBorrowedBookClick: (String) -> Unit
 ) {
-
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp
+        ),
+        modifier = Modifier.padding(6.dp)
+    ) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -65,7 +71,6 @@ fun ItemBorrowedBooks(
                     .padding(start = 8.dp, top = 4.dp),
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
                 ),
             )
         }
@@ -85,7 +90,6 @@ fun ItemBorrowedBooks(
                     .padding(start = 8.dp, top = 4.dp),
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
                 ),
             )
         }
@@ -105,9 +109,9 @@ fun ItemBorrowedBooks(
                     .padding(start = 8.dp, top = 4.dp),
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
                 ),
             )
         }
     }
+        }
 }

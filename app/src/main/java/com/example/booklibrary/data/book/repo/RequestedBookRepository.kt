@@ -1,6 +1,5 @@
 package com.example.booklibrary.data.book.repo
 
-import androidx.compose.runtime.collectAsState
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.booklibrary.data.book.models.ExceptionResponse
@@ -155,7 +154,7 @@ class RequestedBookRepository @Inject constructor(
         status: String
     ): Resource<List<RequestedBook>> {
         val response = try {
-            requestedBookService.getRequestedBooksByBookStatus(token = token,status = status)
+            requestedBookService.getRequestedBooksByBookStatus(token = token, status = status)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

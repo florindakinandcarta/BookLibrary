@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -70,7 +69,8 @@ fun BorrowedSearchScreen(
         }
         SearchBar(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             query = searchText,
             onQueryChange = {
                 searchViewModel.onSearchTextChange(it)
@@ -108,7 +108,6 @@ fun BorrowedSearchScreen(
                         .clickable {
                             searchViewModel.onToggleSearch()
                         },
-                    style = TextStyle(color = Color.DarkGray)
                 )
             },
             placeholder = {
@@ -116,16 +115,8 @@ fun BorrowedSearchScreen(
                     text = placeholderText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
                 )
             },
-            colors = SearchBarDefaults.colors(
-                containerColor = Color.White,
-                dividerColor = Color.Black,
-                inputFieldColors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.Black
-                )
-            ),
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -153,8 +144,6 @@ fun BorrowedSearchScreen(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.width(64.dp),
-                                    color = MaterialTheme.colors.primary,
-                                    trackColor = MaterialTheme.colors.secondary,
                                 )
                             }
                         }

@@ -23,9 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,11 +33,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,16 +67,18 @@ fun LoginScreen(
     val userJWTToken = userViewModel.userJWTToken.collectAsState().value
     val context = LocalContext.current
     LaunchedEffect(userJWTToken) {
-       when(userJWTToken){
-           is Resource.Loading -> {
-           }
-           is Resource.Error -> {
-               context.showToast(userJWTToken.message.toString())
-           }
-           is Resource.Success -> {
+        when (userJWTToken) {
+            is Resource.Loading -> {
+            }
 
-           }
-       }
+            is Resource.Error -> {
+                context.showToast(userJWTToken.message.toString())
+            }
+
+            is Resource.Success -> {
+
+            }
+        }
     }
     Scaffold {
         it
@@ -137,17 +135,13 @@ fun LoginScreen(
                         } else {
                             stringResource(id = R.string.enter_email)
                         },
-                        style = TextStyle(
-                            color = if (isEmailValid) Color.Red else Color.Unspecified,
-                            fontSize = 17.sp
-                        )
                     )
                 },
+                isError = isEmailValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
             OutlinedTextField(
@@ -166,7 +160,6 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 visualTransformation = if (showPassword) {
                     VisualTransformation.None
                 } else {
@@ -188,8 +181,8 @@ fun LoginScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.forgot_password)),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -247,12 +240,6 @@ fun LoginScreen(
                     .height(60.dp),
                 shape = RoundedCornerShape(32.dp),
                 enabled = isError && isPasswordValid,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = Color.White,
-                    disabledContentColor = Color.White
-                )
             ) {
                 Text(
                     text = stringResource(id = R.string.login),

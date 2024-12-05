@@ -1,4 +1,4 @@
-package com.example.ui.theme
+package com.example.booklibrary.ui.theme
 
 import androidx.compose.material3.Typography
 

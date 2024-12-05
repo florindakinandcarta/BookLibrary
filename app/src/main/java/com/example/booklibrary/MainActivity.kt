@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.example.booklibrary.navigation.RootNavigationGraph
-import com.example.compose.BookLibraryTheme
+import com.example.booklibrary.ui.theme.BookLibraryTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

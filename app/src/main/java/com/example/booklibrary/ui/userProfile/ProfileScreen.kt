@@ -269,18 +269,12 @@ fun ProfileScreen(
                         displayName = it
                     },
                     label = {
-                        Text(
-                            stringResource(id = R.string.name),
-                            style = TextStyle(
-                                Color.Unspecified
-                            )
-                        )
+                        Text(stringResource(id = R.string.name))
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     singleLine = true,
-                    textStyle = TextStyle(color = Color.Black),
                     trailingIcon = {
                         IconButton(
                             onClick = {

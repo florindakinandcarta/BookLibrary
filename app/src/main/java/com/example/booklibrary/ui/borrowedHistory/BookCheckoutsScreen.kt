@@ -169,9 +169,15 @@ fun BookCheckoutsScreen(
 
                     is Resource.Loading -> {
                         item {
-                            CircularProgressIndicator(
-                                modifier = Modifier.width(64.dp),
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.width(64.dp),
+                                )
+                            }
                         }
                     }
                 }

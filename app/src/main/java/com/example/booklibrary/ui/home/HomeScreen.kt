@@ -2,6 +2,7 @@ package com.example.booklibrary.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -35,14 +35,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.data.book.models.Genres
 import com.example.booklibrary.data.book.models.Languages
 import com.example.booklibrary.data.book.viewModels.BookViewModel
-import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
 import kotlinx.coroutines.launch
@@ -96,8 +97,12 @@ fun HomeScreen(
                 }
                 stickyHeader {
                     Column(
-                        modifier = Modifier
-                            .background(Color.White)
+                        modifier =
+                        if (isSystemInDarkTheme()) {
+                            Modifier.background(androidx.compose.material3.MaterialTheme.colorScheme.surfaceDim)
+                        } else {
+                            Modifier.background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                        }
                     ) {
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -117,9 +122,6 @@ fun HomeScreen(
                                         label = {
                                             Text(
                                                 text = selectedLanguage,
-                                                style = TextStyle(
-                                                    color = Color.Black
-                                                )
                                             )
                                         },
                                         trailingIcon = {
@@ -133,15 +135,11 @@ fun HomeScreen(
                                         onDismissRequest = { expanded = false },
                                         modifier = Modifier
                                             .width(140.dp)
-                                            .background(Color.White)
                                     ) {
                                         Languages.entries.forEach { languages ->
                                             DropdownMenuItem(
                                                 text = {
-                                                    Text(
-                                                        languages.name,
-                                                        style = TextStyle(color = Color.Black)
-                                                    )
+                                                    Text(languages.name)
                                                 },
                                                 onClick = {
                                                     selectedLanguage = languages.name
@@ -190,8 +188,6 @@ fun HomeScreen(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.width(64.dp),
-                                    color = MaterialTheme.colors.primary,
-                                    trackColor = MaterialTheme.colors.secondary,
                                 )
                             }
                         }
@@ -199,7 +195,25 @@ fun HomeScreen(
 
                     is Resource.Error -> {
                         listOfBooks.data?.let { error ->
-                            //call the dialog pop up for error display it for 5s and dismiss it
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = error.toString(),
+                                        modifier = Modifier
+                                            .padding(8.dp),
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                        ),
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
+                            }
                         }
                     }
                 }

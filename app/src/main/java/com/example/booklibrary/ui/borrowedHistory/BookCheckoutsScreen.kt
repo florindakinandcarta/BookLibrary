@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -217,7 +218,25 @@ fun BookCheckoutsScreen(
 
                     is Resource.Error -> {
                         listOfBooks.message?.let { error ->
-                            //call the dialog pop up for error display it for 5s and dismiss it
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = error.toString(),
+                                        modifier = Modifier
+                                            .padding(8.dp),
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                        ),
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
+                            }
                         }
                     }
                 }

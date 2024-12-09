@@ -159,10 +159,14 @@ fun BorrowedSearchScreen(
                                 ) {
                                     Text(
                                         text = error.toString(),
+                                        modifier = Modifier
+                                            .padding(8.dp),
                                         style = TextStyle(
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Medium
-                                        )
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                        ),
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
                                 }
                             }

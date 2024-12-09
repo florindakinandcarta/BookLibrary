@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,7 +41,7 @@ fun BookDetails(
     val context = LocalContext.current
     val checkoutMessage = bookCheckoutViewModel.checkoutMessage.collectAsState().value
     LaunchedEffect(checkoutMessage) {
-        when(checkoutMessage){
+        when (checkoutMessage) {
             is Resource.Error -> {
                 context.showToast(message = checkoutMessage.message.toString())
             }
@@ -87,8 +88,8 @@ fun BookDetails(
                             onBorrowClick()
                         },
                         modifier = Modifier
-                            .fillMaxWidth()
                             .padding(16.dp)
+                            .width(300.dp)
                             .height(60.dp),
                         shape = RoundedCornerShape(32.dp)
                     ) {

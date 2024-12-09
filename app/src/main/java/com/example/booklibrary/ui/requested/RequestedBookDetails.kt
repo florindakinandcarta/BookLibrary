@@ -274,7 +274,6 @@ fun RequestedBookDetails(
                             text = if (expandedState) stringResource(id = R.string.read_less) else stringResource(
                                 id = R.string.read_more
                             ),
-                            color = MaterialTheme.colorScheme.secondary,
 
                             modifier = Modifier
                                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
@@ -301,7 +300,7 @@ fun RequestedBookDetails(
                             },
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth()
+                                .width(300.dp)
                                 .height(60.dp),
                             shape = RoundedCornerShape(32.dp)
                         ) {

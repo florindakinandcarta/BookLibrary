@@ -9,4 +9,4 @@ data class BookDisplay(
     val title: String? = null,
     val language: String? = null,
     val image: String? = null
-):Parcelable
+) : Parcelable

@@ -77,7 +77,6 @@ fun AboutBook(book: Book) {
                 text = if (expandedState) stringResource(id = R.string.read_less) else stringResource(
                     id = R.string.read_more
                 ),
-                color = MaterialTheme.colorScheme.secondary,
 
                 modifier = Modifier
                     .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)

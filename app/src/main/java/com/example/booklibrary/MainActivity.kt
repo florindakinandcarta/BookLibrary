@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         var keepSplashScreen = true
         super.onCreate(savedInstanceState)
-        splashScreen.setKeepOnScreenCondition{keepSplashScreen}
+        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
         lifecycleScope.launch {
             delay(1500)
             keepSplashScreen = false

@@ -194,7 +194,7 @@ class BookCheckoutRepository @Inject constructor(
 
     suspend fun returnBookItem(bookCheckoutRequest: BookReturnRequest): Resource<BookCheckoutResponse> {
         val response = try {
-            bookCheckoutService.returnBookItem(token,bookCheckoutRequest)
+            bookCheckoutService.returnBookItem(token, bookCheckoutRequest)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

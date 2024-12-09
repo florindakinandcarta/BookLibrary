@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterAlt
@@ -152,8 +152,8 @@ fun RequestedScreen(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(bottom = 80.dp)
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .fillMaxHeight()
             ) {
                 when (listOfBooks) {
                     is Resource.Success -> {
@@ -178,8 +178,6 @@ fun RequestedScreen(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.width(64.dp),
-                                    color = MaterialTheme.colors.primary,
-                                    trackColor = MaterialTheme.colors.secondary,
                                 )
                             }
                         }

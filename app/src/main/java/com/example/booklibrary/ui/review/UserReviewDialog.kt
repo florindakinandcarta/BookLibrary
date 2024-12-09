@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,7 +82,6 @@ fun StepOneDialog(onCancel: () -> Unit, onNext: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.cancel),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.primaryContainer,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier
@@ -100,7 +98,6 @@ fun StepOneDialog(onCancel: () -> Unit, onNext: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.next),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier
@@ -151,7 +148,6 @@ fun StepTwoDialog(onPrevious: () -> Unit, onSubmit: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.previous),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.primaryContainer,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier
@@ -166,7 +162,6 @@ fun StepTwoDialog(onPrevious: () -> Unit, onSubmit: () -> Unit) {
             Text(
                 text = stringResource(id = R.string.submit),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier

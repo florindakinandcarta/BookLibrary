@@ -68,7 +68,7 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
         //the screen where we open the camera
     }
 
-    composable(ProfileScreen.Settings.route){
+    composable(ProfileScreen.Settings.route) {
         Settings(
             onBackClicked = {
                 navHostController.popBackStack()
@@ -161,6 +161,6 @@ fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {
 sealed class ProfileScreen(val route: String) {
     object ChangePicture : ProfileScreen("CAMERA")
     object Settings : ProfileScreen("SETTINGS")
-    object ChangePassword: ProfileScreen("CHANGEPASSWORD")
+    object ChangePassword : ProfileScreen("CHANGEPASSWORD")
     object AllUsers : ProfileScreen("ALLUSERS")
 }

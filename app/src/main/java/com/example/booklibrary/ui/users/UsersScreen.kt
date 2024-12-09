@@ -27,10 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.User
 import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
-import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
 import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.util.Resource
-import java.util.UUID
 
 @Composable
 fun UsersScreen(

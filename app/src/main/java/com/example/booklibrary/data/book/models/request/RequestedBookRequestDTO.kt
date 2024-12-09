@@ -6,4 +6,4 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RequestedBookRequestDTO(
     val bookIsbn: String
-):Parcelable
+) : Parcelable

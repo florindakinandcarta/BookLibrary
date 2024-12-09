@@ -1,9 +1,5 @@
 package com.example.booklibrary.data.book.viewModels
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.booklibrary.data.book.models.Book
@@ -13,9 +9,7 @@ import com.example.booklibrary.data.book.models.request.RequestedBookRequestDTO
 import com.example.booklibrary.data.book.models.response.RequestedBookResponse
 import com.example.booklibrary.data.book.repo.RequestedBookRepository
 import com.example.booklibrary.util.Resource
-import com.example.booklibrary.util.getUserJWTToken
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -43,13 +37,13 @@ class RequestedBookViewModel @Inject constructor(
 
     suspend fun getAllRequestedBooks() {
         viewModelScope.launch {
-            when( val result = requestedBookRepository.getAllRequestedBooks()){
+            when (val result = requestedBookRepository.getAllRequestedBooks()) {
                 is Resource.Success -> {
                     _books.value = result
                     _isRefreshing.value = false
                 }
                 is Resource.Error -> {
-                   _books.value = result
+                    _books.value = result
                     _isRefreshing.value = false
                 }
                 is Resource.Loading -> {
@@ -69,7 +63,7 @@ class RequestedBookViewModel @Inject constructor(
     }
 
     suspend fun insertNewRequestedBook(book: RequestedBookRequestDTO) {
-        when( val result = requestedBookRepository.insertNewRequestedBook(book)){
+        when (val result = requestedBookRepository.insertNewRequestedBook(book)) {
             is Resource.Success -> {
                 _book.value = result
             }
@@ -78,7 +72,7 @@ class RequestedBookViewModel @Inject constructor(
             }
             is Resource.Loading -> {
                 _books.value = Resource.Loading()
-               _book.value = Resource.Loading()
+                _book.value = Resource.Loading()
             }
         }
     }
@@ -90,9 +84,9 @@ class RequestedBookViewModel @Inject constructor(
 
     suspend fun changeBookStatus(
         bookStatus: BookChangeStatus
-    ){
+    ) {
         viewModelScope.launch {
-            when(requestedBookRepository.changeBookStatus(bookStatus)){
+            when (requestedBookRepository.changeBookStatus(bookStatus)) {
                 is Resource.Success -> {
                     _message.value = Resource.Success(data = "Book status changed successfully")
                 }

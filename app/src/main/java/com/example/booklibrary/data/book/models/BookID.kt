@@ -6,4 +6,4 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class BookID(
     val isbn: String
-):Parcelable
+) : Parcelable

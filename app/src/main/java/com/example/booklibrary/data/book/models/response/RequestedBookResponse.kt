@@ -13,4 +13,4 @@ data class RequestedBookResponse(
     val bookStatus: String,
     val title: String,
     val image: String
-):Parcelable
+) : Parcelable

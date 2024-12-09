@@ -27,7 +27,7 @@ class BookItemRepository @Inject constructor(
     }
     suspend fun getBookItemsByBookIsbn(isbn: String): Resource<List<BookItem>> {
         val response = try {
-            bookItemService.getBookItemsByBookIsbn(token,isbn)
+            bookItemService.getBookItemsByBookIsbn(token, isbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -44,7 +44,7 @@ class BookItemRepository @Inject constructor(
 
     suspend fun createBookItem(bookISBN: BookID): Resource<BookItem> {
         val response = try {
-            bookItemService.createBookItem(token,bookISBN)
+            bookItemService.createBookItem(token, bookISBN)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

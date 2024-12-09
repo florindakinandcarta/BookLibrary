@@ -1,6 +1,5 @@
 package com.example.booklibrary.ui.login
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,24 +31,17 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,12 +53,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
 import com.example.booklibrary.data.SampleData
 import com.example.booklibrary.data.book.models.Offices
 import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
-import com.example.booklibrary.data.book.viewModels.OfficeViewModel
 import com.example.booklibrary.util.validateEmail
 
 
@@ -143,16 +133,12 @@ fun RegisterScreen(
                 label = {
                     Text(
                         stringResource(id = R.string.name),
-                        style = TextStyle(
-                            color = Color.Gray
-                        )
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
             ExposedDropdownMenuBox(
@@ -179,7 +165,6 @@ fun RegisterScreen(
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },
-                    colors = TextFieldDefaults.colors(focusedTextColor = Color.Black)
                 )
                 DropdownMenu(
                     expanded = expanded,
@@ -198,7 +183,6 @@ fun RegisterScreen(
                                 expanded = false
                             },
                             contentPadding = ItemContentPadding,
-                            colors = MenuDefaults.itemColors(textColor = Color.Black)
                         )
 
                     }
@@ -221,16 +205,13 @@ fun RegisterScreen(
                         } else {
                             stringResource(id = R.string.enter_email)
                         },
-                        style = TextStyle(
-                            color = if (isEmailValid) Color.Red else Color.Gray,
-                        )
                     )
                 },
+                isError = isEmailValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
             OutlinedTextField(
@@ -247,16 +228,12 @@ fun RegisterScreen(
                         } else {
                             stringResource(id = R.string.enter_password)
                         },
-                        style = TextStyle(
-                            color = Color.Gray
-                        )
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 visualTransformation = if (showPassword) {
                     VisualTransformation.None
                 } else {
@@ -288,16 +265,12 @@ fun RegisterScreen(
                 label = {
                     Text(
                         stringResource(id = R.string.confirm_password),
-                        style = TextStyle(
-                            color = Color.Gray
-                        )
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
                 visualTransformation = if (showPassword) {
                     VisualTransformation.None
                 } else {
@@ -365,17 +338,12 @@ fun RegisterScreen(
 
                 },
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+                    .width(300.dp)
                     .height(60.dp),
                 shape = RoundedCornerShape(32.dp),
                 enabled = isError,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = Color.White,
-                    disabledContentColor = Color.White
-                )
             ) {
                 Text(
                     text = stringResource(id = R.string.sign_up),

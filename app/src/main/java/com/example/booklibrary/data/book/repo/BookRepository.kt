@@ -43,7 +43,7 @@ class BookRepository @Inject constructor(
 
     suspend fun getBookByISBN(isbn: String): Resource<Book> {
         val response = try {
-            bookService.getBookByISBN(token,isbn)
+            bookService.getBookByISBN(token, isbn)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -60,7 +60,7 @@ class BookRepository @Inject constructor(
 
     suspend fun getBooksByTitle(title: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByTitle(token,title)
+            bookService.getBooksByTitle(token, title)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -113,7 +113,7 @@ class BookRepository @Inject constructor(
         language: String
     ): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByLanguage(token,language)
+            bookService.getBooksByLanguage(token, language)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),
@@ -130,7 +130,7 @@ class BookRepository @Inject constructor(
 
     suspend fun getBooksByGenre(genre: String): Resource<List<BookDisplay>> {
         val response = try {
-            bookService.getBooksByGenre(token,genre)
+            bookService.getBooksByGenre(token, genre)
         } catch (httpException: HttpException) {
             val errorResponse = Gson().fromJson(
                 httpException.response()?.errorBody()?.string(),

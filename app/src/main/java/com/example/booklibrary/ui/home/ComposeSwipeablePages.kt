@@ -117,7 +117,7 @@ fun ComposeSwipeablePages(
         ) {
             limitedBookCheckouts?.forEachIndexed { index, _ ->
                 val color =
-                    if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+                    if (pagerState.currentPage == index) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primaryContainer
                 Box(
                     modifier = Modifier
                         .size(8.dp)

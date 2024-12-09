@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.QrCode
@@ -25,12 +24,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -124,7 +120,8 @@ fun SearchScreen(
         }
         SearchBar(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             query = searchText,
             onQueryChange = {
                 searchViewModel.onSearchTextChange(it)
@@ -163,7 +160,6 @@ fun SearchScreen(
                             .clickable {
                                 searchViewModel.onToggleSearch()
                             },
-                        style = TextStyle(color = Color.DarkGray)
                     )
                 } else {
                     IconButton(
@@ -225,21 +221,12 @@ fun SearchScreen(
                     text = placeholderText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
                 )
             },
-            colors = SearchBarDefaults.colors(
-                containerColor = Color.White,
-                dividerColor = Color.Black,
-                inputFieldColors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.Black
-                )
-            ),
         ) {
             LazyColumn(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .padding(bottom = 60.dp)
             ) {
                 when (books) {
                     is Resource.Success -> {
@@ -258,9 +245,7 @@ fun SearchScreen(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.width(64.dp),
-                                    color = MaterialTheme.colors.primary,
-                                    trackColor = MaterialTheme.colors.secondary,
+                                    modifier = Modifier.width(64.dp)
                                 )
                             }
                         }

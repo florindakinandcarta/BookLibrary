@@ -103,6 +103,9 @@ fun NavGraphBuilder.authGraph(
         }
         composable(AuthScreen.Forgot.route) {
             ForgotPasswordScreen(
+                onBackClicked = {
+                    navHostController.popBackStack()
+                },
                 onSendEmailClick = {
 
                 }

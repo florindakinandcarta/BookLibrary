@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.ItemContentPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -44,7 +43,7 @@ fun UserRoleDialog(user: User, onSubmit: (String) -> Unit) {
     var userRole by remember {
         mutableStateOf(user.role)
     }
-    Dialog(onDismissRequest = {  }) {
+    Dialog(onDismissRequest = { }) {
         ElevatedCard(
             onClick = { },
             shape = RoundedCornerShape(12.dp),
@@ -108,7 +107,6 @@ fun UserRoleDialog(user: User, onSubmit: (String) -> Unit) {
             Text(
                 text = stringResource(id = R.string.submit),
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier

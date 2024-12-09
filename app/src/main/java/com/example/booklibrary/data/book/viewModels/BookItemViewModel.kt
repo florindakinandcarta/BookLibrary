@@ -45,7 +45,7 @@ class BookItemViewModel @Inject constructor(
         when (val result = bookItemRepository.createBookItem(bookISBN)) {
             is Resource.Success -> {
                 _bookItemResponse.value = result
-                _message.value = Resource.Success( "Book item created successfully")
+                _message.value = Resource.Success("Book item created successfully")
             }
 
             is Resource.Error -> {

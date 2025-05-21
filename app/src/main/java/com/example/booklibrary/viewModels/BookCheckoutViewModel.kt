@@ -106,6 +106,10 @@ class BookCheckoutViewModel @Inject constructor(
     suspend fun getAllBookCheckoutsForBookTitle(
         titleSearchTerm: String
     ) {
+        if (titleSearchTerm.isBlank()) {
+            _books.value = Resource.Error("Title cannot be empty. Please provide a valid book title!")
+            return
+        }
         when (val result =
             bookCheckoutRepository.getAllBookCheckoutsForBookTitle(titleSearchTerm)) {
             is Resource.Success -> {

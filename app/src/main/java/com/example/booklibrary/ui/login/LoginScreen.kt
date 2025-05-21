@@ -51,11 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.request.UserLoginRequest
-import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.data.models.request.UserLoginRequest
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
 import com.example.booklibrary.util.validateEmail
+import com.example.booklibrary.viewModels.UserViewModel
 
 @Composable
 fun LoginScreen(

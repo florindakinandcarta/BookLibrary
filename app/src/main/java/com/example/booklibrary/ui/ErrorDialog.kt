@@ -61,7 +61,7 @@ fun ErrorDialog(message: String, onDismissRequest: () -> Unit) {
                     )
                     Icon(
                         imageVector = Icons.Filled.Cancel,
-                        contentDescription = null,
+                        contentDescription = "Cancel",
                         modifier = Modifier
                             .padding(16.dp)
                             .size(48.dp)

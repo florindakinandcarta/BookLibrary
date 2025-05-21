@@ -10,16 +10,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.booklibrary.data.book.models.BookID
-import com.example.booklibrary.data.book.models.request.RequestedBookRequestDTO
-import com.example.booklibrary.data.book.viewModels.BookItemViewModel
-import com.example.booklibrary.data.book.viewModels.BookViewModel
-import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
+import com.example.booklibrary.data.models.BookID
+import com.example.booklibrary.data.models.request.RequestedBookRequestDTO
 import com.example.booklibrary.ui.BookRequestedSuccessDialog
 import com.example.booklibrary.ui.barcode.BookISBNScanner
 import com.example.booklibrary.ui.generalScreens.SearchScreen
 import com.example.booklibrary.ui.requested.RequestedBookDetails
 import com.example.booklibrary.ui.requested.RequestedScreen
+import com.example.booklibrary.viewModels.BookItemViewModel
+import com.example.booklibrary.viewModels.BookViewModel
+import com.example.booklibrary.viewModels.RequestedBookViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("NewApi")

@@ -30,10 +30,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.UserRole
-import com.example.booklibrary.data.book.models.displayName
-import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
-import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
+import com.example.booklibrary.data.models.UserRole
+import com.example.booklibrary.data.models.displayName
+import com.example.booklibrary.data.models.request.UserUpdateRoleRequest
+import com.example.booklibrary.data.models.response.UserWithRoleResponse
 
 @Composable
 fun ItemUser(

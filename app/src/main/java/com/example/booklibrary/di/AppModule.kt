@@ -1,12 +1,12 @@
 package com.example.booklibrary.di
 
-import com.example.booklibrary.data.book.services.BookCheckoutService
-import com.example.booklibrary.data.book.services.BookItemService
-import com.example.booklibrary.data.book.services.BookService
-import com.example.booklibrary.data.book.services.OfficeService
-import com.example.booklibrary.data.book.services.RequestedBookService
-import com.example.booklibrary.data.book.services.ReviewService
-import com.example.booklibrary.data.book.services.UserService
+import com.example.booklibrary.services.BookCheckoutService
+import com.example.booklibrary.services.BookItemService
+import com.example.booklibrary.services.BookService
+import com.example.booklibrary.services.OfficeService
+import com.example.booklibrary.services.RequestedBookService
+import com.example.booklibrary.services.ReviewService
+import com.example.booklibrary.services.UserService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -19,6 +19,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    const val BASE_URL = ""
     val gson = GsonBuilder()
         .setLenient()
         .create()

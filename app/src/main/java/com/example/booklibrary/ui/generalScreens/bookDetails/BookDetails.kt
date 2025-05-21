@@ -27,13 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
+import com.example.booklibrary.data.models.Book
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
+import com.example.booklibrary.viewModels.BookCheckoutViewModel
 
 @Composable
 fun BookDetails(
-    book: com.example.booklibrary.data.book.models.Book,
+    book: Book,
     onBackClicked: () -> Unit,
     onBorrowClick: () -> Unit,
     bookCheckoutViewModel: BookCheckoutViewModel = hiltViewModel()
@@ -45,9 +46,11 @@ fun BookDetails(
             is Resource.Error -> {
                 context.showToast(message = checkoutMessage.message.toString())
             }
+
             is Resource.Success -> {
 
             }
+
             is Resource.Loading -> {
 
             }

@@ -11,16 +11,16 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.request.BookReturnRequest
-import com.example.booklibrary.data.book.viewModels.BookCheckoutViewModel
-import com.example.booklibrary.data.book.viewModels.BookItemViewModel
-import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.models.request.BookReturnRequest
 import com.example.booklibrary.ui.borrowedHistory.BookCheckoutsScreen
 import com.example.booklibrary.ui.borrowedHistory.BorrowedSearchScreen
 import com.example.booklibrary.ui.generalScreens.GeneralBookDetails
 import com.example.booklibrary.ui.returnDialog.ReturnDialog
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
+import com.example.booklibrary.viewModels.BookCheckoutViewModel
+import com.example.booklibrary.viewModels.BookItemViewModel
+import com.example.booklibrary.viewModels.BookViewModel
 import kotlinx.coroutines.launch
 
 

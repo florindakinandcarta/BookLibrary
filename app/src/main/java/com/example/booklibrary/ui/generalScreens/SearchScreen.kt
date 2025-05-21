@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.viewModels.BookViewModel
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.ui.home.SearchViewModel
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.viewModels.BookViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState

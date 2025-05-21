@@ -46,7 +46,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,10 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.request.UserUpdateDataRequest
-import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.data.models.request.UserUpdateDataRequest
 import com.example.booklibrary.util.convertBase64ToBitmap
 import com.example.booklibrary.util.convertBitmapToString
+import com.example.booklibrary.viewModels.UserViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState

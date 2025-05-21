@@ -113,4 +113,12 @@ dependencies {
     implementation(libs.scanbot.barcode.scanner.sdk)
     implementation(libs.rtu.ui.v2.barcode)
 
+
+    //Testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.mockk:mockk:1.13.7") // or use Mockito
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("org.mockito:mockito-inline:4.1.0")
+
 }

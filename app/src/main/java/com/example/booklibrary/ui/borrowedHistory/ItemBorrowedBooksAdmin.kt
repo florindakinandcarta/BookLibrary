@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.booklibrary.data.book.models.response.BookCheckoutWithUserAndBookItemResponse
+import com.example.booklibrary.data.models.response.BookCheckoutWithUserAndBookItemResponse
 
 @Composable
 fun ItemBorrowedBooksAdmin(

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.Book
+import com.example.booklibrary.data.models.Book
 
 @Composable
 fun AboutBook(book: Book) {

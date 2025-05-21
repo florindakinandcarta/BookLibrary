@@ -8,13 +8,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.booklibrary.data.book.viewModels.UserViewModel
 import com.example.booklibrary.ui.userProfile.AllUsersScreen
 import com.example.booklibrary.ui.userProfile.ChangePasswordScreen
 import com.example.booklibrary.ui.userProfile.ProfileScreen
 import com.example.booklibrary.ui.userProfile.Settings
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
+import com.example.booklibrary.viewModels.UserViewModel
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.profileGraph(navHostController: NavHostController) {

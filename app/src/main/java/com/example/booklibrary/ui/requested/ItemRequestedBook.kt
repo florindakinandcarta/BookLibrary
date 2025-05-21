@@ -44,11 +44,11 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.BookStatus
-import com.example.booklibrary.data.book.models.RequestedBook
-import com.example.booklibrary.data.book.models.displayName
-import com.example.booklibrary.data.book.models.request.BookChangeStatus
-import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.data.models.BookStatus
+import com.example.booklibrary.data.models.RequestedBook
+import com.example.booklibrary.data.models.displayName
+import com.example.booklibrary.data.models.request.BookChangeStatus
+import com.example.booklibrary.viewModels.UserViewModel
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable

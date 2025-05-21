@@ -30,9 +30,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.request.UserUpdateRoleRequest
-import com.example.booklibrary.data.book.models.response.UserWithRoleResponse
-import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.data.models.request.UserUpdateRoleRequest
+import com.example.booklibrary.data.models.response.UserWithRoleResponse
+import com.example.booklibrary.viewModels.UserViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGlideComposeApi::class)

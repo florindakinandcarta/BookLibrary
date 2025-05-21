@@ -23,13 +23,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.booklibrary.R
+import com.example.booklibrary.data.models.Book
 import com.example.booklibrary.ui.generalScreens.bookDetails.AboutBook
 import com.example.booklibrary.ui.generalScreens.bookDetails.BookDetailsSection
 
 
 @Composable
 fun GeneralBookDetails(
-    book: com.example.booklibrary.data.book.models.Book,
+    book: Book,
     onBackClicked: () -> Unit,
     onReturnClick: (String) -> Unit,
 ) {

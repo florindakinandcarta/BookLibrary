@@ -44,11 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.BookStatus
-import com.example.booklibrary.data.book.models.displayName
-import com.example.booklibrary.data.book.models.request.BookChangeStatus
-import com.example.booklibrary.data.book.viewModels.RequestedBookViewModel
+import com.example.booklibrary.data.models.BookStatus
+import com.example.booklibrary.data.models.displayName
+import com.example.booklibrary.data.models.request.BookChangeStatus
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.viewModels.RequestedBookViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -56,7 +56,6 @@ import kotlinx.coroutines.launch
 fun RequestedScreen(
     onAddNewBook: () -> Unit,
     onClickedBook: (String) -> Unit,
-    viewModel: RequestedBookViewModel = hiltViewModel(),
     onLikeBook: (String) -> Unit,
     onGetBookByStatusClicked: (String) -> Unit,
     onChangeStatusClicked: (BookChangeStatus) -> Unit,
@@ -69,8 +68,8 @@ fun RequestedScreen(
         mutableStateOf("")
     }
     val scope = rememberCoroutineScope()
-    val listOfBooks = viewModel.books.collectAsState().value
-    val isRefreshing = viewModel.isRefreshing.collectAsState().value
+    val listOfBooks = requestedBookViewModel.books.collectAsState().value
+    val isRefreshing = requestedBookViewModel.isRefreshing.collectAsState().value
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
         onRefresh = {

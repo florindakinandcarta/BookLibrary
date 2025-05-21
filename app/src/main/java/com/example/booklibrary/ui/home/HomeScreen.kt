@@ -41,11 +41,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.booklibrary.data.book.models.Genres
-import com.example.booklibrary.data.book.models.Languages
-import com.example.booklibrary.data.book.viewModels.BookViewModel
+import com.example.booklibrary.data.models.Genres
+import com.example.booklibrary.data.models.Languages
 import com.example.booklibrary.ui.ItemBook
 import com.example.booklibrary.util.Resource
+import com.example.booklibrary.viewModels.BookViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(

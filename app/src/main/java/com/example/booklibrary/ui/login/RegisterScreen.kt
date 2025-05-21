@@ -55,8 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booklibrary.R
 import com.example.booklibrary.data.SampleData
-import com.example.booklibrary.data.book.models.Offices
-import com.example.booklibrary.data.book.models.request.UserRegistrationRequest
+import com.example.booklibrary.data.models.Offices
+import com.example.booklibrary.data.models.request.UserRegistrationRequest
 import com.example.booklibrary.util.validateEmail
 
 

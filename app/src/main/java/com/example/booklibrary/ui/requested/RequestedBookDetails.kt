@@ -46,12 +46,12 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.booklibrary.R
-import com.example.booklibrary.data.book.models.Book
-import com.example.booklibrary.data.book.viewModels.BookItemViewModel
-import com.example.booklibrary.data.book.viewModels.UserViewModel
+import com.example.booklibrary.data.models.Book
 import com.example.booklibrary.ui.RatingBar
 import com.example.booklibrary.util.Resource
 import com.example.booklibrary.util.showToast
+import com.example.booklibrary.viewModels.BookItemViewModel
+import com.example.booklibrary.viewModels.UserViewModel
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -70,9 +70,11 @@ fun RequestedBookDetails(
             is Resource.Success -> {
                 context.showToast(message.data.toString())
             }
+
             is Resource.Error -> {
                 context.showToast(message.message.toString())
             }
+
             is Resource.Loading -> {
 
             }

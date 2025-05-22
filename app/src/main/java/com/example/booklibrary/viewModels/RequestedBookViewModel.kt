@@ -22,7 +22,7 @@ class RequestedBookViewModel @Inject constructor(
 ) : ViewModel() {
     private val _books = MutableStateFlow<Resource<List<RequestedBook>>>(Resource.Loading())
     val books: StateFlow<Resource<List<RequestedBook>>> = _books
-    private val _isRefreshing = MutableStateFlow(true)
+    private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
     private val _book = MutableStateFlow<Resource<RequestedBookResponse>>(Resource.Loading())
@@ -39,18 +39,18 @@ class RequestedBookViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = requestedBookRepository.getAllRequestedBooks()) {
                 is Resource.Success -> {
-                    _books.value = result
                     _isRefreshing.value = false
+                    _books.value = result
                 }
 
                 is Resource.Error -> {
-                    _books.value = result
                     _isRefreshing.value = false
+                    _books.value = result
                 }
 
                 is Resource.Loading -> {
-                    _books.value = Resource.Loading()
                     _isRefreshing.value = true
+                    _books.value = Resource.Loading()
                 }
             }
         }

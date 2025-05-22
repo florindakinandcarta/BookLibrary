@@ -1,6 +1,8 @@
 package com.example.booklibrary.viewModels
 
 import app.cash.turbine.test
+import com.example.booklibrary.data.models.request.BookReturnRequest
+import com.example.booklibrary.data.models.response.BookCheckoutResponse
 import com.example.booklibrary.data.models.response.BookCheckoutWithUserAndBookItemResponse
 import com.example.booklibrary.repo.BookCheckoutRepository
 import com.example.booklibrary.util.Resource
@@ -8,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -18,6 +21,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class BookCheckoutViewModelTest {
 
     private lateinit var bookCheckoutRepository: BookCheckoutRepository
@@ -70,15 +74,45 @@ class BookCheckoutViewModelTest {
 
 
     @Test
-    fun getAllBookCheckoutsForBookTitle_withEmptyTitle_shouldNotCallRepository() = runTest {
+    fun getAllBookCheckoutsForBookTitle_withEmptyTitle_shouldReturnError() = runTest {
         val testTitle = ""
         val errorMessage = "Title cannot be empty. Please provide a valid book title!"
         bookCheckoutViewModel.getAllBookCheckoutsForBookTitle(testTitle)
-        coVerify(exactly = 0) { bookCheckoutRepository.getAllBookCheckoutsForBookTitle(testTitle) }
+        coEvery { bookCheckoutRepository.getAllBookCheckoutsForBookTitle(testTitle) }
         assertTrue(bookCheckoutViewModel.books.value is Resource.Error)
         assertEquals(
             errorMessage,
             (bookCheckoutViewModel.books.value as Resource.Error).message
         )
+    }
+
+    @Test
+    fun returnBookItem_shouldReturn_Success() = runTest {
+        val bookRequestItemTest = BookReturnRequest(bookItemId = "54312345123")
+        val bookItemResponse = BookCheckoutResponse(
+            bookTitle = "The Catcher in the Rye",
+            bookISBN = "987654321",
+            dateBorrowed = "12-04-2024",
+            dateReturned = "22-04-2024",
+            scheduledReturnDate = "23-04-2024"
+        )
+        coEvery { bookCheckoutRepository.returnBookItem(bookRequestItemTest) } returns Resource.Success(
+            bookItemResponse
+        )
+        bookCheckoutViewModel.returnBookItem(bookRequestItemTest)
+        assertTrue(bookCheckoutViewModel.bookReturnResponse.value is Resource.Success)
+        assertEquals(
+            bookItemResponse,
+            (bookCheckoutViewModel.bookReturnResponse.value as Resource.Success).data
+        )
+    }
+
+    @Test
+    fun returnBookItem_shouldReturn_Error() = runTest {
+        val bookRequestItemTest = BookReturnRequest(bookItemId = "54312345123")
+        val errorMessage = "Something went wrong! Book not returned."
+        coEvery { bookCheckoutRepository.returnBookItem(bookRequestItemTest) } returns Resource.Error(message = errorMessage)
+        bookCheckoutViewModel.returnBookItem(bookRequestItemTest)
+        assertTrue(bookCheckoutViewModel.bookReturnResponse.value is Resource.Error)
     }
 }

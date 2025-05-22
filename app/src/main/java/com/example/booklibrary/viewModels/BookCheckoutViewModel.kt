@@ -107,24 +107,25 @@ class BookCheckoutViewModel @Inject constructor(
         titleSearchTerm: String
     ) {
         if (titleSearchTerm.isBlank()) {
-            _books.value = Resource.Error("Title cannot be empty. Please provide a valid book title!")
-            return
-        }
-        when (val result =
-            bookCheckoutRepository.getAllBookCheckoutsForBookTitle(titleSearchTerm)) {
-            is Resource.Success -> {
-                _books.value = result
-                println("result $result")
-            }
+            _books.value =
+                Resource.Error("Title cannot be empty. Please provide a valid book title!")
+        } else {
+            when (val result =
+                bookCheckoutRepository.getAllBookCheckoutsForBookTitle(titleSearchTerm)) {
+                is Resource.Success -> {
+                    _books.value = result
+                    println("result $result")
+                }
 
-            is Resource.Error -> {
-                _books.value = result
-                println("error ${result.message}")
+                is Resource.Error -> {
+                    _books.value = result
+                    println("error ${result.message}")
 
-            }
+                }
 
-            is Resource.Loading -> {
-                _books.value = Resource.Loading()
+                is Resource.Loading -> {
+                    _books.value = Resource.Loading()
+                }
             }
         }
     }
